@@ -1,0 +1,134 @@
+<head>
+  <!-- Required meta tags -->
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+
+  <!-- Bootstrap CSS -->
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous" />
+  <link rel="stylesheet" href="emp.css">
+  <title>Visitor Log form</title>
+</head> 
+  
+<body class="container bg-light">
+  <!-- Start Header form -->
+  <div class="text-center pt-5">
+    <img src="logo.jpeg" alt="network-logo" />
+    <h2>Visitor Log form</h2>
+  </div>
+  <!-- End Header form -->
+
+  <!-- Start Card -->
+  <div class="card">
+    <!-- Start Card Body -->
+    <div class="card-body">
+      <!-- Start Form -->
+      <form id="LoginForm" action="#" method="" class="needs-validation" novalidate autocomplete="off">
+        <!-- Start Input Name -->
+        <div class="row">
+          <div class="form-group col-md-4">
+          <label for="inputId">Id</label>
+          <input type="text" class="form-control" id="inputid" name="Id" placeholder="Your Id" required />
+          <small class="form-text text-muted">Please fill your Id</small>
+        </div> 
+        
+          <div class="form-group col-md-4">
+          <label for="inputId">Employee-Id</label>
+          <input type="text" class="form-control" id="inputid" name="Id" placeholder="Your Id" required />
+          <small class="form-text text-muted">Please fill your Employee-Id</small>
+        </div>
+       
+          <div class="form-group col-md-4">
+          <label for="inputId">Security Employee-Id</label>
+          <input type="text" class="form-control" id="inputid" name="Id" placeholder="Your Id" required />
+          <small class="form-text text-muted">Please fill your Security Employee-Id</small>
+        </div></div>
+        <div class="row">
+          <div class="form-group col-md-4">
+          <label for="inputname">Visitor Name</label>
+          <input type="text" class="form-control" id="inputname" name="name" placeholder="Visitor's Name" required />
+          <small class="form-text text-muted">Please type Visitor's name</small>
+        </div>
+       
+          <div class="form-group col-md-4">
+          <label for="inputnum">Vehicle Number:</label>
+          <input type="number" class="form-control" id="inputnum" name="no." placeholder="Visitor's Vehicle Number" required />
+          <small class="form-text text-muted">Please fill the visitor's vehicle number</small>
+        </div>
+
+
+        
+          <div class="form-group col-md-4">
+          <label for="inputId">Type of Visitor:</label>
+            <select id="type" name="type"> 
+              <label for="inputtype">
+              <option>Select Type of Visitor</option>
+              <option value="Employee">Employee</option>
+              <option value="Non-Employee">Non-Employee</option></select></div>
+              </div>
+
+              <div class="row">
+                <div class="form-group col-md-4">
+              <label for="inputId">Check-In Timestamp</label>
+              <input type="text" class="currentTime time-dropdown form-textbox validate[required]" id="input_22_timeInput" name="q22_arrivalDate[timeInput]" required="" aria-labelledby="label_22 sublabel_22_hour" data-mask="hh:MM" value="07:10" data-version="v2" inputmode="numeric" placeholder="HH : MM">
+            <select class="time-dropdown form-dropdown validate[required] is-active" id="input_22_ampm" name="q22_arrivalDate[ampm]" data-component="time-ampm" required="" aria-labelledby="label_22 sublabel_22_ampm">
+              <option selected="" value="AM"> AM </option>
+              <option value="PM"> PM </option>
+              <small class="form-text text-muted">Please fill Check-In timestamp</small> </select>
+            </div>
+            
+              <div class="form-group col-md-4">
+              <label for="inputId">Check-Out Timestamp</label>
+              <input type="text" class="currentTime time-dropdown form-textbox validate[required]" id="input_22_timeInput" name="q22_arrivalDate[timeInput]" required="" aria-labelledby="label_22 sublabel_22_hour" data-mask="hh:MM" value="07:10" data-version="v2" inputmode="numeric" placeholder="HH : MM">
+            <select class="time-dropdown form-dropdown validate[required] is-active" id="input_22_ampm" name="q22_arrivalDate[ampm]" data-component="time-ampm" required="" aria-labelledby="label_22 sublabel_22_ampm">
+              <option selected="" value="AM"> AM </option>
+              <option value="PM"> PM </option>
+              <small class="form-text text-muted">Please fill Check-In timestamp</small> </select>
+            </div></div>
+           <div class="row">
+              <div class="form-group col-md-4">
+              <label for="inputpur">Purpose</label>
+              <input type="text" class="form-control" id="inputpur" name="purpose" placeholder="Purpose of Visit" required />
+              <small class="form-text text-muted">Please type Purpose</small>
+            </div> 
+            <div class="form-group">
+              <label for="inputPhone">Phone </label>
+              <input type="tel" class="form-control" id="inputPhone" name="phone" placeholder="099xxxxxxx" pattern="\d{3}\d{3}\d{4}" required />
+            </div> </div>
+       <!-- Start Submit Button -->
+       <button class="btn btn-primary btn-block col-lg-2" type="submit">Submit</button>
+       <!-- End Submit Button -->
+
+  <!-- Optional JavaScript -->
+  <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+  <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+<script src="emp.js"></script>
+  <!-- Start Scritp for Form -->
+  <script>
+    // Example starter JavaScript for disabling form submissions if there are invalid fields
+    (function() {
+      'use strict';
+      window.addEventListener('load', function() {
+        // Fetch all the forms we want to apply custom Bootstrap validation styles to
+        var forms = document.getElementsByClassName('needs-validation');
+        // Loop over them and prevent submission
+        var validation = Array.prototype.filter.call(forms, function(form) {
+          form.addEventListener('submit', function(event) {
+            if (form.checkValidity() === false) {
+              event.preventDefault();
+              event.stopPropagation();
+            }
+            form.classList.add('was-validated');
+          }, false);
+        });
+      }, false);
+    })();
+  </script>
+  <!-- End Scritp for Form -->
+  <footer>
+      <div class="my-4 text-muted text-center">
+        <p>© deltinconnect</p>
+      </div>
+    </footer>
+</body> 

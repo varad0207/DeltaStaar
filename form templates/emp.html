@@ -1,0 +1,214 @@
+<head>
+  <!-- Required meta tags -->
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Lobster&display=swap" rel="stylesheet">
+  <!-- Bootstrap CSS -->
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous" />
+ <link rel="stylesheet" href="emp.css">
+  <title>EMP form</title>
+</head> 
+  <header>
+<body class="container bg-light">
+  <!-- Start Header form -->
+  <div class="text-center pt-5">
+    <img src="logo.jpeg" alt="network-logo" width="100px" />
+  <header>
+    <h2>Employee Log In form</h2></header>
+  </div>
+  <!-- End Header form -->
+
+  <!-- Start Card -->
+  <div class="card">
+    <!-- Start Card Body -->
+    <div class="card-body">
+      <!-- Start Form -->
+      <form id="LoginForm" action="#" method="" class="needs-validation" novalidate autocomplete="off">
+        <!-- Start Input Name -->
+        
+        <div class="form-group">
+          <label for="inputId">Emp-id</label>
+          <input type="text" class="form-control" id="inputid" name="Id" placeholder="Your Id" required />
+          <small class="form-text text-muted" color="white">Please fill your Id</small>
+        </div>
+        <div class="form-group">
+          <label for="inputName">First Name</label>
+          <input type="text" class="form-control" id="inputf" name="fname" placeholder="Your First name" required />
+          <small class="form-text text-muted">Please fill your First Name</small>
+        </div> 
+        <div class="form-group">
+          <label for="inputName">Middle name</label>
+          <input type="text" class="form-control" id="inputm" name="minit" placeholder="Your Middle name" required />
+          <small class="form-text text-muted">Please fill your middlename</small>
+        </div>
+        <div class="form-group">
+          <label for="inputName">Last Name</label>
+          <input type="text" class="form-control" id="inputl" name="lname" placeholder="Your LastName" required />
+          <small class="form-text text-muted">Please fill your LastName</small>
+        </div>
+        <!-- End Input Name -->
+
+        <!-- Start Input Email -->
+        <div class="form-group">
+          <label for="inputEmail">Email</label>
+          <input type="email" class="form-control" id="inputEmail" name="email" placeholder="Enter email" pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$" required />
+          <small class="form-text text-muted">We'll never share your email with anyone else.</small>
+        </div>
+        <!-- End Input Email -->
+
+        <!-- Start Input Telephone -->
+        <div class="form-group">
+          <label for="inputPhone">Phone 1</label>
+          <input type="tel" class="form-control" id="inputPhone" name="phone" placeholder="099xxxxxxx" pattern="\d{3}\d{3}\d{4}" required />
+          <small class="form-text text-muted">We'll never share your phone number with anyone else.</small>
+        </div> 
+        <!-- End Input Telephone -->
+        <div class="form-group">
+          <label for="inputPhone">Phone 2</label>
+          <input type="tel" class="form-control" id="inputPhone" name="phone" placeholder="099xxxxxxx" pattern="\d{3}\d{3}\d{4}" required />
+          <small class="form-text text-muted">We'll never share your phone number with anyone else.</small>
+        </div> 
+        <div class="form-group col-md-4">
+          <label for="inputDate">Date of Birth</label>
+          <input type="date" class="form-control" id="inputDate" name="date" required />
+          <small class="form-text text-muted">Please choose date of Birth</small>
+        </div> 
+      <div>
+        <select id="country" name="country"> 
+          <label for="inputcountry">
+          <option>Select Country</option>
+          <option value="Afghanistan">Afghanistan</option>
+          <option value="Aland Islands">Aland Islands</option>
+          <option value="Albania">Albania</option>
+          <option value="Algeria">Algeria</option>
+          <option value="American Samoa">American Samoa</option>
+          <option value="Andorra">Andorra</option>
+          <option value="Australia">Australia</option>
+          <option value="Austria">Austria</option>
+          <option value="Azerbaijan">Azerbaijan</option>
+          <option value="Bahamas">Bahamas</option>
+          <option value="Bahrain">Bahrain</option>
+          <option value="Bangladesh">Bangladesh</option>
+          <option value="Barbados">Barbados</option>
+          <option value="Belarus">Belarus</option>
+          <option value="Belgium">Belgium</option>
+          <option value="Burundi">Burundi</option>
+          <option value="Cambodia">Cambodia</option>
+          <option value="Cameroon">Cameroon</option>
+          <option value="Canada">Canada</option>
+          <option value="Cape Verde">Cape Verde</option>
+          <option value="Cayman Islands">Cayman Islands</option>
+          <option value="Central African Republic">Central African Republic</option>
+          <option value="Chad">Chad</option>
+          <option value="Chile">Chile</option>
+          <option value="Dominica">Dominica</option>
+          <option value="Dominican Republic">Dominican Republic</option>
+          <option value="Ecuador">Ecuador</option>
+          <option value="Egypt">Egypt</option>
+          <option value="El Salvador">El Salvador</option>
+          <option value="Equatorial Guinea">Equatorial Guinea</option>
+          <option value="Eritrea">Eritrea</option>
+          <option value="Falkland Islands (Malvinas)">Falkland Islands (Malvinas)</option>
+          <option value="Faroe Islands">Faroe Islands</option>
+          <option value="Fiji">Fiji</option>
+          <option value="Guinea-Bissau">Guinea-Bissau</option>
+          <option value="Guyana">Guyana</option>
+          <option value="Haiti">Haiti</option>
+          <option value="Heard Island and Mcdonald Islands">Heard Island and Mcdonald Islands</option>
+          <option value="Holy See (Vatican City State)">Holy See (Vatican City State)</option>
+          <option value="Honduras">Honduras</option>
+          <option value="Hong Kong">Hong Kong</option>
+          <option value="Hungary">Hungary</option>
+          <option value="Iceland">Iceland</option>
+          <option value="India">India</option>  
+      </select> </label> 
+      <select id="state" name="state">
+          <label for="inputstate">
+          <option>Select state</option>
+          <option value="Maharastra">Maharastra</option>
+          <option value="Goa">Goa</option>
+          <option value="Telangana">Telangana</option>
+          <option value="Uttar Pradesh">Uttar Pradesh</option>
+          <option value="Assam">Assam</option>
+          <option value="West Bengal">West Bengal</option></select>
+          <small class="form-text text-muted">Please choose country and state</small>
+      </div> 
+      <div class="ff">
+          <span class="form-group">
+              <label for="inputPincode">PinCode</label>
+              <input type="number" class="form-control" id="inputPincode" name="pin" placeholder="403707" pattern="\d{3}\d{3}\d{4}" required />
+               <small class="form-text text-muted">Please fill pincode</small></span>
+               <span class="form-group">
+                <label for="inputBldgrp">Blood Group</label>
+                <input type="text" class="form-control" id="inputbldgrp" name="BldGrp" placeholder="Enter Blood Group" pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$" required />
+               </span>
+              </div>  
+        <div class="form-group">
+          <label for="inputAddress">Address</label>
+          <input type="text" class="form-control" id="inputaddress" name="address" placeholder="Enter address" pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$" required />
+          <small class="form-text text-muted">We'll never share your address with anyone else.</small>
+        </div> 
+        
+        <div class="form-group">
+          <label for="inputdept">Department</label>
+          <input type="Department" class="form-control" id="inputdept" name="dept" placeholder="Enter your Department" pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$" required />
+        </div> 
+        <div class="form-group">
+          <label for="inputdes">Designation</label>
+          <input type="Designation" class="form-control" id="inputdes" name="designation" placeholder="Enter your Department" pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$" required />
+        </div> 
+        <div class="form-group col-md-4">
+          <label for="inputDate">Joining Date</label>
+          <input type="date" class="form-control" id="inputDate" name="date" required />
+          <small class="form-text text-muted">Please choose your joining date.</small>
+        </div> 
+        <div class="form-group">
+          <label for="inputaadh">Aadhar Number</label>
+          <input type="Aadhar" class="form-control" id="inputAadhar" name="aadhar" placeholder="Enter your Aadhar Number" pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$" required />
+          <small class="form-text text-muted">We'll never share your aadhar number with anyone else.</small>
+      </div> 
+      <div class="form-group">
+          <label for="inputaadh">Salary</label>
+          <input type="Salary" class="form-control" id="inputsal" name="salary" placeholder="Enter your Salary" pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$" required />
+          <small class="form-text text-muted">We'll never share your salary with anyone else.</small>
+      </div> 
+       <!-- Start Submit Button -->
+       <button class="btn btn-primary btn-block col-lg-2" type="submit">Submit</button>
+       <!-- End Submit Button -->
+
+  <!-- Optional JavaScript -->
+  <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+  <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+<script src="emp.js"></script>
+  <!-- Start Scritp for Form -->
+  <script>
+    // Example starter JavaScript for disabling form submissions if there are invalid fields
+    (function() {
+      'use strict';
+      window.addEventListener('load', function() {
+        // Fetch all the forms we want to apply custom Bootstrap validation styles to
+        var forms = document.getElementsByClassName('needs-validation');
+        // Loop over them and prevent submission
+        var validation = Array.prototype.filter.call(forms, function(form) {
+          form.addEventListener('submit', function(event) {
+            if (form.checkValidity() === false) {
+              event.preventDefault();
+              event.stopPropagation();
+            }
+            form.classList.add('was-validated');
+          }, false);
+        });
+      }, false);
+    })();
+  </script>
+  <!-- End Scritp for Form -->
+  <footer>
+      <div class="my-4 text-muted text-center">
+        <p>© deltinconnect</p>
+      </div>
+    </footer>
+</body> 

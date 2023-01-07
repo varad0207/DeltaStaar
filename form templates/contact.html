@@ -1,0 +1,39 @@
+<head>
+  <!-- Required meta tags -->
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+
+  <!-- Bootstrap CSS -->
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous" />
+  <link rel="stylesheet" href="emp.css">
+  <title>Contact form</title>
+</head> 
+  
+<body class="container bg-light">
+  <!-- Start Header form -->
+  <div class="text-center pt-5">
+    <img src="logo.jpeg" alt="network-logo" width="120" height="120" />
+    <h2>Contact form</h2>
+  </div>
+  <!-- End Header form -->
+
+  <!-- Start Card -->
+  <div class="card">
+    <!-- Start Card Body -->
+    <div class="card-body">
+      <!-- Start Form -->
+      <form id="LoginForm" action="#" method="" class="needs-validation" novalidate autocomplete="off">
+        <!-- Start Input Name -->
+        <div class="form-group">
+          <label for="inputId">Emp-id</label>
+          <input type="text" class="form-control" id="inputid" name="Id" placeholder="Your Id" required />
+          <small class="form-text text-muted">Please fill your Id</small>
+        </div> 
+        <div class="form-group">
+          <label for="inputPhone">Contact</label>
+          <input type="tel" class="form-control" id="inputPhone" name="phone" placeholder="099xxxxxxx" pattern="\d{3}\d{3}\d{4}" required />
+          <small class="form-text text-muted">We'll never share your phone number with anyone else.</small>
+        </div> 
+         <!-- Start Submit Button -->
+       <button class="btn btn-primary btn-block col-lg-2" type="submit">Submit</button>
+       <!-- End Submit Button -->
