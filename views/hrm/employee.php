@@ -455,12 +455,12 @@ if (isset($_GET['edit'])) {
 
                             <div class="col-md-12 pa2">
                                 <label for="acc_id">Accomodation</label>
-                                <select class="form-select mt-3" name="acc_id">
+                                <select class="form-select mt-3" name="acc_id" id="accList" onchange="myfunc()">
                                     <option name="employee_accomodation" selected disabled value="">Select Accomodation
                                     </option>
                         
                                 <?php $emp_acc = mysqli_query($conn, "SELECT * FROM accomodation");
-
+                                    $empAcc_row = mysqli_fetch_assoc($emp_acc);
                                     foreach ($emp_acc as $row) { ?>
                                         <option name="employee_accomodation" value="<?= $row["acc_id"] ?>">
                                             <?= $row["acc_name"]; ?>
@@ -475,11 +475,13 @@ if (isset($_GET['edit'])) {
                             <div class="col-md-12 pa2">
                                 <label for="room_id">Room</label>
                                 <select class="form-select mt-3" name="room_id">
+                                    
                                     <option name="employee_room" selected disabled value="">Select room
                                     </option>
                                     <?php
-                                    $emp_room = mysqli_query($conn, "SELECT * FROM rooms WHERE ");
-
+                                    // $accid = $empAcc_row['acc_id'];
+                                    $emp_room = mysqli_query($conn, "SELECT * FROM rooms");
+                                    
                                     foreach ($emp_room as $row) { 
                                         if($row['status'] == 'Occupied') {
                                         ?>
@@ -534,6 +536,12 @@ if (isset($_GET['edit'])) {
     <footer class="tc f3 lh-copy mt4">Copyright &copy; 2022 Delta@STAAR. All Rights Reserved</footer>
     
     <!-- Script files -->
+    <script>
+        function myfunc() {
+            var x = document.getElementById("accList").value;
+            func(x);
+        }
+    </script>
     <script src="../../js/form.js"></script>
     <script src="../../js/Sidebar/sidebar.js"></script>
     <script src="https://kit.fontawesome.com/319379cac6.js" crossorigin="anonymous"></script>
