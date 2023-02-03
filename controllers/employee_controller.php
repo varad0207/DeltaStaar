@@ -33,9 +33,9 @@ if (isset($_POST['submit'])) {
 
     $queryRoomOcc = mysqli_query($conn, "SELECT * FROM rooms WHERE id = '$room_id'");
     $EmployeeRoom_row = mysqli_fetch_assoc($queryRoomOcc);
-    $accID = $EmployeeRoom_row['acc_id'];
     $roomCap = $EmployeeRoom_row['room_capacity'];
     $roomOcc = $EmployeeRoom_row['current_room_occupancy'];
+    $accID = $EmployeeRoom_row['acc_id'];
     $roomStatus = $EmployeeRoom_row['status'];
     if($roomOcc < $roomCap)
     {
@@ -43,27 +43,29 @@ if (isset($_POST['submit'])) {
         if($roomOcc == $roomCap){
             $updateRoom = "UPDATE rooms SET current_room_occupancy = $roomOcc, status = 'Occupied' WHERE id = $room_id";
         }
-        $updateRoom = "UPDATE rooms SET current_room_occupancy = $roomOcc, status = 'Available' WHERE id = $room_id";
+        else{
+            $updateRoom = "UPDATE rooms SET current_room_occupancy = $roomOcc, status = 'Available' WHERE id = $room_id";
+        }
     }
-    elseif($roomOcc == $roomCap){
+    else{
         echo "Room Occupied!";
         $updateRoom = "UPDATE rooms SET current_room_occupancy = $roomOcc, status = 'Occupied' WHERE id = $room_id";
     }
     
+
+    $queryAcc = mysqli_query($conn, "SELECT * FROM accomodation WHERE acc_id = $accID");
+    $EmployeeAcc_row = mysqli_fetch_assoc($queryAcc);
+    $totRooms = $EmployeeAcc_row['no_of_rooms'];
+    if($roomStatus == "Occupied")
+    {
+        $occRooms = $occRooms + 1;
+        $avaRooms = $totRooms - $occRooms;
+        $updateAcc = "UPDATE accomodation SET occupied_rooms = '$occRooms', available_rooms = '$avaRooms' WHERE acc_id = $accID";
+        $submitAcc = mysqli_query($conn, $updateAcc) or die(mysqli_error($conn));
+    }
+
     $submitRoom = mysqli_query($conn, $updateRoom) or die(mysqli_error($conn));
-
-    // $queryAcc = mysqli_query($conn, "SELECT * FROM accomodation WHERE acc_id = $accID");
-    // $EmployeeAcc_row = mysqli_fetch_assoc($queryAcc);
-    // $totRooms = $EmployeeAcc_row['no_of_rooms'];
-    // if($roomStatus == "Occupied")
-    // {
-    //     $occRooms = $occRooms + 1;
-    //     $avaRooms = $totRooms - $occRooms;
-    //     $updateAcc = "UPDATE accomodation SET occupied_rooms = $occRooms, available_rooms = $avaRooms WHERE acc_id = %accID";
-    // }
-
-    // $submitAcc = mysqli_query($conn, $updateAcc) or die(mysqli_error($conn));
-
+    
     mysqli_query($conn, "INSERT INTO employee (emp_code, fname,mname,lname,designation,dob,contact,address,state,country,pincode,email,blood_group,department,joining_date,aadhaar_number,salary,room_id) VALUES ('$emp_code', '$fname','$mname','$lname','$designation','$dob','$contact','$address','$state','$country','$pincode','$email','$blood_group','$department','$joining_date','$aadhaar_number','$salary','$room_id')");
 
     // $last_insert_id = mysqli_insert_id($conn);
@@ -120,19 +122,20 @@ if (isset($_POST['update'])) {
         echo "Room Occupied!";
         $updateRoom = "UPDATE rooms SET current_room_occupancy = $roomOcc, status = 'Occupied' WHERE id = $room_id";
     }
+    
+
+    $queryAcc = mysqli_query($conn, "SELECT * FROM accomodation WHERE acc_id = $accID");
+    $EmployeeAcc_row = mysqli_fetch_assoc($queryAcc);
+    $totRooms = $EmployeeAcc_row['no_of_rooms'];
+    if($roomStatus == "Occupied")
+    {
+        $occRooms = $occRooms + 1;
+        $avaRooms = $totRooms - $occRooms;
+        $updateAcc = "UPDATE accomodation SET occupied_rooms = '$occRooms', available_rooms = '$avaRooms' WHERE acc_id = $accID";
+        $submitAcc = mysqli_query($conn, $updateAcc) or die(mysqli_error($conn));
+    }
+
     $submitRoom = mysqli_query($conn, $updateRoom) or die(mysqli_error($conn));
-
-    // $queryAcc = mysqli_query($conn, "SELECT * FROM accomodation WHERE acc_id = $accID");
-    // $EmployeeAcc_row = mysqli_fetch_assoc($queryAcc);
-    // $totRooms = $EmployeeAcc_row['no_of_rooms'];
-    // if($roomStatus == "Occupied")
-    // {
-    //     $occRooms = $occRooms + 1;
-    //     $avaRooms = $totRooms - $occRooms;
-    //     $updateAcc = "UPDATE accomodation SET occupied_rooms = $occRooms, available_rooms = $avaRooms WHERE acc_id = %accID";
-    // }
-
-    // $submitAcc = mysqli_query($conn, $updateAcc) or die(mysqli_error($conn));
 
     mysqli_query($conn, "UPDATE employee SET fname='$fname', mname='$mname',lname='$lname',designation='$designation',dob='$dob',contact='$contact',address='$address',
                                             state='$state',country='$country',pincode='$pincode',email='$email',blood_group='$blood_group',

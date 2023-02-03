@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!--Favicon link-->
+    <link rel="icon" type="image/x-icon" href="../../images/logo-no-name-circle.png">
+    <title>Delta@STAAR | Sidebar</title>
+
+    <link rel="stylesheet" href="../../css/sidebar.css">
+    <link rel="stylesheet" href="../../css/form.css">
+    <link rel="stylesheet" href="../../css/style1.css">
+
+    <!-- CSS only -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.3/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="https://unpkg.com/tachyons@4.12.0/css/tachyons.min.css" />
+</head>
+
+<body style="background-color: #1b1c1e;">
+<div id="mySidebar" class="sidebar">
+        <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
+
+        <a class="navbar-brand mb-2" href="#" style="padding: 8px;">
+            <img src="../../images/logo-no-name-circle.png" height="120px" alt="Deltin Logo" class="">
+        </a>
+
+        <ul class="nav flex-column p-4" id="nav_accordion" style="--bs-nav-link-hover-color: #f8f9fa;">
+
+            <li class="nav-item has-submenu">
+                <a class="nav-link border-dark border-bottom" href="#">
+                    <i class="bi bi-building"></i>
+                    Accommodation
+                    <i class="bi bi-chevron-down"></i>
+                </a>
+                <ul class="submenu collapse">
+                    <li>
+                        <a class="nav-link border-dark border-bottom" href="../../views/accomodation/accomodation.php">
+                            Add Accommodation
+                        </a>
+                    </li>
+                    <li>
+                        <a class="nav-link border-dark border-bottom"
+                            href="../../views/accomodation/accomodation_table.php">
+                            Accommodation Table
+                        </a>
+                    </li>
+                    <li>
+                        <a class="nav-link border-dark border-bottom" href="../../views/accomodation/rooms.php">
+                            Add Rooms
+                        </a>
+                    </li>
+                    <li>
+                        <a class="nav-link border-dark border-bottom" href="../../views/accomodation/room_table.php">
+                            Rooms Table
+                        </a>
+                    </li>
+                </ul>
+            </li>
+
+            <li class="nav-item has-submenu">
+                <a class="nav-link border-dark border-bottom" href="#">
+                    <i class="bi bi-file-text"></i>Complaints<i class="bi bi-chevron-down"></i>
+                </a>
+                <ul class="submenu collapse">
+                    <li>
+                        <a class="nav-link border-dark border-bottom" href="../../views/complaint/complaint.php">
+                            Raise A Complaint
+                        </a>
+                    </li>
+                    <li>
+                        <a class="nav-link border-dark border-bottom" href="../../views/complaint/complaint_table.php">
+                            Complaint Table
+                        </a>
+                    </li>
+                    <li>
+                        <a class="nav-link border-dark border-bottom" href="../../views/config/complaint_type.php">
+                            Add Complaint Type
+                        </a>
+                    </li>
+                    <li>
+                        <a class="nav-link border-dark border-bottom"
+                            href="../../views/config/complaint_type_table.php">
+                            Complaint Type Table
+                        </a>
+                    </li>
+                </ul>
+            </li>
+
+            <li class="nav-item has-submenu">
+                <a class="nav-link border-dark border-bottom" href="#">
+                    <i class="bi bi-person"></i> HRM <i class="bi bi-chevron-down"></i>
+                </a>
+                <ul class="submenu collapse">
+                    <li>
+                        <a class="nav-link border-dark border-bottom" href="../../views/config/emp_desig.php">
+                            Add Designation Details
+                        </a>
+                    </li>
+                    <li>
+                        <a class="nav-link border-dark border-bottom" href="../../views/config/emp_desig_table.php">
+                            Employees Designation Table
+                        </a>
+                    </li>
+                    <li>
+                        <a class="nav-link border-dark border-bottom" href="../../views/hrm/employee.php">
+                            Add Employee Details
+                        </a>
+                    </li>
+                    
+                    <li>
+                        <a class="nav-link border-dark border-bottom" href="../../views/hrm/employee_table.php">
+                            Employees Table
+                        </a>
+                    </li>
+                    <li>
+                        <a class="nav-link border-dark border-bottom" href="../../views/hrm/roles.php">
+                            Add Role </a>
+                    </li>
+                    <li>
+                        <a class="nav-link border-dark border-bottom" href="../../views/hrm/roles_table.php">
+                            Roles Table
+                        </a>
+                    </li>
+                    <li>
+                        <a class="nav-link border-dark border-bottom" href="../../views/config/security_table.php">
+                            Security Table
+                        </a>
+                    </li>
+                    <li>
+                        <a class="nav-link border-dark border-bottom" href="../../views/config/technician_table.php">
+                            Technician Table
+                        </a>
+                    </li>
+                    <li>
+                        <a class="nav-link border-dark border-bottom" href="../../views/hrm/vaccination.php">
+                            Add Vacination Details
+                        </a>
+                    </li>
+                    <li>
+                        <a class="nav-link border-dark border-bottom" href="../../views/hrm/vaccination_table.php">
+                            Vacination Table
+                        </a>
+                    </li>
+
+                </ul>
+            </li>
+
+            <li class="nav-item has-submenu">
+                <a class="nav-link border-dark border-bottom" href="#">
+                    <i class="bi bi-shield"></i> Security <i class="bi bi-chevron-down"></i>
+                </a>
+                <ul class="submenu collapse">
+                    <li>
+                        <a class="nav-link border-dark border-bottom" href="../../views/security/employee_outing.php">
+                            Add Employee Outing
+                        </a>
+                    </li>
+                    <li>
+                        <a class="nav-link border-dark border-bottom"
+                            href="../../views/security/employee_outing_table.php">
+                            Employee Outings Table
+                        </a>
+                    </li>
+                    <li>
+                        <a class="nav-link border-dark border-bottom" href="../../views/security/tanker.php">
+                            Add Tanker Entry
+                        </a>
+                    </li>
+                    <li>
+                        <a class="nav-link border-dark border-bottom" href="../../views/security/tanker_table.php">
+                            Tanker Table
+                        </a>
+                    </li>
+                    <li>
+                        <a class="nav-link border-dark border-bottom" href="../../views/security/visitor_log.php">
+                            Visitor Log Form
+                        </a>
+                    </li>
+                    <li>
+                        <a class="nav-link border-dark border-bottom" href="../../views/security/visitor_log_table.php">
+                            Visitor Log Table
+                        </a>
+                    </li>
+                </ul>
+            </li>
+
+            <!--
+            <li class="nav-item">
+                <a class="nav-link" href="#"> Other link </a>
+            </li>
+            -->
+        </ul>
+
+    </div>
+
+    <script src="../../js//Sidebar//sidebar.js"></script>
+    <script src="https://kit.fontawesome.com/319379cac6.js" crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
+        integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
+        crossorigin="anonymous"></script>
+    <!-- JavaScript Bundle with Popper -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4"
+        crossorigin="anonymous"></script>
+</body>
+
+</html>

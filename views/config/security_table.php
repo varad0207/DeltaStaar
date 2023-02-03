@@ -44,22 +44,11 @@
 </head>
 
 <body>
-<nav class="navbar navbar-expand-lg navbar-dark f3 lh-copy fw5">
-        <div class="container-fluid">
-            <a class="navbar-brand" href="#">
-                <img src="../../images/logo-no-name.png" height="50px" alt="Deltin Logo" class="d-inline-block align-text-top"
-                    style="border-radius: 50px;">
-            </a>
-            <ul class="navbar-nav justify-content-end">    
-                <li class="nav-item">
-                    <a class="nav-link active" aria-current="page" href="../dashboard.php">Home</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link active" id="adminlogin" onmouseover="this.style.cursor='pointer'" onclick = "history.back()" >Back</a>
-                </li>
-            </ul>    
-        </div>
-    </nav>
+    <!-- Sidebar and Navbar-->
+   <?php
+    include '../../controllers/includes/sidebar.html';
+    include '../../controllers/includes/navbar.html';
+    ?>
     <div class="table-header">
         <h1 class="tc f1 lh-title spr">Security</h1>
         <div class="fl w-75 form-outline srch">

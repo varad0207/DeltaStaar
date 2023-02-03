@@ -39,37 +39,13 @@ if(isset($_GET['edit']))
     
 </head>
 <body class="b ma2">
-<nav class="navbar  navbar-expand-lg navbar-dark f4 lh-copy pa3 fw4">
-        <div class="container-fluid">
-            <a class="navbar-brand" href="#">
-                <img src="../../images/logo-no-name.png" height="50px" alt="Deltin Logo" class="d-inline-block align-text-top"
-                    style="border-radius: 50px;">
-            </a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNavbar"
-                aria-controls="offcanvasNavbar">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="offcanvas offcanvas-end text-bg-dark" tabindex="-1" id="offcanvasNavbar"
-                aria-labelledby="offcanvasNavbarLabel">
-                <div class="offcanvas-header">
-                    <h5 class="offcanvas-title" id="offcanvasNavbarLabel" style="color: #fff;">Delta@STAAR</h5>
-                    <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas"
-                        aria-label="Close"></button>
-                </div>
-                <div class="offcanvas-body">
-                    <ul class="navbar-nav justify-content-end flex-grow-1 pe-3">             
-                        <li class="nav-item">
-                            <a class="nav-link active" aria-current="page" href="../dashboard.php">Home</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link active1" id="adminlogin" onmouseover="this.style.cursor='pointer'" onclick=history.back()>Back</a>
-                        </li>
-                    </ul>
-                </div>
-            </div>
-        </div>
-    </nav>
-  <div class="form-body">
+
+    <!-- Sidebar and Navbar-->
+   <?php
+    include '../../controllers/includes/sidebar.html';
+    include '../../controllers/includes/navbar.html';
+    ?>
+    <div class="form-body">
     <div class="row">
         <div class="form-holder">
             <div class="form-content">

@@ -8,6 +8,7 @@ if (isset($_GET['edit'])) {
 
 	// if (count($record) == 1 ) {
 	$n = mysqli_fetch_array($record);
+    $id = $n['id'];
 	$emp_id = $n['emp_id'];
 	$role = $n['role'];
 }
@@ -31,40 +32,11 @@ if (isset($_GET['edit'])) {
 </head>
 
 <body style="background-color: black; color:#fff;">
-<nav class="navbar  navbar-expand-lg navbar-dark f4 lh-copy pa3 fw4">
-        <div class="container-fluid">
-            <a class="navbar-brand" href="#">
-                <img src="../../images/logo-no-name.png" height="50px" alt="Deltin Logo" class="d-inline-block align-text-top"
-                    style="border-radius: 50px;">
-            </a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNavbar"
-                aria-controls="offcanvasNavbar">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="offcanvas offcanvas-end text-bg-dark" tabindex="-1" id="offcanvasNavbar"
-                aria-labelledby="offcanvasNavbarLabel">
-                <div class="offcanvas-header">
-                    <h5 class="offcanvas-title" id="offcanvasNavbarLabel" style="color: #fff;">Delta@STAAR</h5>
-                    <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas"
-                        aria-label="Close"></button>
-                </div>
-                <div class="offcanvas-body">
-                    <ul class="navbar-nav justify-content-end flex-grow-1 pe-3">
-                        
-                        <li class="nav-item">
-                            <a class="nav-link active" aria-current="page" href="../dashboard.php">Home</a>
-                        </li>
-						<li class="nav-item">
-                            <a class="nav-link" href="technician_table.php">Technician Details</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link active1" id="adminlogin" onmouseover="this.style.cursor='pointer'" onclick=history.back()>Back</a>
-                        </li>
-                    </ul>
-                </div>
-            </div>
-        </div>
-    </nav>
+<!-- Sidebar and Navbar-->
+<?php
+    include '../../controllers/includes/sidebar.html';
+    include '../../controllers/includes/navbar.html';
+    ?>
 	<div class="form-body">
         <div class="row">
             <div class="form-holder">
@@ -73,10 +45,10 @@ if (isset($_GET['edit'])) {
                         <h1 class="f2 lh-copy tc" style="color: white;">Add Technician</h1>
                         <form class="requires-validation f3 lh-copy" novalidate
                             action="../../controllers/technician_controller.php" method="post">
-                            <input type="hidden" name="emp_id" value="<?php echo $emp_id; ?>">
+                            <input type="hidden" name="id" value="<?php echo $id; ?>">
                             <div class="col-md-12 pa2">
-                                <<label class="d-block mb-4">Employee Code</label>
-								<select class="custom-select my-1 mr-sm-2" id="inlineFormCustomSelectPref" name="Id">
+                                <label class="d-block mb-4">Employee Code</label>
+								<select class="custom-select my-1 mr-sm-2" id="inlineFormCustomSelectPref" name="emp_id">
 								<option name="employee_code" selected>Choose...</option>
 								<?php
 								$emp_det = mysqli_query($conn, "SELECT * FROM employee");
