@@ -4,9 +4,10 @@
     if (!isset($_SESSION["emp_id"]))header("location:../../views/login.php");
     // check rights
     $isPrivilaged = 0;
-if ($_SESSION['rights_accomodation'] > 0) {
-    $isPrivilaged = $_SESSION['rights_accomodation'];
-}
+    $rights = unserialize($_SESSION['rights']);
+    if ($rights['rights_accomodation'] > 0) {
+        $isPrivilaged = $rights['rights_accomodation'];
+    }
 else
 die('<script>alert("You dont have access to this page, Please contact admin");window.location = history.back();</script>');
 
@@ -48,36 +49,212 @@ die('<script>alert("You dont have access to this page, Please contact admin");wi
 		          listing[i].style.display = "";
 		        } else {
 		          listing[i].style.display = "none";
-                //   document.getElementById("demo").innerHTML = "No Results Found";
 		        }
 		      }
 		    }
 		 }
+
+         function resetFrom() {
+            document.getElementById("myForm").reset();
+         }
 	</script>
 </head>
 <body class="bg">
     <!-- Sidebar and Navbar-->
     <?php
-    include '../../controllers/includes/sidebar.html';
-    include '../../controllers/includes/navbar.html';
+    include '../../controllers/includes/sidebar.php';
+    include '../../controllers/includes/navbar.php';
     ?>
 
     <div class="table-header">
     <h1 class="tc f1 lh-title spr">Accommodation Details</h1>
     <div class="fl w-75 form-outline srch">
-        <input type="search" id="form1" class="form-control" placeholder="Search" aria-label="Search" oninput="search()" />
+        <input type="search" id="form1" class="form-control" placeholder="Live Search" aria-label="Search" oninput="search()" />
         <h4 id="demo"></h4>
     </div>
-    <div class="fl w-25 tr">
-        <button class="btn btn-dark">
-            <h5><i class="bi bi-filter-circle"> Sort By</i></h5>
-        </button>
+    <div class="fl w-25 tr pa1">
+    <button class="btn btn-dark" class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarTogglerDemo01" aria-controls="navbarTogglerDemo01" aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span>
+    <i class="bi bi-filter-circle"> Sort By</i> </button>
+        
+    </div>
+    </div>
+
+    <br>
+    <!-- FILTERING DATA -->
+    <div class="collapse navbar-collapse" id="navbarTogglerDemo01">
+    <div class="pa1">
+        <br>
+        <form action="" method="GET" class="myForm">
+            <label style="color:white;">Filter By</label>
+            <button type="sumbit" class="btn btn-light">Go</button>
+            <!-- <button type="reset" class="btn btn-light" onclick="resetForm()">Reset</button> -->
+            <!-- <input type="button" value="Reset" onclick="resetForm()"> -->
+            <br>
+            <br>
+            <table class="table">
+                <thead>
+                    <th>Location : </th>
+                    <th>Building Status : </th>
+                    <th>Gender : </th>
+                    <th>Sort By : </th>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>
+                            <?php
+                            $fetch_loc = "SELECT * FROM acc_locations";
+                            $fetch_loc_run = mysqli_query($conn, $fetch_loc);
+                            if (mysqli_num_rows($fetch_loc_run) > 0) {
+                                foreach ($fetch_loc_run as $loc) {
+                                    $checked1 = [];
+                                    if (isset($_GET['location'])) {
+                                        $checked1 = $_GET['location'];
+                                    }
+                            ?>
+                                    <div>
+                                        <input type="checkbox" name="location[]" value="<?= $loc['loc_id']; ?>" <?php if (in_array($loc['loc_id'], $checked1)) 
+                                        {echo "checked";}?>>
+                                        <label><?= $loc['location']; ?></label>
+                                    </div>
+                            <?php
+                                }
+                            } else {
+                                echo "No location available";
+                            }
+                            ?>
+                        </td>
+                        <td>
+                        <?php
+                            $fetch_stat = "SELECT DISTINCT(bldg_status) FROM accomodation";
+                            $fetch_stat_run = mysqli_query($conn, $fetch_stat);
+                            if (mysqli_num_rows($fetch_stat_run) > 0) {
+                                foreach ($fetch_stat_run as $stat) {
+                                    $checked1 = [];
+                                    if (isset($_GET['bldg_status'])) {
+                                        $checked1 = $_GET['bldg_status'];
+                                    }
+                            ?>
+                                    <div>
+                                        <input type="checkbox" name="bldg_status[]" value="<?= $stat['bldg_status']; ?>" <?php if (in_array($stat['bldg_status'], $checked1)) 
+                                        {echo "checked";} ?>>
+                                        <label><?= $stat['bldg_status']; ?></label>
+                                    </div>
+                            <?php
+                                }
+                            } else {
+                                echo "No Status available";
+                            }
+                            ?>
+                        </td>
+                        <td>
+                        <?php
+                            $fetch_gender = "SELECT DISTINCT(gender) FROM accomodation";
+                            $fetch_gender_run = mysqli_query($conn, $fetch_gender);
+                            if (mysqli_num_rows($fetch_gender_run) > 0) {
+                                foreach ($fetch_gender_run as $gender) {
+                                    $checked1 = [];
+                                    if (isset($_GET['gender'])) {
+                                        $checked1 = $_GET['gender'];
+                                    }
+                            ?>
+                                    <div>
+                                        <input type="checkbox" name="gender[]" value="<?= $gender['gender']; ?>" <?php if (in_array($gender['gender'], $checked1)) {
+                                                                                                                        echo "checked";
+                                                                                                                    }
+                                                                                                                    ?>>
+                                        <label><?= $gender['gender']; ?></label>
+                                    </div>
+                            <?php
+                                }
+                            } else {
+                                echo "No Gender available";
+                            }
+                            ?>
+                        </td>
+                        <td>
+                        <div class="input-group mb-3">
+                            <select name="sort_alpha" class="form-control">
+                                <option value="">--Select Option--</option>
+                                <option value="a-z" <?php if (isset($_POST['sort_alpha']) && $_POST['sort_alpha'] == "a-z") echo "selected"; ?>>A-Z(Ascending Order)</option>
+                                <option value="z-a" <?php if (isset($_POST['sort_alpha']) && $_POST['sort_alpha'] == "z-a") echo "selected"; ?>>Z-A(Descending Order)</option>
+                            </select>
+                        </div>
+                        </td>
+                    </tr>
+                    
+                </tbody>
+            </table>
+        </form>
     </div>
     </div>
 
     <!-- Displaying Database Table -->
+        <?php 
+        $sqli = "SELECT * FROM accomodation t1 JOIN acc_locations t2 ON t1.location=t2.loc_id JOIN employee t3 ON t1.warden_emp_code=t3.emp_code WHERE 1=1";
+        $sort_condition = "";
+        if (isset($_GET['sort_alpha'])) {
+            if ($_GET['sort_alpha'] == "a-z") {
+                $sort_condition = "ASC";
+            } else if ($_GET['sort_alpha'] == "z-a") {
+                $sort_condition = "DESC";
+            }
+        }
+        if(isset($_GET['location'])){
+            $location_checked = [];
+            $location_checked = $_GET['location'];
+            $sqli .= " AND ( ";
+            foreach($location_checked as $row_loc){
+                $sqli .= " t1.location=$row_loc OR"; 
+            }
+            $sqli =substr($sqli,0,strripos($sqli,"OR"));  
+            $sqli .=" ) ";
+            
+        }
+        if(isset($_GET['bldg_status'])){
+            $stat_checked = [];
+            $stat_checked = $_GET['bldg_status'];
+            $sqli .= " AND ( ";
+            foreach($stat_checked as $row_stat){
+                $sqli .= " bldg_status='$row_stat' OR"; 
+            }
+            $sqli =substr($sqli,0,strripos($sqli,"OR"));  
+            $sqli .=" ) ";
+            
+        }
+        if(isset($_GET['gender'])){
+            $gender_checked = [];
+            $gender_checked = $_GET['gender'];
+            $sqli .= " AND ( ";
+            foreach($gender_checked as $row_gender){
+                $sqli .= " gender='$row_gender' OR"; 
+            }
+            $sqli =substr($sqli,0,strripos($sqli,"OR"));  
+            $sqli .=" ) ";
+            
+        }
+        $sqli .=" ORDER BY acc_name $sort_condition";
+        $temp_qry=$sqli;
+        $results = mysqli_query($conn, $sqli);
+        ?> 
+        
+    <?php
+    /* ***************** PAGINATION ***************** */
+    $limit=10;
+    $page=isset($_GET['page'])?$_GET['page']:1;
+    $start=($page-1) * $limit;
+    $sqli .=" LIMIT $start,$limit";
+    $result=mysqli_query($conn,$sqli);
 
-    <div class="table-div">
+    $q1="SELECT * FROM accomodation";
+    $result1=mysqli_query($conn,$q1);
+    $total=mysqli_num_rows($result1);
+    $pages=ceil($total/$limit);
+    $Previous=$page-1;
+    $Next=$page+1;
+    /* ************************************************ */
+    ?>
+
+        <div class="table-div">
         <?php if (isset($_SESSION['message'])): ?>
                 <div class="msg">
                     <?php
@@ -85,9 +262,7 @@ die('<script>alert("You dont have access to this page, Please contact admin");wi
                     unset($_SESSION['message']);
                     ?>
                 </div>
-        <?php endif ?>
-        
-        <?php $results = mysqli_query($conn, "SELECT * FROM accomodation"); ?>
+        <?php endif ?>    
         <div class="pa1 table-responsive">
             <table class="table table-bordered tc">
                 <thead>
@@ -108,12 +283,13 @@ die('<script>alert("You dont have access to this page, Please contact admin");wi
                     </tr>
                 </thead>
                 <tbody>
-                    <?php while ($row = mysqli_fetch_array($results)) { ?>
-                        <?php
-                        $employeecode = $row['warden_emp_code'];
-                        $queryEmployeeName = mysqli_query($conn, "SELECT * FROM employee WHERE emp_code='$employeecode'");
-                        $EmployeeName_row = mysqli_fetch_assoc($queryEmployeeName);
-                        ?>
+
+
+                    <?php 
+                    if(mysqli_num_rows($results) > 0) {
+                    while ($row = mysqli_fetch_array($results)) { 
+                    ?>
+                        
                     <tr>
                     <th scope="row"><?php echo $row['acc_code']; ?></th>
                     <td>
@@ -135,14 +311,8 @@ die('<script>alert("You dont have access to this page, Please contact admin");wi
                             <?php echo $row['no_of_rooms']; ?>
                         </td>
                         <td>
-                            <?php echo $EmployeeName_row['fname']. " " . $EmployeeName_row['lname']; ?>
+                            <?php echo $row['fname']. " " . $row['lname']; ?>
                         </td>
-                        <!-- <td>
-                            <?php echo $row['occupied_rooms']; ?>
-                        </td>
-                        <td>
-                            <?php echo $row['available_rooms']; ?>
-                        </td> -->
                         <td>
                             <?php echo $row['owner']; ?>
                         </td>
@@ -150,33 +320,54 @@ die('<script>alert("You dont have access to this page, Please contact admin");wi
                             <?php echo $row['remark']; ?>
                         </td>
                         <td>
-                            <a href="accomodation.php?edit=<?php echo '%27' ?><?php echo $row['acc_code']; ?><?php echo '%27' ?>"
+                            <?php if($isPrivilaged>1 && $isPrivilaged!=5 && $isPrivilaged!=4){ ?>
+                            <a href="accomodation.php?edit=<?php echo '%27'; ?><?php echo $row['acc_code']; ?><?php echo '%27'; ?>"
                                 class="edit_btn"> <i class="bi bi-pencil-square" style="font-size: 1.2rem; color: black;"></i>
                             </a>
+                            <?php } ?>
                             &nbsp;
+                            <?php if($isPrivilaged>=4){ ?>
                             <a href="../../controllers/accomodation_controller.php?del=<?php echo '%27' ?><?php echo $row['acc_code']; ?><?php echo '%27' ?>"
                                 class="del_btn"><i class="bi bi-trash" style="font-size: 1.2rem; color: black;"></i>
                             </a>
+                            <?php } ?>
                         </td>
                     </tr>
-                    <?php } ?>
+                    <?php } 
+                    }
+                    ?>
                 </tbody>
             </table>
         </div>
     </div>
 
+    <nav aria-label="Page navigation example">
+        <ul class="pagination pagination justify-content-center">
+            <li class="page-item"><a class="page-link" href="accomodation_table.php?page=<?=$Previous;?>" aria-label="Previous"><span aria-hidden="true">&laquo; Previous</span></a></li>
+            <?php for($i=1;$i<=$pages;$i++) :?>
+    <li class="page-item"><a class="page-link" href="accomodation_table.php?page=<?=$i?>">
+                <?php echo $i; ?>
+            </a></li>
+            <?php endfor;?>
+            <li class="page-item"><a class="page-link" href="accomodation_table.php?page=<?=$Next;?>" aria-label="Next"><span aria-hidden="true">Next &raquo;</span></a></li>
+        </ul>
+    </nav>
     <div class="table-footer pa4">
         <div class="fl w-75 tl">
-            <button class="btn btn-warning">
-                <h4><i class="bi bi-file-earmark-pdf"> Export</i></h4>
-            </button>
+            <form action="excel.php" method="post">
+                <button class="btn btn-warning" name="excel" value="<?php echo $temp_qry;?>"><h4><i class="bi bi-file-earmark-pdf"> Export</i></h4></button>
+            </form>
         </div>
+        <?php if($isPrivilaged>1 && $isPrivilaged!=5 && $isPrivilaged!=4){ ?>
         <div class="fl w-25 tr">
             <button class="btn btn-light">
                 <h4><a href="accomodation.php">Add Accommodation</a></h4>
             </button>   
         </div>
+        <?php } ?>
     </div>
+
+    
     
     <!-- Footer -->
     <footer class="tc f3 lh-copy mt4">Copyright &copy; 2022 Delta@STAAR. All Rights Reserved</footer>
@@ -189,8 +380,8 @@ die('<script>alert("You dont have access to this page, Please contact admin");wi
         integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
         crossorigin="anonymous"></script>
     <!-- JavaScript Bundle with Popper -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"
+    <!-- <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4"
-        crossorigin="anonymous"></script>
+        crossorigin="anonymous"></script> -->
 </body>
 </html>

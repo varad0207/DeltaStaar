@@ -1,6 +1,9 @@
 <?php include('../../controllers/includes/common.php'); ?>
 <?php include('../../controllers/employee_controller.php'); 
-if (!isset($_SESSION["emp_id"]))header("location:../../views/login.php");
+if (!isset($_SESSION["emp_id"]))
+header("location:../../views/login.php");
+if ($_SESSION['is_superadmin'] == 0)
+die('<script>alert("You dont have access to this page, Please contact admin");window.location = history.back();</script>');
 $update = "";
 $designation = "";
 if(isset($_GET['edit']))
@@ -26,7 +29,7 @@ if(isset($_GET['edit']))
 
     <!--Favicon link-->
     <link rel="icon" type="image/x-icon" href="../../images/logo-no-name-circle.png">
-	<title>Delta@STAAR | Add Vaccination</title>
+	<title>Delta@STAAR | Add Designation</title>
     
 	<meta name="description" content="Employee Addition portal for deltin employees">
 	<link rel="stylesheet" href="../../css/form.css">
@@ -37,8 +40,8 @@ if(isset($_GET['edit']))
 <body class="b ma2">
     <!-- Sidebar and Navbar-->
    <?php
-    include '../../controllers/includes/sidebar.html';
-    include '../../controllers/includes/navbar.html';
+    include '../../controllers/includes/sidebar.php';
+    include '../../controllers/includes/navbar.php';
     ?>
 
     <div class="form-body">
@@ -49,7 +52,8 @@ if(isset($_GET['edit']))
                     <h1 class="f2 lh-copy tc" style="color: white;">Enter Employee Designation Details</h1>
                     <form class="requires-validation f3 lh-copy" novalidate action="../../controllers/emp_desig_controller.php" method="post">
                       
-                       
+                    <input class="form-control" type="hidden" name="id"  value ="<?php echo $id?>" required>
+
                         <div class="col-md-12 pa2">
                             <label for="designation">Employee Designation</label>
                               <input class="form-control" type="text" name="designation" placeholder="Designation" value ="<?php echo $designation?>" required>

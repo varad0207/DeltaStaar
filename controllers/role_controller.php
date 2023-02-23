@@ -117,9 +117,17 @@ if (isset($_POST['update'])) {
     header('location: ../views/hrm/roles_table.php');
 }
 
-if (isset($_GET['del'])) {
+if (isset($_GET['del'])) 
+{
     $role_id = $_GET['del'];
     mysqli_query($conn, "DELETE FROM roles WHERE role_id=$role_id");
     $_SESSION['message'] = "Role Deleted!";
     header('location: ../views/hrm/roles_table.php');
+}
+
+if(isset($_GET['del_roleof_emp'])){
+    $employee_id = $_GET['del_roleof_emp'];
+    mysqli_query($conn, "UPDATE employee set role=null where emp_id=$employee_id");
+    mysqli_query($conn, "DELETE from login_credentials where emp_id=$employee_id");
+    header('location: ../views/hrm/roles_assigned_table.php');
 }

@@ -5,8 +5,9 @@
     if (!isset($_SESSION["emp_id"]))header("location:../../views/login.php");
     // check rights
     $isPrivilaged = 0;
-if ($_SESSION['rights_vaccination'] > 0) {
-    $isPrivilaged = $_SESSION['rights_vaccination'];
+$rights = unserialize($_SESSION['rights']);
+if ($rights['rights_vaccination'] > 0) {
+    $isPrivilaged = $rights['rights_vaccination'];
 }
 else
 die('<script>alert("You dont have access to this page, Please contact admin");window.location = history.back();</script>');
@@ -60,26 +61,145 @@ die('<script>alert("You dont have access to this page, Please contact admin");wi
 
     <!-- Sidebar and Navbar-->
    <?php
-    include '../../controllers/includes/sidebar.html';
-    include '../../controllers/includes/navbar.html';
+    include '../../controllers/includes/sidebar.php';
+    include '../../controllers/includes/navbar.php';
     ?>
 
     
     <div class="table-header">
-    <h1 class="tc f1 lh-title spr">Vaccination Details</h1>
+    <h1 class="tc f1 lh-title spr">Employee Vaccination Details</h1>
     <div class="fl w-75 form-outline srch">
-        <input type="search" id="form1" class="form-control" placeholder="Search" aria-label="Search" oninput="search()" />
+        <input type="search" id="form1" class="form-control" placeholder="Live Search" aria-label="Search" oninput="search()" />
         <h4 id="demo"></h4>
     </div>
-    <div class="fl w-25 tr">
-        <button class="btn btn-dark">
-            <h5><i class="bi bi-filter-circle"> Sort By</i></h5>
-        </button>
+    <div class="fl w-25 tr pa1">
+    <button class="btn btn-dark" class="navbar-toggler collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#navbarTogglerDemo01" aria-controls="navbarTogglerDemo01" aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span>
+    <i class="bi bi-filter-circle"> Sort By</i> </button>
+    
     </div>
     </div>
 
+    
+    <!-- FILTERING DATA -->
+    <div class="collapse navbar-collapse" id="navbarTogglerDemo01">
+    <div class="pa1">
+        <br>
+        <form action="" method="GET">
+            <label style="color:white;">Filter By</label>
+            <button type="sumbit" class="btn btn-light">Go</button>
+            <!-- <button type="reset" class="btn btn-light">Reset</button> -->
+            <br>
+            <br>
+            <table class="table">
+                <thead>
+                    <th>Category : </th>
+                    <th>Administration Date : </th>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>
+                            <?php
+                            $fetch_category = "SELECT * FROM vaccination_category";
+                            $fetch_category_run = mysqli_query($conn, $fetch_category);
+                            if (mysqli_num_rows($fetch_category_run) > 0) 
+                            {
+                                foreach ($fetch_category_run as $cat) 
+                                {
+                                    $checked1 = [];
+                                    if (isset($_GET['category'])) 
+                                    {
+                                        $checked1 = $_GET['category'];
+                                    }
+                                    ?>
+                                    <div>
+                                    <input type="checkbox" name="category[]" value="<?= $cat['category_id']; ?>" 
+                                    <?php 
+                                    if (in_array($cat['category_id'], $checked1)) 
+                                    {
+                                        echo "checked";
+                                    }
+                                    ?>>
+                                    <label><?= $cat['category_name']; ?></label>
+                                    </div>
+                                    <?php
+                                }
+                            } 
+                            else 
+                            {
+                                echo "No designation availabe";
+                            }
+                            ?>
+                        </td>
+                        <td>
+                            <label>From : </label>
+                            <input type="date" name="start_date" value="<?php if (isset($_POST['start_date']))
+                            echo $_POST['start_date']; ?>">
+                            <br>
+                            <br>
+                            <label>To : </label>
+                            <input type="date" name="end_date" value="<?php  if (isset($_POST['end_date']))
+                            echo $_POST['end_date']; ?>"><br>
+
+                        </td>
+                        <!-- <td>
+                        <div class="input-group mb-3">
+                            <select name="sort_alpha" class="form-control">
+                                <option value="">--Select Option--</option>
+                                <option value="a-z" <?php if (isset($_POST['sort_alpha']) && $_POST['sort_alpha'] == "a-z") echo "selected"; ?>>A-Z(Ascending Order)</option>
+                                <option value="z-a" <?php if (isset($_POST['sort_alpha']) && $_POST['sort_alpha'] == "z-a") echo "selected"; ?>>Z-A(Descending Order)</option>
+                            </select>
+                        </div>
+                        </td> -->
+                    </tr>
+                </tbody>
+            </table>
+        </form>
+    </div>
+    </div>
+
+    <?php
+    $sql="select last_dose.emp_id emp_id, employee.emp_code emp_code,vaccination_category.category_name category_name,last_dose.date_of_administration date_of_administration,last_dose.category_id category_id,last_dose.vaccination_id vaccination_id,last_dose.location location,last_dose.date_of_next_dose date_of_next_dose from employee join last_dose on employee.emp_id=last_dose.emp_id join vaccination_category on vaccination_category.category_id=last_dose.category_id where 1=1";
+    if(isset($_GET['category']))
+    {
+        $category_checked = [];
+        $category_checked = $_GET['category'];
+        $sql.=" and ( ";
+        foreach ($category_checked as $row_cat) {
+            $sql .= " vaccination_category.category_id=$row_cat or";
+        }
+        $sql=substr($sql,0,strripos($sql,"or"));  
+        $sql.=" ) ";
+        
+    }
+    if (isset($_GET['start_date'])) 
+    {
+        $_GET['start_date']!=""?$sql .= " and date_of_administration>='{$_GET['start_date']}' ":$a=0;
+        
+
+    }
+    if (isset($_GET['end_date'])) {
+         
+        $_GET['end_date']!=""?$sql .= " and date_of_administration<='{$_GET['end_date']}' ":$a=0;
+    }
+    $vaccination_qry=$sql;
+    ?>
     <!-- Displaying Database Table -->
+    <?php
+    /* ***************** PAGINATION ***************** */
+    $limit=10;
+    $page=isset($_GET['page'])?$_GET['page']:1;
+    $start=($page-1) * $limit;
+    $sql .=" LIMIT $start,$limit";
+    $result=mysqli_query($conn,$sql);
 
+    $q1="SELECT * FROM vaccination";
+    $result1=mysqli_query($conn,$q1);
+    $total=mysqli_num_rows($result1);
+    $pages=ceil($total/$limit);
+    $Previous=$page-1;
+    $Next=$page+1;
+    /* ************************************************ */
+    ?>
     <div class="table-div">
         <?php if (isset($_SESSION['message'])): ?>
                 <div class="msg">
@@ -89,8 +209,7 @@ die('<script>alert("You dont have access to this page, Please contact admin");wi
                     ?>
                 </div>
         <?php endif ?>
-        
-        <?php $results = mysqli_query($conn, "select last_dose.emp_id emp_id, employee.emp_code emp_code,vaccination_category.category_name category_name,last_dose.date_of_administration date_of_administration,last_dose.category_id category_id,last_dose.vaccination_id vaccination_id,last_dose.location location,last_dose.date_of_next_dose date_of_next_dose from employee join last_dose on employee.emp_id=last_dose.emp_id join vaccination_category on vaccination_category.category_id=last_dose.category_id"); ?>
+    
         <div class="pa1 table-responsive">
             <table class="table table-bordered tc">
                 <thead>
@@ -104,7 +223,7 @@ die('<script>alert("You dont have access to this page, Please contact admin");wi
                     </tr>
                 </thead>
                 <tbody>
-                    <?php while ($row = mysqli_fetch_array($results)) { ?>
+                    <?php while ($row = mysqli_fetch_array($result)) { ?>
                     <?php $employeeid = $row['emp_id'];
                 
                     $categoryid = $row['category_id'];
@@ -126,13 +245,17 @@ die('<script>alert("You dont have access to this page, Please contact admin");wi
                             <?php echo $row['date_of_next_dose']; ?>
                         </td>
                         <td>
+                        <?php if($isPrivilaged>1 && $isPrivilaged!=5 && $isPrivilaged!=4){ ?>
                             <a href="./vaccination.php?edit=<?php echo '%27' ?><?php echo $row['vaccination_id']; ?><?php echo '%27' ?>"
                                 class="edit_btn"><i class="bi bi-pencil-square" style="font-size: 1.2rem; color: black;"></i>
                             </a>
+                            <?php } ?>
                                 &nbsp;
+                                <?php if($isPrivilaged>=4){ ?>
                             <a href="../../controllers/vaccination_controller.php?del=<?php echo '%27' ?><?php echo $row['vaccination_id']; ?><?php echo '%27' ?>"
                                 class="del_btn"><i class="bi bi-trash" style="font-size: 1.2rem; color: black;"></i>
                             </a>
+                            <?php } ?>
                         </td>
                     </tr>
                     <?php } ?>
@@ -141,17 +264,31 @@ die('<script>alert("You dont have access to this page, Please contact admin");wi
         </div>
     </div>
 
+    <nav aria-label="Page navigation example">
+        <ul class="pagination pagination justify-content-center">
+            <li class="page-item"><a class="page-link" href="vaccination_table.php?page=<?=$Previous;?>" aria-label="Previous"><span aria-hidden="true">&laquo; Previous</span></a></li>
+            <?php for($i=1;$i<=$pages;$i++) :?>
+    <li class="page-item"><a class="page-link" href="vaccination_table.php?page=<?=$i?>">
+                <?php echo $i; ?>
+            </a></li>
+            <?php endfor;?>
+            <li class="page-item"><a class="page-link" href="vaccination_table.php?page=<?=$Next;?>" aria-label="Next"><span aria-hidden="true">Next &raquo;</span></a></li>
+        </ul>
+    </nav>
+
     <div class="table-footer pa4">
         <div class="fl w-75 tl">
-            <button class="btn btn-warning">
-                <h4><i class="bi bi-file-earmark-pdf"> Export</i></h4>
-            </button>
+            <form action="../EXCEL_export.php" method="post">
+                <button class="btn btn-warning" name="vaccination_export" value="<?php echo $vaccination_qry;?>"><h4><i class="bi bi-file-earmark-pdf"> Export</i></h4></button>
+            </form>
         </div>
+        <?php if($isPrivilaged>1 && $isPrivilaged!=5 && $isPrivilaged!=4){ ?>
         <div class="fl w-25 tr">
             <button class="btn btn-light">
                 <h4><a href="vaccination.php">Add Vaccination</a></h4>
             </button>   
         </div>
+        <?php } ?>
     </div>
     
     <!-- Footer -->
@@ -165,8 +302,8 @@ die('<script>alert("You dont have access to this page, Please contact admin");wi
         integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
         crossorigin="anonymous"></script>
     <!-- JavaScript Bundle with Popper -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"
+    <!-- <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4"
-        crossorigin="anonymous"></script>
+        crossorigin="anonymous"></script> -->
 </body>
 </html>

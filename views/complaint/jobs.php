@@ -3,11 +3,18 @@ require '../../controllers/includes/common.php';
 require '../../controllers/jobs_controller.php';
 require '../../controllers/complaint_controller.php';
 
-// raise complaint if logged in
-if (isset($_SESSION['emp_id'])) {
-    // $_SESSION['emp_code']
-    //  display this emp code directly in the form below
-}
+if (!isset($_SESSION["emp_id"]))
+    header("location:../../views/login.php");
+// check rights
+$isPrivilaged = 0;
+$rights = unserialize($_SESSION['rights']);
+if ($rights['rights_jobs'] > 1) {
+    $isPrivilaged = $rights['rights_jobs'];
+} else
+    die('<script>alert("You dont have access to this page, Please contact admin");window.location = history.back();</script>');
+if ($isPrivilaged == 5 || $isPrivilaged == 4)
+    die('<script>alert("You dont have access to this page, Please contact admin");window.location = history.back();</script>');
+
 $warden_id = $_SESSION['emp_id'];
 $complaints_id = $_GET['raise'];
 $update = "";
@@ -51,8 +58,8 @@ if (isset($_GET['edit'])) {
 <body class="b ma2">
     <!-- Sidebar and Navbar-->
    <?php
-    include '../../controllers/includes/sidebar.html';
-    include '../../controllers/includes/navbar.html';
+    include '../../controllers/includes/sidebar.php';
+    include '../../controllers/includes/navbar.php';
     ?>
     
     <div class="form-body">

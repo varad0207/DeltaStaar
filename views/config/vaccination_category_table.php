@@ -2,8 +2,11 @@
     include('../../controllers/includes/common.php');
     include('../../controllers/vaccination_category_controller.php'); 
 
-    if (!isset($_SESSION["emp_id"]))header("location:../../views/login.php");
-    // check rights
+    if (!isset($_SESSION["emp_id"]))
+    header("location:../../views/login.php");
+if ($_SESSION['is_superadmin'] == 0)
+    die('<script>alert("You dont have access to this page, Please contact admin");window.location = history.back();</script>');
+
 ?>
 
 <!DOCTYPE html>
@@ -51,8 +54,8 @@
 <body class="bg">
     <!-- Sidebar and Navbar-->
    <?php
-    include '../../controllers/includes/sidebar.html';
-    include '../../controllers/includes/navbar.html';
+    include '../../controllers/includes/sidebar.php';
+    include '../../controllers/includes/navbar.php';
     ?>
 
     

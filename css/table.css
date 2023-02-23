@@ -1,59 +1,125 @@
 @import url('https://fonts.googleapis.com/css2?family=Bungee+Spice&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
 
 body {
-    padding: 10px;
-    font-family: 'Bungee Spice', cursive;
-    font-family: 'Poppins', sans-serif;
-    background-color: #1b1c1e;
-    /* color: white; */
+  padding: 10px;
+  font-family: 'Bungee Spice', cursive;
+  font-family: 'Poppins', sans-serif;
+  background-color: #1b1c1e;
+  /* color: white; */
 }
 
 .active {
-    background: -webkit-linear-gradient(#f5f5c4, #fdfff9);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
+  background: -webkit-linear-gradient(#f5f5c4, #fdfff9);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
 }
 
 .active:hover {
-    background: -webkit-linear-gradient(#FEBE10, #F0E68C);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
+  background: -webkit-linear-gradient(#FEBE10, #F0E68C);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
 }
 
 .spr {
-    background: -webkit-linear-gradient(#FEBE10, #F0E68C);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
+  background: -webkit-linear-gradient(#FEBE10, #F0E68C);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
 }
 
 .table-header {
-    align-items: center;
-    justify-items: center;
-    align-content: center;
-    justify-content: center;
+  align-items: center;
+  justify-items: center;
+  align-content: center;
+  justify-content: center;
 }
 
 thead {
-    color: black;
-    background-color: #ceaa6d;
-    border: 2px solid black;
+  color: black;
+  background-color: #ceaa6d;
+  border: 2px solid black;
 }
 
 tbody {
-    color: black;
-    background-color: whitesmoke;
-    border: 2px solid black;
+  color: black;
+  background-color: whitesmoke;
+  border: 2px solid black;
 }
 
 a {
-    text-decoration: none;
-    color: black;
+  text-decoration: none;
+  color: black;
 }
 
 a:hover {
-    color: #ceaa6d;
+  color: #ceaa6d;
 }
 
 footer {
-    color: whitesmoke;
+  color: whitesmoke;
+}
+
+.progress-bar {
+  width: 100px;
+  height: 20px;
+  background-color: #ddd;
+  border-radius: 20px;
+  overflow: hidden;
+  position: relative;
+}
+
+.progress-bar .progress {
+  height: 20px;
+  background-color: green;
+  float: left;
+  border-radius: 20px;
+  transition: width 1s ease-out;
+  justify-content: center;
+  align-items: center;
+}
+
+.progress-bar:after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: repeating-linear-gradient(135deg, #ddd, #ddd 1px, transparent 5px, transparent 14px);
+  background-size: 20px 20px;
+  animation: running-lines 2s linear infinite;
+}
+
+@keyframes running-lines {
+  from {
+    background-position: 0 0;
+  }
+
+  to {
+    background-position: 20px 0px;
+  }
+}
+
+a.del_btn {
+  background-color: red;
+  color: white;
+  padding: 5px 10px;
+  border-radius: 5px;
+  text-align: center;
+  display: inline-block;
+}
+
+.closure-label {
+  display: inline-block;
+  vertical-align: top;
+  margin-top: 5px;
+}
+
+p.del_btn {
+  background-color: green;
+  color: white;
+  padding: 5px 10px;
+  border-radius: 5px;
+  margin-bottom: 0px;
+  text-align: center;
+  display: inline-block;
 }

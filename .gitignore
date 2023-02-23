@@ -1,2 +1,3 @@
 controllers/includes/common.php
 .DS_Store
+.vscode/settings.json

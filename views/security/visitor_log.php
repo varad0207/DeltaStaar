@@ -1,6 +1,15 @@
 <?php include('../../controllers/includes/common.php'); ?>
 <?php include('../../controllers/visitor_log_controller.php');
 if (!isset($_SESSION["emp_id"]))header("location:../../views/login.php");
+$isPrivilaged = 0;
+    $rights = unserialize($_SESSION['rights']);
+    if ($rights['rights_visitor_log'] > 1) {
+        $isPrivilaged = $rights['rights_visitor_log'];
+    } else
+        die('<script>alert("You dont have access to this page, Please contact admin");window.location = history.back();</script>');
+    if ($isPrivilaged == 5 || $isPrivilaged == 4)
+        die('<script>alert("You dont have access to this page, Please contact admin");window.location = history.back();</script>');
+  
 ?>
 <?php
 	$id = "";
@@ -48,8 +57,8 @@ if (!isset($_SESSION["emp_id"]))header("location:../../views/login.php");
 <body class="b ma2">
     <!-- Sidebar and Navbar-->
    <?php
-    include '../../controllers/includes/sidebar.html';
-    include '../../controllers/includes/navbar.html';
+    include '../../controllers/includes/sidebar.php';
+    include '../../controllers/includes/navbar.php';
     ?>
 	<div class="form-body">
     <div class="row">

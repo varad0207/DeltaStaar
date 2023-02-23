@@ -1,10 +1,12 @@
 <?php
     require '../../controllers/includes/common.php';
     require '../../controllers/complaint_type_controller.php';
-?>
-<?php
+
     if (!isset($_SESSION["emp_id"]))
     header("location:../../views/login.php");
+if ($_SESSION['is_superadmin'] == 0)
+    die('<script>alert("You dont have access to this page, Please contact admin");window.location = history.back();</script>');
+
 
     $update = $type = $description = $id = "";
 
@@ -12,11 +14,11 @@
     {
         $id = $_GET['edit'];
         $update = true;
-        $record = mysqli_query($conn, "SELECT * FROM complaint_type WHERE id = $id");
+        $record = mysqli_query($conn, "SELECT * FROM complaint_type WHERE type_id = $id");
     
         $n = mysqli_fetch_array($record);    
-        $type = $n['type'];
-        $description = $n['description'];
+        $type = $n['complaint_type'];
+        $description = $n['type_description'];
     }
 ?>
 <!DOCTYPE html>
@@ -41,8 +43,8 @@
 <body class="b ma2">
     <!-- Sidebar and Navbar-->
    <?php
-    include '../../controllers/includes/sidebar.html';
-    include '../../controllers/includes/navbar.html';
+    include '../../controllers/includes/sidebar.php';
+    include '../../controllers/includes/navbar.php';
     ?>
 
     <div class="form-body">
@@ -63,8 +65,8 @@
                             </div>
 
                             <div class="col-md-12 pa2">
-                                <label for="description">Complain Description</label>
-                                <textarea name="description" placeholder="Describe Complain" cols="30" rows="10"
+                                <label for="description">Complaint Description</label>
+                                <textarea name="description" placeholder="Describe Complaint" cols="30" rows="10"
                                     value="<?php echo $description; ?>"></textarea>
                             </div>
 

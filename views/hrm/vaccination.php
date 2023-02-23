@@ -3,6 +3,15 @@
 <?php
 if (!isset($_SESSION["emp_id"]))
     header("location:../../views/login.php");
+    $isPrivilaged = 0;
+    $rights = unserialize($_SESSION['rights']);
+    if ($rights['rights_vaccination'] > 1) {
+        $isPrivilaged = $rights['rights_vaccination'];
+    } else
+        die('<script>alert("You dont have access to this page, Please contact admin");window.location = history.back();</script>');
+    if ($isPrivilaged == 5 || $isPrivilaged == 4)
+        die('<script>alert("You dont have access to this page, Please contact admin");window.location = history.back();</script>');
+    
 
 if (isset($_GET['edit'])) {
     $vaccination_id = $_GET['edit'];
@@ -48,8 +57,8 @@ if (isset($_GET['edit'])) {
 
     <!-- Sidebar and Navbar-->
    <?php
-    include '../../controllers/includes/sidebar.html';
-    include '../../controllers/includes/navbar.html';
+    include '../../controllers/includes/sidebar.php';
+    include '../../controllers/includes/navbar.php';
     ?>
 
     <div class="form-body">
@@ -70,10 +79,9 @@ if (isset($_GET['edit'])) {
                                         <?php
                                         $emp_code = mysqli_query($conn, "SELECT * FROM employee");
 
-                                        foreach ($emp_code as $row) { ?>
-                                            <option name="employee_code" value="<?= $row["emp_id"] ?>">
-                                                <?= $row["emp_code"]; ?>
-                                            </option>
+                                        foreach ($emp_code as $row) {?>
+                                        <option name="employee_code" value="<?= $row["emp_id"] ?>"><?= $row["emp_code"]; ?>
+                                        </option>
                                         <?php
                                         }
 
@@ -108,10 +116,7 @@ if (isset($_GET['edit'])) {
                                     <label for="empcode">Employee Code</label>
 
                                     <input class="form-control" type="text" name="emp_code" value="<?php echo $emp_code ?>"
-                                        disabled>
-
-
-
+                                        readonly>
                                 </div>
                                 <div class="col-md-12 pa2">
                                     <label for="category">Vaccination Category</label>

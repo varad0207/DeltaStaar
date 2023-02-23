@@ -1,3 +1,165 @@
+<div>     
+                    <!-- Sort and Filter -->
+                    <div class="container">
+                        <form action="" method="post">
+                            <div class="item">
+                                <form action="" method="post" class="myForm">
+                                    <div class="input-group mb-3">
+                                        <select name="sort_alpha" class="form-control">
+                                            <option value="">--Select Option--</option>
+                                            <option value="a-z" <?php if(isset($_POST['sort_alpha']) && $_POST['sort_alpha'] == "a-z") echo "selected"; ?> >A-Z(Ascending Order)</option>
+                                            <option value="z-a" <?php if(isset($_POST['sort_alpha']) && $_POST['sort_alpha'] == "z-a") echo "selected"; ?> >Z-A(Descending Order)</option>
+                                        </select>
+                                        <button class="btn btn-dark">
+                                        <i class="bi bi-filter-circle"> Sort By</i>
+                                        </button>
+                                    </div>
+                                </form>
+                                </div>   
+                            </div>
+                            <div class="parent tc">
+                                <form action="" method="post" class="myForm">
+                                    <h4>Filter By:</h4> 
+                                            <div class="fl w-third pa2">
+                                            Location 
+                                            <?php
+                                            $res1 = mysqli_query($conn, "SELECT * FROM acc_locations");
+                                            if(mysqli_num_rows($res1) > 0){
+                                                foreach($res1 as $r1){
+                                                    $checked1 = [];
+                                                    if(isset($_POST['locations'])){
+                                                        $checked1 = $_POST['locations'];
+                                                    }
+                                                    ?>
+                                                    
+                                                    <div class="check">
+                                                        <input type="checkbox" name="locations[]" value="<?= $r1['loc_id'] ?>"
+                                                        <?php
+                                                        if(in_array($r1['loc_id'],$checked1)) echo "checked";
+                                                        ?>
+                                                        >
+                                                        <?= $r1['location'] ?>
+                                                    </div>
+                                                
+                                                    <?php
+                                                }
+                                            }
+                                            else{
+                                                echo "No Record";
+                                            }
+                                            ?>
+                                            <label>Click to Filter</label>
+                                            <button type="submit" class="btn btn-dark">Filter</button>
+                                            <!-- <button class="btn btn-dark" onclick="formReset()">Reset</button> -->
+                                            </div>
+                                </form>
+                                <!-- <label>Click to Reset</label> -->
+                        </form>
+                    </div>
+                </div>
+
+                <?php
+                        $employeecode = $row['warden_emp_code'];
+                        $queryEmployeeName = mysqli_query($conn, "SELECT * FROM employee WHERE emp_code='$employeecode'");
+                        $EmployeeName_row = mysqli_fetch_assoc($queryEmployeeName);
+                        ?>
+                        <?php
+                        $accLocation = $row['location'];
+                        $queryAccLoc = mysqli_query($conn, "SELECT * FROM acc_locations WHERE loc_id = '$accLocation'");
+                        $AccLoc_row = mysqli_fetch_assoc($queryAccLoc);
+                        ?>
+
+
+
+<?php 
+                    if(mysqli_num_rows($results) > 0){
+                    while ($row = mysqli_fetch_array($results)) { ?>
+
+}
+                }
+            }
+        }
+        if(isset($_POST['departments']))
+        {
+            $deptChecked = [];
+            $deptChecked = $_POST['departments'];
+            
+            foreach($deptChecked as $deptRow)
+            {
+                $results = mysqli_query($conn, "SELECT * FROM employee WHERE department IN('$deptRow')");
+                
+            }
+        }
+        ?>
+
+<?php
+                        $desigid = $row['designation'];
+                        $queryEmployeeDesig = mysqli_query($conn, "SELECT * FROM employee_designation WHERE id='$desigid' OR designation = '$desigid'");
+                        $EmployeeDesig_row = mysqli_fetch_assoc($queryEmployeeDesig);
+                    ?>
+                    <?php
+                        $deptid = $row['department'];
+                        $queryEmpDept = mysqli_query($conn, "SELECT * FROM employee_dept WHERE dept_id='$deptid'");
+                        $EmployeeDept_row = mysqli_fetch_assoc($queryEmpDept);
+                    ?>
+                    <?php
+                        $roomid = $row['room_id'];
+                        $queryRoom = mysqli_query($conn, "SELECT * FROM rooms WHERE id = '$roomid'");
+                        $EmployeeRoom_row = mysqli_fetch_assoc($queryRoom);
+                    ?>
+                    <?php
+                        // $accid = $EmployeeRoom_row['acc_id'];
+
+                        if (isset($EmployeeRoom_row['acc_id']) && !empty($EmployeeRoom_row['acc_id'])) {
+                            $queryAcc = mysqli_query($conn, "SELECT * FROM accomodation where acc_id='{$EmployeeRoom_row['acc_id']}'");
+                            $Acc_row = mysqli_fetch_assoc($queryAcc);
+                            $accName = $Acc_row['acc_name'];
+                          } else {
+                            $accName = 'N/A';
+                          }
+
+                    ?>
+
+                    <tr>
+                        <th scope="row"><?php echo $row['emp_code']; ?></th>
+                        <td>
+                            <?php echo $row['fname']; ?>
+                        </td>
+                        <td>
+                            <?php echo $row['mname']; ?>
+                        </td>
+                        <td>
+                            <?php echo $row['lname']; ?>
+                        </td>
+                        <td>
+                            <?php echo $EmployeeDesig_row['designation']; ?>
+                        </td>
+                        <td>
+                            <?php echo $EmployeeDept_row['dept_name']; ?>
+                        </td>
+                        <td>
+                            <?php echo date('d-m-Y', strtotime($row['joining_date'])); ?>
+                        </td>
+                        <td>
+                            <?php echo $row['state']; ?>
+                        </td>
+                        
+                        <td>
+                            <?php echo $row['contact']; ?>
+                        </td>
+                        <td style="text-align: center;">
+                        <a href="./emp_viewmore.php?id=<?php echo $row['emp_code']?> " class="btn btn-primary">View More</a>
+                            <a href="./employee.php?edit=<?php echo '%27' ?><?php echo $row['emp_code']; ?><?php echo '%27' ?>"
+                                class="edit_btn"> <i class="bi bi-pencil-square"
+                                    style="font-size: 1rem; color: black;"></i></a>
+                            &nbsp;
+                            <a href="../../controllers/employee_controller.php?del=<?php echo '%27' ?><?php echo $row['emp_code']; ?><?php echo '%27' ?>"
+                                class="del_btn"><i class="bi bi-trash" style="font-size: 1rem; color: black;"></i></a>
+                        </td>
+                    </tr>
+                    <?php }
+                    } 
+                    ?>
 accomodation
 <?php include('../../controllers/includes/common.php'); ?>
 <?php include('../../controllers/accomodation_controller.php'); ?>
@@ -2700,3 +2862,354 @@ $emp_code = $row['emp_code'];
                     $queryAcc = mysqli_query($conn, "SELECT * FROM accomodation WHERE acc_id = '$accid'");
                     $Acc_row = mysqli_fetch_assoc($queryAcc);
                     ?>
+
+
+security 
+<div class="container">
+		<!-- <h1 class="tc f1 lh-title">Add New Security</h1> -->
+		<div class="row mx-0 justify-content-center">
+			<div class="col-md-7 col-lg-5 px-lg-2 col-xl-4 px-xl-0 bg f4 lh-copy">
+				<?php if (isset($_SESSION['message'])): ?>
+				<div class="msg">
+					<?php
+	                echo $_SESSION['message'];
+	                unset($_SESSION['message']);
+                    ?>
+				</div>
+				<?php endif ?>
+
+
+				<?php $results = mysqli_query($conn, "SELECT * FROM security"); ?>
+
+				<?php $results = mysqli_query($conn, "SELECT * FROM security"); ?>
+
+
+				<table>
+					<thead>
+						<tr>
+
+						<!-- <th>emp-id </th>
+						<th>acc_id </th> -->
+						<th>Employee code </th>
+						<th>Accommodation name </th>
+					</thead>
+					<tbody>
+						<tr>
+						<!-- <td><?php echo $EmployeeCode_row['emp_code']; ?></td> -->
+			 			<!-- <td><?php echo $AccomodationName_row['acc_name']; ?></td>   -->
+						<td><?php 
+							while ($row = mysqli_fetch_array($results)) 
+							{ ?>
+								<?php $employeeid = $row['emp_id'];
+	    						$queryEmployeeCode = mysqli_query($conn, "SELECT * FROM employee where emp_id=$employeeid");
+	    						$EmployeeCode_row = mysqli_fetch_assoc($queryEmployeeCode);
+								$accomodationid = $row['acc_id'];
+	    						$queryAccomodationName = mysqli_query($conn, "SELECT * FROM accomodation where acc_id=$accomodationid");
+	    						$AccomodationName_row = mysqli_fetch_assoc($queryAccomodationName);
+        						?>
+								<?php
+								$accomodationid = $row['acc_id'];
+                    			$queryAccomodationName = mysqli_query($conn, "SELECT * FROM accomodation where acc_id=$accomodationid");
+                    			$AccomodationName_row = mysqli_fetch_assoc($queryAccomodationName);
+								?>
+							
+							
+							<td><?php echo $EmployeeCode_row['emp_code']; ?></td>
+							<td><?php echo $AccomodationName_row['acc_name']; ?></td>
+						</tr>
+						<td>
+
+
+							<a href="security.php?edit=<?php echo '%27' ?><?php echo $row['emp_id']; ?><?php echo '%27' ?>"
+								class="edit_btn">Edit</a>
+						</td>
+						<td>
+							<a href="../../controllers/security_controller.php?del=<?php echo '%27' ?><?php echo $row['emp_id']; ?><?php echo '%27' ?>"
+								class="del_btn">Delete</a>
+						</td>
+					</tr>
+					<?php } ?>
+				</table>
+
+				<form method="post" class="w-100 rounded p-4 border bg-white" action="../../controllers/security_controller.php">
+
+					<h1 class="f2 lh-copy tc" style="color: black;">Define Security</h1>
+					<input type="hidden" name="emp_id" value="<?php echo $emp_id; ?>">
+					<!-- <div class="input-group">
+						<label class="d-block mb-4"> <span class="d-block mb-2">Employee Code
+						<?php if ($update == true): ?>
+						<input class="form-control" disabled type="text" name="emp_code" value="<?php echo $emp_code; ?>">
+						<?php else: ?>
+						<input class="form-control" type="text" name="emp_code" value="<?php echo $emp_code; ?>">
+						<?php endif ?>
+					</div> -->
+					</label>
+					<div class="input-group">
+						<label class="d-block mb-4"> <span class="d-block mb-2">Employee Code <span></span>
+
+								<select class="custom-select my-1 mr-sm-2" id="inlineFormCustomSelectPref" name="Id">
+									<option name="employee_code" selected>Choose...</option>
+
+									<?php
+                            $emp_det = mysqli_query($conn, "SELECT * FROM employee");
+
+                            foreach ($emp_det as $row) { ?>
+									<option name="employee_code" value="<?= $row["emp_id"] ?>"><?= $row["emp_code"]; ?>
+									</option>
+									<?php
+                            }
+
+                                ?>
+								</select>
+					</div>
+					</label>
+					<div class="input-group">
+						<label class="d-block mb-4"> <span class="d-block mb-2">Accomodation Name <span>
+
+									<select class="custom-select my-1 mr-sm-2" id="inlineFormCustomSelectPref"
+										name="acId">
+										<option name="employee_code" selected>Choose...</option>
+
+										<?php
+                            $emp_det = mysqli_query($conn, "SELECT * FROM accomodation");
+
+                            foreach ($emp_det as $row) { ?>
+										<option name="employee_code" value="<?= $row["acc_id"] ?>"><?= $row["acc_name"]; ?></option>
+										<?php
+                            }
+
+                                ?>
+									</select>
+					</div>
+					</label>
+
+					</label>
+
+					</label>
+					<div class="mb-3 tc">
+						<?php if ($update == true): ?>
+						<button class="btnn" type="submit" name="update" value="update"
+							style="background: #556B2F;">update</button>
+						<?php else: ?>
+						<button class="btn btn-dark px-3" class="btnn" type="submit" name="save"
+							value="save">Save</button>
+						<?php endif ?>
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
+
+technician
+<div class="container">
+		<h1 class="tc f1 lh-title">Add/Define Technician</h1>
+		<div class="row mx-0 justify-content-center">
+			<div class="col-md-7 col-lg-5 px-lg-2 col-xl-4 px-xl-0 bg f4 lh-copy">
+				<?php if (isset($_SESSION['message'])): ?>
+				<div class="msg">
+					<?php
+	                echo $_SESSION['message'];
+	                unset($_SESSION['message']);
+                    ?>
+				</div>
+				<?php endif ?>
+
+				<?php $results = mysqli_query($conn, "SELECT * FROM technician"); ?>
+
+				<table>
+					<thead>
+						<tr>
+
+
+		<th>emp_code </th>
+		<th>Role </th>
+		
+			<th colspan="2">Action</th>
+		</tr>
+	</thead>
+	
+		<?php while ($row = mysqli_fetch_array($results)) { ?>
+		<?php $employeeid = $row['emp_id'];
+                    $queryEmployeeCode = mysqli_query($conn, "SELECT * FROM employee where emp_id=$employeeid");
+                    $EmployeeCode_row = mysqli_fetch_assoc($queryEmployeeCode);
+					?>
+		<tr>
+			<td><?php echo $EmployeeCode_row['emp_code']; ?></td>
+			<td><?php echo $row['role']; ?></td>
+			
+			
+			<td>
+				<a href="../views/technician.php?edit=<?php echo '%27' ?><?php echo $row['id']; ?><?php echo '%27' ?>" class="edit_btn" >Edit</a>
+			</td>
+			<td>
+				<a href="../../controllers/technician_controller.php?del=<?php echo '%27' ?><?php echo $row['id']; ?><?php echo '%27' ?>" class="del_btn">Delete</a>
+			</td>
+		</tr>
+	<?php } ?>
+</table>
+
+				<form method="post" class="w-100 rounded p-4 border " action="../../controllers/technician_controller.php">
+					<input type="hidden" name="eId" value="<?php echo $emp_id; ?>">
+					<!-- <div class="input-group">
+						<label class="d-block mb-4"> <span class="d-block mb-2">Employee Code
+						<?php if ($update == true): ?>
+						<input class="form-control" disabled type="text" name="emp_code" value="<?php echo $emp_code; ?>">
+						<?php else: ?>
+						<input class="form-control" type="text" name="emp_code" value="<?php echo $emp_code; ?>">
+						<?php endif ?>
+					</div> -->
+					</label>
+					<div class="input-group">
+						<label class="d-block mb-4"> <span class="d-block mb-2" >Employee Code <span></span>
+
+								<select class="custom-select my-1 mr-sm-2" id="inlineFormCustomSelectPref" name="eId">
+									<option name="employee_code" selected>Choose...</option>
+
+									<?php
+                            $emp_det = mysqli_query($conn, "SELECT * FROM employee");
+
+                            foreach ($emp_det as $row) { ?>
+									<option name="employee_code" value="<?= $row["emp_id"] ?>"><?= $row["emp_code"]; ?>
+									</option>
+									<?php
+                            }
+
+                                ?>
+								</select>
+					</div>
+					</label>
+					<div class="input-group">
+						<label class="d-block mb-4"> <span class="d-block mb-2">Role: <span>
+									<select id="role" name="role">
+										<option>Select Role</option>
+										<option value="Electrician">Electrician</option>
+										<option value="Plumber">Plumber</option>
+										<option value="Furniture">Furniture</option>
+										<option value="Others">Others</option>
+									</select>
+					</div>
+			</div>
+			</label>
+
+			</label>
+			<div class="mb-3 tc">
+				<?php if ($update == true): ?>
+				<button class="btnn" type="submit" name="update" value="update"
+					style="background: #556B2F;">update</button>
+				<?php else: ?>
+				<button class="btn btn-dark px-3" class="btnn" type="submit" name="save" value="save">Save</button>
+				<?php endif ?>
+			</div>
+			</form>
+		</div>
+	</div>
+	</div>
+	<!-- JavaScript Bundle with Popper -->
+	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"
+		integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4"
+		crossorigin="anonymous"></script>
+
+
+
+
+// jobs_table.php
+
+<td>
+                        <?php 
+                            if (!isset($row3['tech_closure_timestamp'])) {
+                        ?>
+                        <a href="../../controllers/complaint_controller.php?tech=<?php echo '%27' ?><?php echo $row['complaint_id']; ?><?php echo '%27' ?>"
+                                class="del_btn" style="background-color: red; color: white;padding:5px; border-radius: 5px;">Done</a><br>Technician
+                        
+                        <?php
+                            } else {
+                        ?>
+                        <p class="del_btn" style="background-color: green; color: white;padding:5px; border-radius: 5px; margin-bottom:0px ;" disabled>Closed</p>Technician
+                        
+                        <?php
+                            }
+                        ?>
+                        </td>
+
+                        <td>
+                        <?php 
+                            if (!isset($row3['sec_closure_timestamp'])) {
+                        ?>
+                        <a href="../../controllers/complaint_controller.php?sec=<?php echo '%27' ?><?php echo $row['complaint_id']; ?><?php echo '%27' ?>"
+                                class="del_btn" style="background-color: red; color: white;padding:5px; border-radius: 5px;">Done</a><br>Security
+                        
+                        <?php
+                            } else {
+                        ?>
+                        <p class="del_btn" style="background-color: green; color: white;padding:5px; border-radius: 5px; margin-bottom:0px ;" disabled>Closed</p>Security
+                        
+                        <?php
+                            }
+                        ?>
+                        </td>
+
+                        <td>
+                        <?php 
+                            if (!isset($row3['warden_closure_timestamp'])) {
+                        ?>
+                        <a href="../../controllers/complaint_controller.php?warden=<?php echo '%27' ?><?php echo $row['complaint_id']; ?><?php echo '%27' ?>"
+                                class="del_btn" style="background-color: red; color: white;padding:5px; border-radius: 5px;">Done</a><br>Warden
+                        
+                        <?php
+                            } else {
+                        ?>
+                        <p class="del_btn" style="background-color: green; color: white;padding:5px; border-radius: 5px; margin-bottom:0px ;" disabled>Closed</p>Warden
+                        
+                        <?php
+                            }
+                        ?>
+                        </td>
+
+tech_job.php
+ <td>
+                                <a id="buttonId" class="del_btn">Add remark</a>
+                                <script>
+                                    
+                                    document.getElementById("buttonId").addEventListener("click", function () {
+                                        var button = document.getElementById("buttonId");
+                                        var textbox = document.createElement("input");
+                                        textbox.type = "text";
+                                        var submitButton = document.createElement("input");
+                                        submitButton.type = "submit";
+                                        button.parentNode.replaceChild(textbox, button);
+                                        textbox.parentNode.insertBefore(submitButton, textbox.nextSibling);
+
+                                    });
+                                </script>
+                            </td>
+
+
+complaint_table.php
+
+ <div class="progress" style="color:black">
+                                        <?php
+                                        
+
+                                        if (isset($row['tech_closure_timestamp']) && isset($row['sec_closure_timestamp']) && isset($row['warden_closure_timestamp'])) {
+                                            $progress = 100;
+                                            $stat = "Completed";
+                                        } else if (isset($row['tech_pending_timestamp']) && !isset($row['tech_closure_timestamp']) && !isset($row['sec_closure_timestamp']) && !isset($row['warden_closure_timestamp'])) {
+                                            $progress = 75;
+                                            $stat = "Waiting for material";
+                                        } else if (!isset($row['tech_closure_timestamp']) && !isset($row['sec_closure_timestamp']) && !isset($row['warden_closure_timestamp'])) {
+                                            $progress = 5;
+                                            $stat = "Not started";
+                                        } else {
+                                            $progress = 50;
+                                            $stat = "In progress";
+                                        }
+                                        ?>
+                                        <div class="progress-bar" role="progressbar" style="width: <?php echo $progress; ?>%; color:black;"
+                                            aria-valuenow="<?php echo $progress; ?>" aria-valuemin="0" aria-valuemax="100">
+                                            <?php echo $progress; ?><br>
+                                        </div>
+                                        <?php echo $stat; ?>
+                                    </div>
+
+                                    Warning: Undefined array key "rights_tanker" in C:\xampp\htdocs\frontend\controllers\includes\sidebar.php on line 205
+Visitor Log Form

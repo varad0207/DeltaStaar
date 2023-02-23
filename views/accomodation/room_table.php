@@ -2,11 +2,12 @@
     include('../../controllers/includes/common.php'); 
     include('../../controllers/rooms_controller.php'); 
     if (!isset($_SESSION["emp_id"]))header("location:../../views/login.php");
-    // check rights
-    $isPrivilaged = 0;
-if ($_SESSION['rights_rooms'] > 0) {
-    $isPrivilaged = $_SESSION['rights_complaints'];
-}
+   // check rights
+   $isPrivilaged = 0;
+   $rights = unserialize($_SESSION['rights']);
+   if ($rights['rights_rooms'] > 0) {
+       $isPrivilaged = $rights['rights_rooms'];
+   }
 else
 die('<script>alert("You dont have access to this page, Please contact admin");window.location = history.back();</script>');
 
@@ -58,26 +59,133 @@ die('<script>alert("You dont have access to this page, Please contact admin");wi
 <body class="bg">
     <!-- Sidebar and Navbar-->
    <?php
-    include '../../controllers/includes/sidebar.html';
-    include '../../controllers/includes/navbar.html';
+    include '../../controllers/includes/sidebar.php';
+    include '../../controllers/includes/navbar.php';
     ?>
 
     
     <div class="table-header">
     <h1 class="tc f1 lh-title spr">Room Details</h1>
     <div class="fl w-75 form-outline srch">
-        <input type="search" id="form1" class="form-control" placeholder="Search" aria-label="Search" oninput="search()" />
+        <input type="search" id="form1" class="form-control" placeholder="Live Search" aria-label="Search" oninput="search()" />
         <h4 id="demo"></h4>
     </div>
-    <div class="fl w-25 tr">
-        <button class="btn btn-dark">
-            <h5><i class="bi bi-filter-circle"> Sort By</i></h5>
-        </button>
+    <div class="fl w-25 tr pa1">
+    <button class="btn btn-dark" class="navbar-toggler collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#navbarTogglerDemo01" aria-controls="navbarTogglerDemo01" aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span>
+    <i class="bi bi-filter-circle"> Sort By</i> </button>
+    
     </div>
     </div>
 
-    <!-- Displaying Database Table -->
+    
+    <!-- FILTERING DATA -->
+    <div class="collapse navbar-collapse" id="navbarTogglerDemo01">
+    <div class="pa1">
+        <br>
+        <form action="" method="GET">
+            <label style="color:white;">Filter By</label>
+            <button type="sumbit" class="btn btn-light">Go</button>
+            <!-- <button type="reset" class="btn btn-light">Reset</button> -->
+            <br>
+            <br>
+            <table class="table">
+                <thead>
+                    <th>Accomodation Name : </th>
+                    <th>Sort By :</th>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>
+                            <?php
+                            $fetch_accomo = "SELECT * FROM accomodation";
+                            $fetch_accomo_run = mysqli_query($conn, $fetch_accomo);
+                            if (mysqli_num_rows($fetch_accomo_run) > 0) 
+                            {
+                                foreach ($fetch_accomo_run as $accomo) 
+                                {
+                                    $checked1 = [];
+                                    if (isset($_GET['accomodation'])) {
+                                        $checked1 = $_GET['accomodation'];
+                                    }
+                            ?>
+                                    <div>
+                                        <input type="checkbox" name="accomodation[]" value="<?= $accomo['acc_id']; ?>" <?php if (in_array($accomo['acc_id'], $checked1)) 
+                                        {
+                               echo "checked";
+                           }?>>
+                                        <label><?= $accomo['acc_name']; ?></label>
+                                    </div>
+                            <?php
+                                }
+                            } else {
+                                echo "No designation availabe";
+                            }
+                            ?>
+                        </td>
+                        <td>
+                        <div class="input-group mb-3">
+                            <select name="sort_alpha" class="form-control">
+                                <option value="">--Select Option--</option>
+                                <option value="a-z" <?php if (isset($_POST['sort_alpha']) && $_POST['sort_alpha'] == "a-z") echo "selected"; ?>>A-Z(Ascending Order)</option>
+                                <option value="z-a" <?php if (isset($_POST['sort_alpha']) && $_POST['sort_alpha'] == "z-a") echo "selected"; ?>>Z-A(Descending Order)</option>
+                            </select>
+                        </div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </form>
+    </div>
+    </div>
 
+    <?php
+    $sort_condition = "";
+    if (isset($_GET['sort_alpha'])) {
+        if ($_GET['sort_alpha'] == "a-z") {
+            $sort_condition = "ASC";
+        } else if ($_GET['sort_alpha'] == "z-a") {
+            $sort_condition = "DESC";
+        }
+    }
+
+    $sql="SELECT * FROM rooms JOIN accomodation ON rooms.acc_id = accomodation.acc_id where 1=1";
+    if(isset($_GET['accomodation'])){
+        $accomodation_checked = [];
+        $accomodation_checked = $_GET['accomodation'];
+        $sql.=" and ( ";
+        foreach ($accomodation_checked as $row_acc) {
+            $sql .= " accomodation.acc_id=$row_acc or";
+        }
+        $sql=substr($sql,0,strripos($sql,"or"));  
+        $sql.=" ) ";
+        // echo $sql;
+    }
+   if($sort_condition=="")
+   {    $sort_condition="ASC";
+        $sql.=" ORDER BY acc_name $sort_condition";
+   }
+   else
+   {
+        $sql .=" ORDER BY acc_name $sort_condition";
+   }
+   $room_qry=$sql;
+?>
+    <?php
+    /* ***************** PAGINATION ***************** */
+    $limit=10;
+    $page=isset($_GET['page'])?$_GET['page']:1;
+    $start=($page-1) * $limit;
+    $sql .=" LIMIT $start,$limit";
+    $result=mysqli_query($conn,$sql);
+
+    $q1="SELECT * FROM rooms";
+    $result1=mysqli_query($conn,$q1);
+    $total=mysqli_num_rows($result1);
+    $pages=ceil($total/$limit);
+    $Previous=$page-1;
+    $Next=$page+1;
+    /* ************************************************ */
+    ?>
     <div class="table-div">
         <?php if (isset($_SESSION['message'])): ?>
                 <div class="msg">
@@ -87,8 +195,6 @@ die('<script>alert("You dont have access to this page, Please contact admin");wi
                     ?>
                 </div>
         <?php endif ?>
-        
-        <?php $results = mysqli_query($conn, "SELECT * FROM rooms JOIN accomodation ON rooms.acc_id = accomodation.acc_id"); ?>
         <div class="pa1 table-responsive">
             <table class="table table-bordered tc">
                 <thead>
@@ -102,7 +208,7 @@ die('<script>alert("You dont have access to this page, Please contact admin");wi
                     </tr>
                 </thead>
                 <tbody>
-                    <?php while ($row = mysqli_fetch_array($results)) { ?>
+                    <?php while ($row = mysqli_fetch_array($result)) { ?>
                     <?php $acc_id = $row['acc_id'];
                     $queryAccName = mysqli_query($conn, "SELECT * FROM accomodation where acc_id='$acc_id'");
                     $AccName_row = mysqli_fetch_assoc($queryAccName);
@@ -124,13 +230,18 @@ die('<script>alert("You dont have access to this page, Please contact admin");wi
                         </td>
 
                         <td>
+                        <?php if($isPrivilaged>1 && $isPrivilaged!=5 && $isPrivilaged!=4){ ?>
+
                             <a href="rooms.php?edit=<?php echo '%27' ?><?php echo $row['id']; ?><?php echo '%27' ?>"
                                 class="edit_btn"> <i class="bi bi-pencil-square" style="font-size: 1.2rem; color: black;"></i>
                             </a>
+                            <?php } ?>
                             &nbsp;
+                            <?php if ($isPrivilaged >= 4) { ?>
                             <a href="../../controllers/rooms_controller.php?del=<?php echo '%27' ?><?php echo $row['id']; ?><?php echo '%27' ?>"
                                 class="del_btn"><i class="bi bi-trash" style="font-size: 1.2rem; color: black;"></i>
                             </a>
+                            <?php } ?>
                         </td>
                     </tr>
                     <?php } ?>
@@ -139,17 +250,30 @@ die('<script>alert("You dont have access to this page, Please contact admin");wi
         </div>
     </div>
 
+    <nav aria-label="Page navigation example">
+        <ul class="pagination pagination justify-content-center">
+            <li class="page-item"><a class="page-link" href="room_table.php?page=<?=$Previous;?>" aria-label="Previous"><span aria-hidden="true">&laquo; Previous</span></a></li>
+            <?php for($i=1;$i<=$pages;$i++) :?>
+    <li class="page-item"><a class="page-link" href="room_table.php?page=<?=$i?>">
+                <?php echo $i; ?>
+            </a></li>
+            <?php endfor;?>
+            <li class="page-item"><a class="page-link" href="room_table.php?page=<?=$Next;?>" aria-label="Next"><span aria-hidden="true">Next &raquo;</span></a></li>
+        </ul>
+    </nav>
     <div class="table-footer pa4">
         <div class="fl w-75 tl">
-            <button class="btn btn-warning">
-                <h4><i class="bi bi-file-earmark-pdf"> Export</i></h4>
-            </button>
+        <form action="../EXCEL_export.php" method="post">
+                <button class="btn btn-warning" name="room_export" value="<?php echo $room_qry;?>"><h4><i class="bi bi-file-earmark-pdf"> Export</i></h4></button>
+            </form>
         </div>
+        <?php if ($isPrivilaged > 1 && $isPrivilaged != 5 && $isPrivilaged != 4) { ?>
         <div class="fl w-25 tr">
             <button class="btn btn-light">
                 <h4><a href="rooms.php">Add Room</a></h4>
             </button>   
         </div>
+        <?php } ?>
     </div>
     
     <!-- Footer -->
@@ -163,8 +287,8 @@ die('<script>alert("You dont have access to this page, Please contact admin");wi
         integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
         crossorigin="anonymous"></script>
     <!-- JavaScript Bundle with Popper -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"
+    <!-- <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4"
-        crossorigin="anonymous"></script>
+        crossorigin="anonymous"></script> -->
 </body>
 </html>

@@ -40,7 +40,6 @@ try {
 
         .chartBox {
             width: 48%;
-           
 
         }
     </style>
@@ -82,11 +81,19 @@ try {
         </div>
         <div class="chartBox">
             <h4 class="text-center p-2">Complaint Types</h4>
+            <canvas id="myDoughnutChart"></canvas>
+        </div>
+        <div class="chartBox">
+            <h4 class="text-center p-2">Complaint Status</h4>
             <canvas id="myPieChart"></canvas>
         </div>
         <div class="chartBox">
-            <h4 class="text-center p-2">Complaint Types</h4>
-            <canvas id="myPieChart" style="height:45%;"></canvas>
+            <h4 class="text-center p-2">Water Tankers</h4>
+            <canvas id=""></canvas>
+        </div>
+        <div class="chartBox">
+            <h4 class="text-center p-2">Nos.of trips by each Vendor</h4>
+            <canvas id=""></canvas>
         </div>
     </div>
 
@@ -135,6 +142,7 @@ try {
             type: 'bar',
             data: data,
             options: {
+                //aspectRatio: 1.2,
                 scales: {
                     y: {
                         beginAtZero: true
@@ -143,16 +151,18 @@ try {
             }
         };
 
+
+
         //Render Block
         const myChart = new Chart(
             document.getElementById('myChart'), config
         );
     </script>
 
-    <script> //Pie Chart
+    <script> //Doughnut Chart
 
         //Setup Block
-        const dataPie = {
+        const dataDoughnut = {
             labels: [
                 'Plumbing',
                 'Electrical',
@@ -171,10 +181,52 @@ try {
         };
 
         //Config Block
-        const configPie = {
+        const configDoughnut = {
             type: 'doughnut',
-            data: dataPie,
+            data: dataDoughnut,
+            options: {
+                aspectRatio: 2
+            }
+
         };
+
+        //Render Block
+        const myDoughnutChart = new Chart(
+            document.getElementById('myDoughnutChart'), configDoughnut
+        );
+    </script>
+
+    <script> //Pie Chart
+
+        //Setup Block
+        const dataPie = {
+            labels: [
+                'Red',
+                'Blue',
+                'Yellow'
+            ],
+            datasets: [{
+                label: 'My First Dataset',
+                data: [300, 50, 100],
+                backgroundColor: [
+                    'rgb(255, 99, 132)',
+                    'rgb(54, 162, 235)',
+                    'rgb(255, 205, 86)'
+                ],
+                hoverOffset: 4
+            }]
+        };
+
+        //Config Block
+        const configPie = {
+            type: 'pie',
+            data: dataPie,
+            options: {
+                aspectRatio: 2
+            }
+        };
+
+
 
         //Render Block
         const myPieChart = new Chart(
@@ -182,10 +234,7 @@ try {
         );
     </script>
 
-    <script>
-       document.getElementById('myPieChart').style.height = '200px';
 
-    </script>
 
 
 

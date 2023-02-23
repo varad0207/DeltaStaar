@@ -29,8 +29,8 @@ if (!isset($_SESSION["emp_id"]))header("location:../../views/login.php");
 <body class="b ma2">
     <!-- Sidebar and Navbar-->
    <?php
-    include '../../controllers/includes/sidebar.html';
-    include '../../controllers/includes/navbar.html';
+    include '../../controllers/includes/sidebar.php';
+    include '../../controllers/includes/navbar.php';
     ?>
 	<div class="form-body">
     <div class="row">
@@ -40,8 +40,8 @@ if (!isset($_SESSION["emp_id"]))header("location:../../views/login.php");
                     <h1 class="f2 lh-copy tc" style="color: white;">VISITOR LOG FORM</h1>
                     	<form class="requires-validation f3 lh-copy" novalidate action="../../controllers/visitor_log_controller.php" method="post">
                             <div class="input-group">
-						        <label class="d-block mb-4"> <span class="d-block mb-2">Security Code :-<span>
-							    <input class="form-control" type="text" name="security_emp_id" value="<?php echo $security_emp_id; ?>">
+						        <!-- <label class="d-block mb-4"> <span class="d-block mb-2">Security Code :-<span> -->
+							    <input class="form-control" type="hidden" name="security_emp_id" value="<?php echo $_SESSION['emp_id']; ?>">
                                 </label>
                             </div>
 					            

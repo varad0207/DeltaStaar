@@ -46,8 +46,8 @@ if (isset($_GET['edit'])) {
 <body class="b ma2">
     <!-- Sidebar and Navbar-->
    <?php
-    include '../../controllers/includes/sidebar.html';
-    include '../../controllers/includes/navbar.html';
+    include '../../controllers/includes/sidebar.php';
+    include '../../controllers/includes/navbar.php';
     ?>
     
     <div class="form-body">
@@ -93,16 +93,16 @@ if (isset($_GET['edit'])) {
 
                                     <div>
                                         <input type="checkbox" name="rights_acc[]" value="1">
-                                        <label for="read">Read</label>
+                                        <label for="read">Read Accomodation Data</label>
                                     </div>
 
                                     <div>
                                         <input type="checkbox"  name="rights_acc[]" value="2">
-                                        <label for="write_update">Write+Update</label>
+                                        <label for="write_update">Add/Update Accomodation</label>
                                     </div>
                                     <div>
                                         <input type="checkbox" name="rights_acc[]" value="4">
-                                        <label for="delete">Delete</label>
+                                        <label for="delete">Remove Accomodation</label>
                                     </div>
                                     <!-- <div>
                                         <input type="radio" id="all" name="rights_acc" value="7" >
@@ -119,16 +119,16 @@ if (isset($_GET['edit'])) {
 
                                     <div>
                                         <input type="checkbox" name="rights_room[]" value="1">
-                                        <label for="read">Read</label>
+                                        <label for="read">Read Rooms Data</label>
                                     </div>
 
                                     <div>
                                         <input type="checkbox"  name="rights_room[]" value="2">
-                                        <label for="write_update">Write+Update</label>
+                                        <label for="write_update">Add/Update Rooms</label>
                                     </div>
                                     <div>
                                         <input type="checkbox" name="rights_room[]" value="4">
-                                        <label for="delete">Delete</label>
+                                        <label for="delete">Remove Rooms</label>
                                     </div>
                                     <!-- <div>
                                         <input type="checkbox" id="all" name="rights_room" value="7">
@@ -157,16 +157,16 @@ if (isset($_GET['edit'])) {
 
                                     <div>
                                         <input type="checkbox" name="rights_employee_details[]" value="1">
-                                        <label for="read">Read</label>
+                                        <label for="read">Read Employee Data</label>
                                     </div>
 
                                     <div>
                                         <input type="checkbox"  name="rights_employee_details[]" value="2">
-                                        <label for="write_update">Write+Update</label>
+                                        <label for="write_update">Add/Update Employee Details</label>
                                     </div>
                                     <div>
                                         <input type="checkbox" name="rights_employee_details[]" value="4">
-                                        <label for="delete">Delete</label>
+                                        <label for="delete">Delete Employee Record</label>
                                     </div>
                                     <!-- <div>
                                         <input type="checkbox" id="all" name="rights_employee_details" value="7">
@@ -183,16 +183,16 @@ if (isset($_GET['edit'])) {
 
                                     <div>
                                         <input type="checkbox" name="rights_vaccination_details[]" value="1">
-                                        <label for="read">Read</label>
+                                        <label for="read">View Emp. Vaccination Status</label>
                                     </div>
 
                                     <div>
                                         <input type="checkbox"  name="rights_vaccination_details[]" value="2">
-                                        <label for="write_update">Write+Update</label>
+                                        <label for="write_update">Update Vaccination Record</label>
                                     </div>
                                     <div>
                                         <input type="checkbox" name="rights_vaccination_details[]" value="4">
-                                        <label for="delete">Delete</label>
+                                        <label for="delete">Delete Record</label>
                                     </div>
                                     <!-- <div>
                                         <input type="checkbox" id="all" name="rights_vaccination_details" value="7">
@@ -220,16 +220,16 @@ if (isset($_GET['edit'])) {
 
                                     <div>
                                         <input type="checkbox" name="rights_tankers[]" value="1">
-                                        <label for="read">Read</label>
+                                        <label for="read">Read Entries</label>
                                     </div>
 
                                     <div>
                                         <input type="checkbox"  name="rights_tankers[]" value="2">
-                                        <label for="write_update">Write+Update</label>
+                                        <label for="write_update">Add/Update Tanker Entries</label>
                                     </div>
                                     <div>
                                         <input type="checkbox" name="rights_tankers[]" value="4">
-                                        <label for="delete">Delete</label>
+                                        <label for="delete">Delete Entries</label>
                                     </div>
                                     <!-- <div>
                                         <input type="checkbox" id="all" name="rights_tankers" value="7">
@@ -246,16 +246,16 @@ if (isset($_GET['edit'])) {
 
                                     <div>
                                         <input type="checkbox" name="rights_employee_outing[]" value="1">
-                                        <label for="read">Read</label>
+                                        <label for="read">Read Outing Records</label>
                                     </div>
 
                                     <div>
                                         <input type="checkbox"  name="rights_employee_outing[]" value="2">
-                                        <label for="write_update">Write+Update</label>
+                                        <label for="write_update">Verify/Update Outing Requests</label>
                                     </div>
                                     <div>
                                         <input type="checkbox" name="rights_employee_outing[]" value="4">
-                                        <label for="delete">Delete</label>
+                                        <label for="delete">Delete Entries</label>
                                     </div>
                                     <!-- <div>
                                         <input type="checkbox" id="all" name="rights_employee_outing" value="7">
@@ -272,16 +272,16 @@ if (isset($_GET['edit'])) {
 
                                     <div>
                                         <input type="checkbox" name="rights_visitors[]" value="1">
-                                        <label for="read">Read</label>
+                                        <label for="read">Read Log Entries</label>
                                     </div>
 
                                     <div>
                                         <input type="checkbox"  name="rights_visitors[]" value="2">
-                                        <label for="write_update">Write+Update</label>
+                                        <label for="write_update">Add/Update Visitor</label>
                                     </div>
                                     <div>
                                         <input type="checkbox" name="rights_visitors[]" value="4">
-                                        <label for="delete">Delete</label>
+                                        <label for="delete">Delete From Visitor Log</label>
                                     </div>
                                     <!-- <div>
                                         <input type="checkbox" id="all" name="rights_visitors" value="7">
@@ -310,16 +310,16 @@ if (isset($_GET['edit'])) {
 
                                     <div>
                                         <input type="checkbox" name="rights_complaints[]" value="1">
-                                        <label for="read">Read</label>
+                                        <label for="read">Read Complaints</label>
                                     </div>
 
                                     <div>
                                         <input type="checkbox"  name="rights_complaints[]" value="2">
-                                        <label for="write_update">Write+Update</label>
+                                        <label for="write_update">Update/Close Complaints</label>
                                     </div>
                                     <div>
                                         <input type="checkbox" name="rights_complaints[]" value="4">
-                                        <label for="delete">Delete</label>
+                                        <label for="delete">Delete Complaints</label>
                                     </div>
                                     <!-- <div>
                                         <input type="checkbox" id="all" name="rights_complaints" value="7">
@@ -336,16 +336,16 @@ if (isset($_GET['edit'])) {
 
                                     <div>
                                         <input type="checkbox" name="rights_jobs[]" value="1">
-                                        <label for="read">Read</label>
+                                        <label for="read">Read Jobs</label>
                                     </div>
 
                                     <div>
                                         <input type="checkbox"  name="rights_jobs[]" value="2">
-                                        <label for="write_update">Write+Update</label>
+                                        <label for="write_update">Raise/Close Jobs</label>
                                     </div>
                                     <div>
                                         <input type="checkbox" name="rights_jobs[]" value="4">
-                                        <label for="delete">Delete</label>
+                                        <label for="delete">Delete Jobs</label>
                                     </div>
                                     <!-- <div>
                                         <input type="checkbox" id="all" name="rights_jobs" value="7">

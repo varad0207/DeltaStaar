@@ -1,0 +1,60 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;700;900&display=swap');
+
+@font-face {
+    font-family: 'Poppins', sans-serif;
+    /* font-family: Seasons; */
+    src: url(Fontspring-DEMO-theseasons-bd.otf);
+}
+
+h4 {
+    padding-top: 1rem;
+    font-family: Seasons;
+}
+
+.containerrr {
+    display: flex !important;
+    flex-direction: row;
+    padding-top: 1.2rem;
+    text-align: center;
+}
+
+.one,
+.two,
+.three {
+    display: flex !important;
+    align-items: center;
+    width: 33.33%;
+}
+.employee-logo{
+    padding: 1rem;
+    
+}
+
+.two,
+.three {
+    
+    flex-direction: column;
+}
+
+.head-icon {
+    display: flex;
+    width: 40%;
+}
+
+@media only screen and (max-width: 768px) {
+    .containerrr {
+        flex-direction: column;
+        padding-top: 0;
+    }
+
+    .one,
+    .two,
+    .three {
+        width: 100%;
+        align-items: center;
+        text-align: center;
+        padding-bottom: 8%;
+    }
+
+    
+}

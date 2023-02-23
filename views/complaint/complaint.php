@@ -2,7 +2,18 @@
 require '../../controllers/includes/common.php';
 require '../../controllers/complaint_controller.php';
 
+if(isset($_SESSION['emp_id']) && isset($_GET['edit'])){
+    $acc = mysqli_fetch_array(mysqli_query($conn, 
+        "SELECT acc_code 
+        FROM employee 
+        join rooms on rooms.id=employee.room_id
+        join accomodation on accomodation.acc_id=rooms.acc_id
+        WHERE emp_id='{$_SESSION['emp_id']}'"));
+    $acc_code=$acc['acc_code'];
+}
+
 $update = "";
+$acc_code='';
 if (isset($_GET['edit'])) {
 	$id = $_GET['edit'];
 	$update = true;
@@ -19,6 +30,7 @@ if (isset($_GET['edit'])) {
 	$warden_closure_timestamp = $n['warden_closure_timestamp'];
 	$remarks = $n['remarks'];
 	$emp_code = $n['emp_code'];
+    $acc_code=$n['acc_code'];
 
 }
 ?>
@@ -31,7 +43,7 @@ if (isset($_GET['edit'])) {
 
     <!--Favicon link-->
     <link rel="icon" type="image/x-icon" href="../../images/logo-no-name-circle.png">
-    <title>Delta@STAAR | Report Complaint</title>
+    <title>Delta@STAAR | Raise Complaint</title>
     <meta name="description" content="Complaint submission portal for deltin employees">
     <link rel="stylesheet" href="../../css/form.css">
     <link rel="stylesheet" href="../../css/style1.css">
@@ -42,8 +54,10 @@ if (isset($_GET['edit'])) {
 <body class="b ma2">
     <!-- Sidebar and Navbar-->
    <?php
-    include '../../controllers/includes/sidebar.html';
-    include '../../controllers/includes/navbar.html';
+   if (isset($_SESSION['emp_id'])) {
+       include '../../controllers/includes/sidebar.php';
+       include '../../controllers/includes/navbar.php';
+   }
     ?>
     <div class="form-body">
     <div class="row">
@@ -60,51 +74,77 @@ if (isset($_GET['edit'])) {
 				</div>
 				<?php endif ?>
                     <form class="requires-validation f3 lh-copy" novalidate action="../../controllers/complaint_controller.php" method="post">
-                    <input type="hidden" name="id" value="<?php echo $id; ?>">
-                        <div class="col-md-12 pa2">
-                          <label for="empcode">Employee Code</label>
-                          <?php if (isset($_SESSION['emp_id']) && !$update) { ?>
-                            <input class="form-control"  type="text" name="emp_code" value="<?php echo $_SESSION['emp_code']; ?>" disabled>
+                        <input type="hidden" name="id" value="<?php echo $id; ?>">
+                        <input type="hidden" name="acc_code" value="<?php echo $acc_code; ?>">
 
-                            <?php } else {?>
-                            <input class="form-control" value="" type="text" name="emp_code" placeholder="eg.HV1234" required>
-                            <div class="valid-feedback">field is valid!</div>
-                            <div class="invalid-feedback">field cannot be blank!</div>
-                            <?php } ?>
-                        </div>
-                      
+                            <div class="col-md-12 pa2">
+                                <label for="empcode">Employee Code</label>
+                                <?php if (isset($_SESSION['emp_id']) && !$update) { ?>
+                                <input class="form-control" id="empcode" style="pointer-events: none;"  type="text" name="emp_code" value="<?php echo $_SESSION['emp_code']; ?>">
+                                <?php } else {?>
+                                <input class="form-control" id="empcode" value="" type="text" name="emp_code" placeholder="eg.HV1234" required onkeyup="GetDetail(this.value)">
+                                <div class="valid-feedback">field is valid!</div>
+                                <div class="invalid-feedback">field cannot be blank!</div>
+                                <?php } ?>
+                            </div>
+
+                            <div class="col-md-12 pa2">
+                                <label for="accCode">Accomodation Code</label>
+                                <input class="form-control" value="<?php echo $acc_code; ?>" type="text" id="acccode" name="acc_code" placeholder="eg.ACC1234" required>
+                                <div class="valid-feedback">field is valid!</div>
+                                <div class="invalid-feedback">field cannot be blank!</div>
+                            </div>
                         
-                      
-                       <div class="col-md-12 pa2">
-                        <label for="category">Category</label>
-                            <select class="form-select mt-3" name="category" value="<?php echo $category; ?>" required>
-                                  <option selected disabled value="">Select a category of complaint</option>
-                                  <option value="1">Electrical</option>
-                                  <option value="2">Plumbing</option>
-                                  <option value="3">Carpentary</option>
-                                  <option value="Others">Others</option>
-                           </select>
-                            <div class="valid-feedback">You selected an option!</div>
-                            <div class="invalid-feedback">Please select an option!</div>
-                       </div>
+                        <!-- <div class="col-md-12 pa2">
+                            <label for="category">Category</label>
+                                <select class="form-select mt-3" name="category" value="<?php //echo $category; ?>" required>
+                                    <option selected disabled value="">Select a category of complaint</option>
+                                    <option value="1">Electrical</option>
+                                    <option value="2">Plumbing</option>
+                                    <option value="3">Carpentary</option>
+                                    <option value="Others">Others</option>
+                                </select>
+                                <div class="valid-feedback">You selected an option!</div>
+                                <div class="invalid-feedback">Please select an option!</div>
+                        </div> -->
+
+                        <div class="col-md-12 pa2">
+                                <label for="type">Complaint Type</label>
+                                <select class="form-select mt-3" name="category" required>
+                                <option selected disabled value="">Select a category of complaint</option>
+                                    <?php
+                                    $comp_type = mysqli_query($conn, "SELECT * FROM complaint_type");
+
+                                    foreach ($comp_type as $row) { ?>
+                                        <option name="category" value="<?= $row["type_id"] ?>">
+                                            <?= $row["complaint_type"]; ?>
+                                        </option>
+                                    <?php
+                                    }
+
+                                    ?>
+                                </select>
+                                <div class="invalid-feedback">Please select an option!</div>
+                            </div>
 
 
-                       <div class="col-md-12 pa2">
-                        <label for="description">Complain Description</label>
-                        <textarea name="description" placeholder="Please describe your problem" cols="30" rows="10" value="<?php echo $description; ?>"></textarea>
-                       </div>
-                       
 
-                        <div class="form-button mt-3 tc">
-                            
-                            <?php if ($update == true): ?>
-						<button id="submit" class="btn btn-warning f3 lh-copy" style="color: white;" type="submit" name="update" value="update"
-							style="background: #556B2F;">update</button>
-						<?php else: ?>
-						<button id="submit" class="btn btn-warning f3 lh-copy" style="color: white;" type="submit" name="submit"
-							value="submit">Submit</button>
-						<?php endif ?>
+                        <div class="col-md-12 pa2">
+                            <label for="description">Complaint Description</label>
+                            <textarea name="description" placeholder="Please describe your problem" cols="30" rows="10" value="<?php echo $description; ?>"></textarea>
                         </div>
+                        
+
+                            <div class="form-button mt-3 tc">
+                                
+                                <?php if ($update == true): ?>
+                            <button id="submit" class="btn btn-warning f3 lh-copy" style="color: white;" type="submit" name="update" value="update"
+                                style="background: #556B2F;">update</button>
+                            <?php else: ?>
+                            <button id="submit" class="btn btn-warning f3 lh-copy" style="color: white;" type="submit" name="submit"
+                                value="submit">Submit</button>
+                            <?php endif ?>
+                            </div>
                     </form>
                  </div>
                 </div>
@@ -112,6 +152,26 @@ if (isset($_GET['edit'])) {
         </div>
     </div>
     <footer class="tc f3 lh-copy mt4">Copyright &copy; 2022 Delta@STAAR. All Rights Reserved</footer>
+
+    <script>
+  function GetDetail(str) {
+    if (str.length == 0) {
+        document.getElementById("acccode").value = "";
+        return;
+    }
+    else {
+        var xmlhttp = new XMLHttpRequest();
+        xmlhttp.onreadystatechange = function () {
+            if (this.readyState == 4 && this.status == 200) {
+                var myObj = JSON.parse(this.responseText);
+                document.getElementById("acccode").value = myObj[0];
+            }
+        };
+        xmlhttp.open("GET", "../../controllers/complaint_validation.php?emp_code=" + str, true);
+        xmlhttp.send();
+    }
+  }
+</script>
 
     <script src="../../js/form.js"></script>
     <!-- JavaScript Bundle with Popper -->

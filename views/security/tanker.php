@@ -1,7 +1,15 @@
 <?php include('../../controllers/includes/common.php'); ?>
 <?php include('../../controllers/tanker_controller.php'); 
 if (!isset($_SESSION["emp_id"]))header("location:../../views/login.php");
-$update = "";
+$isPrivilaged = 0;
+    $rights = unserialize($_SESSION['rights']);
+    if ($rights['rights_tankers'] > 1) {
+        $isPrivilaged = $rights['rights_tankers'];
+    } else
+        die('<script>alert("You dont have access to this page, Please contact admin");window.location = history.back();</script>');
+    if ($isPrivilaged == 5 || $isPrivilaged == 4)
+        die('<script>alert("You dont have access to this page, Please contact admin");window.location = history.back();</script>');
+   $update = "";
 if(isset($_GET['edit']))
 {
     $id = $_GET['edit'];
@@ -42,8 +50,8 @@ if(isset($_GET['edit']))
 
     <!-- Sidebar and Navbar-->
    <?php
-    include '../../controllers/includes/sidebar.html';
-    include '../../controllers/includes/navbar.html';
+    include '../../controllers/includes/sidebar.php';
+    include '../../controllers/includes/navbar.php';
     ?>
     <div class="form-body">
     <div class="row">
@@ -55,14 +63,14 @@ if(isset($_GET['edit']))
                     
 
                         <div class="col-md-12 pa2">
-                          <label for="accid">Accomodation ID</label>
+                          <label for="accid">Accomodation</label>
                           <select class="form-select mt-3" name="acc" required>
                                 <option selected disabled value="">Select Accomodation</option>
                                 <?php
                                 $acc_code=mysqli_query($conn, "SELECT * FROM accomodation");
                                 
                                 foreach ($acc_code as $row){ ?>
-                                <option name="acc" value="<?= $row["acc_id"]?>"><?= $row["acc_code"];?></option>	
+                                <option name="acc" value="<?= $row["acc_id"]?>"><?= $row["acc_name"];?></option>	
                                 <?php
                                 }
                               ?>

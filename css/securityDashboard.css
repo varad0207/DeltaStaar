@@ -1,0 +1,112 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;700;900&display=swap');
+
+@font-face {
+    font-family: 'Poppins', sans-serif;
+    /* font-family: Seasons; */
+    src: url(Fontspring-DEMO-theseasons-bd.otf);
+}
+
+h4 {
+    font-family: Seasons;
+}
+
+.containerr {
+    display: flex !important;
+    flex-direction: row;
+    padding-top: 1.2rem;
+}
+
+/*.separator {
+    border-top: 300px solid white;
+   
+}*/
+
+.left,
+.middle,
+.right {
+    display: flex !important;
+    align-items: center;
+    width: 33.33%;
+}
+
+.middle,
+.right {
+    display: flex !important;
+    flex-direction: column;
+}
+
+.head-icon {
+    display: flex;
+    width: 40%;
+}
+
+/* CSS */
+.button-56 {
+    align-items: center;
+    background-color: #fee3b8;
+    border: 2px solid #111;
+    border-radius: 8px;
+    box-sizing: border-box;
+    color: #111;
+    cursor: pointer;
+    display: flex;
+    font-family: Inter, sans-serif;
+    font-size: 16px;
+    height: 48px;
+    justify-content: center;
+    line-height: 24px;
+    max-width: 100%;
+    padding: 0 25px;
+    position: relative;
+    text-align: center;
+    text-decoration: none;
+    user-select: none;
+    -webkit-user-select: none;
+    touch-action: manipulation;
+}
+
+.button-56:after {
+    background-color: #111;
+    border-radius: 8px;
+    content: "";
+    display: block;
+    height: 48px;
+    left: 0;
+    width: 100%;
+    position: absolute;
+    top: -2px;
+    transform: translate(8px, 8px);
+    transition: transform .2s ease-out;
+    z-index: -1;
+}
+
+.button-56:hover:after {
+    transform: translate(0, 0);
+}
+
+.button-56:active {
+    background-color: #ffdeda;
+    outline: 0;
+}
+
+.button-56:hover {
+    outline: 0;
+}
+
+@media only screen and (max-width: 768px) {
+    .containerr {
+        flex-direction: column;
+        padding-top: 0;
+    }
+
+    .left,
+    .middle,
+    .right {
+        width: 100%;
+        align-items: center;
+        text-align: center;
+        padding-bottom: 8%;
+    }
+
+    
+}

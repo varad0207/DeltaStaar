@@ -1,23 +1,19 @@
 <?php
-// require '/Applications/XAMPP/xamppfiles/htdocs/deltinconnect/controllers/includes/common.php'; //for chinmay only
-
-require './controllers/includes/common.php'; // for others
-
+require './controllers/includes/common.php';
 if (isset($_SESSION["emp_id"])) {
 	session_unset();
 	session_destroy();
 }
 ?>
+
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
 	<meta charset="UTF-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-
 	<!--Favicon link-->
-	<link rel="icon" type="image/x-icon" href="../images/logo-no-name-circle.png">
+	<link rel="icon" type="image/x-icon" href="images/logo-no-name-circle.png">
 	<title>Delta@STAAR | HOME</title>
 	<link rel="stylesheet" href="./css/style.css">
 	<!-- Bootstrap -->
@@ -26,7 +22,6 @@ if (isset($_SESSION["emp_id"])) {
 	<!-- Tachyons -->
 	<link rel="stylesheet" href="https://unpkg.com/tachyons@4.12.0/css/tachyons.min.css" />
 </head>
-
 <body class="bgcolor">
 	<!-- Navigation Bar -->
 	<nav class="navbar  navbar-expand-lg navbar-dark f4 lh-copy pa3 fw4">
@@ -48,27 +43,12 @@ if (isset($_SESSION["emp_id"])) {
 				</div>
 				<div class="offcanvas-body">
 					<ul class="navbar-nav justify-content-end flex-grow-1 pe-3">
-						<!-- <li class="nav-item">
-						<a class="nav-link active" aria-current="page" href="#">Home</a>
-					</li> -->
 						<li class="nav-item">
 							<a class="nav-link active" href="./views/aboutus.html">About Us</a>
 						</li>
-						<!-- <li class="nav-item">
-						<a class="nav-link active" href="#" >Rooms</a>
-					</li> -->
-						<li class="nav-item">
-							<a class="nav-link active" href="#">Locations</a>
-						</li>
-						<!-- <li class="nav-item">
-						<a class="nav-link active" href="#" >Tankers</a>
-					</li> -->
 						<li class="nav-item">
 							<a class="nav-link active" href="./views/complaint/complaint.php">Complaints+</a>
 						</li>
-						<!-- <li class="nav-item pr5">
-						<a class="nav-link active" href="#" >Contact Us</a>
-					</li> -->
 						<li class="nav-item">
 							<a class="nav-link active1" href="./views/login.php">LogIn</a>
 						</li>
@@ -95,5 +75,4 @@ if (isset($_SESSION["emp_id"])) {
 		integrity="sha384-OERcA2EqjJCMA+/3y+gxIOqMEjwtxJY7qPCqsdltbNJuaOe923+mo//f6V8Qbsw3"
 		crossorigin="anonymous"></script>
 </body>
-
 </html>

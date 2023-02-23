@@ -5,12 +5,15 @@ if (!isset($_SESSION["emp_id"]))
     header("location:../../views/login.php");
 // check rights
 $isPrivilaged = 0;
-if ($_SESSION['rights_complaints'] > 0) {
-    $isPrivilaged = $_SESSION['rights_complaints'];
-}
-else
-die('<script>alert("You dont have access to this page, Please contact admin");window.location = history.back();</script>');
-
+$rights = unserialize($_SESSION['rights']);
+if ($rights['rights_complaints'] > 0) {
+    $isPrivilaged = $rights['rights_complaints'];
+} else
+    die('<script>alert("You dont have access to this page, Please contact admin");window.location = history.back();</script>');
+$isWarden = 0;
+$check = mysqli_query($conn, "select emp_id from employee where emp_id not in(select emp_id from technician) and emp_id not in (select emp_id from security) and emp_id='{$_SESSION['emp_id']}'");
+if (mysqli_num_rows($check) > 0)
+    $isWarden = 1;
 ?>
 
 <!DOCTYPE html>
@@ -41,7 +44,7 @@ die('<script>alert("You dont have access to this page, Please contact admin");wi
             var input, filter, listing, i, txtValue;
             input = document.getElementById("form1");
             filter = input.value.toUpperCase();
-            listing = document.getElementsByTagName("tr");
+            listing = document.getElementsByClassName("live");
             // Loop through all 
             for (i = 0; i < listing.length; i++) {
                 if (listing[i]) {
@@ -60,195 +63,357 @@ die('<script>alert("You dont have access to this page, Please contact admin");wi
 
 <body class="bg">
     <!-- Sidebar and Navbar-->
-   <?php
-    include '../../controllers/includes/sidebar.html';
-    include '../../controllers/includes/navbar.html';
+    <?php
+    include '../../controllers/includes/sidebar.php';
+    include '../../controllers/includes/navbar.php';
     ?>
 
     <div class="table-header">
-        <h1 class="tc f1 lh-title spr">All Complaints</h1>
-        <!-- <div class="fl w-75 form-outline srch">
-        <input type="search" id="form1" class="form-control" placeholder="Search" aria-label="Search" oninput="search()" />
+    <h1 class="tc f1 lh-title spr">Complaint Details</h1>
+    <div class="fl w-75 form-outline srch">
+        <input type="search" id="form1" class="form-control" placeholder="Live Search" aria-label="Search" oninput="search()" />
         <h4 id="demo"></h4>
-        </div> -->
-        <!-- Displaying Database Table -->
+    </div>
+    <div class="fl w-25 tr pa1">
+    <button class="btn btn-dark" class="navbar-toggler collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#navbarTogglerDemo01" aria-controls="navbarTogglerDemo01" aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span>
+    <i class="bi bi-filter-circle"> Sort By</i> </button>
+    
+    </div>
+    </div>
+
+    
+    <!-- FILTERING DATA -->
+    <div class="collapse navbar-collapse" id="navbarTogglerDemo01">
+    <div class="pa1">
+        <br>
+        <form action="" method="GET" class="myForm">
+            <label style="color:white;">Filter By</label>
+            <button type="sumbit" class="btn btn-light">Go</button>
+            <!-- <button type="reset" class="btn btn-light" onclick="resetForm()">Reset</button> -->
+            <!-- <input type="button" value="Reset" onclick="resetForm()"> -->
+            <br>
+            <br>
+            <table class="table">
+                <thead>
+                    <th>Complain Category : </th>
+                    <th>Accommodation : </th>
+                    <th>Sort By : </th>
+                   
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>
+                            <?php
+                            $fetch_filter = "SELECT * FROM complaint_type";
+                            $fetch_filter_run = mysqli_query($conn, $fetch_filter);
+                            if (mysqli_num_rows($fetch_filter_run) > 0) {
+                                foreach ($fetch_filter_run as $filter) {
+                                    $checked1 = [];
+                                    if (isset($_GET['type'])) {
+                                        $checked1 = $_GET['type'];
+                                    }
+                            ?>
+                                    <div>
+                                        <input type="checkbox" name="type[]" value="<?= $filter['complaint_type']; ?>" <?php if (in_array($filter['complaint_type'], $checked1)) {
+                                                                                                                        echo "checked";
+                                                                                                                    }
+                                                                                                                    ?>>
+                                        <label><?= $filter['complaint_type']; ?></label>
+                                    </div>
+                            <?php
+                                }
+                            } else {
+                                echo "No Data available";
+                            }
+                            ?>
+                        </td>
+                        <td>
+                        <?php
+                            $fetch_filter = "SELECT * FROM accomodation";
+                            $fetch_filter_run = mysqli_query($conn, $fetch_filter);
+                            if (mysqli_num_rows($fetch_filter_run) > 0) {
+                                foreach ($fetch_filter_run as $filter) {
+                                    $checked1 = [];
+                                    if (isset($_GET['acc_name'])) {
+                                        $checked1 = $_GET['acc_name'];
+                                    }
+                            ?>
+                                    <div>
+                                        <input type="checkbox" name="acc_name[]" value="<?= $filter['acc_name']; ?>" <?php if (in_array($filter['acc_name'], $checked1)) {
+                                                                                                                        echo "checked";
+                                                                                                                    }
+                                                                                                                    ?>>
+                                        <label><?= $filter['acc_name']; ?></label>
+                                    </div>
+                            <?php
+                                }
+                            } else {
+                                echo "No Data available";
+                            }
+                            ?>
+                        </td>
+                        <td>
+                        <!-- <form action="" method="post" class="myForm"> -->
+                        <div class="input-group mb-3">
+                            <select name="sort_alpha" class="form-control">
+                                <option value="">--Select Option--</option>
+                                <option value="a-z" <?php if (isset($_POST['sort_alpha']) && $_POST['sort_alpha'] == "a-z") echo "selected"; ?>>A-Z(Ascending Order)</option>
+                                <option value="z-a" <?php if (isset($_POST['sort_alpha']) && $_POST['sort_alpha'] == "z-a") echo "selected"; ?>>Z-A(Descending Order)</option>
+                            </select>
+                        </div>
+                    <!-- </form> -->
+                        </td>
+                    </tr>
+                    
+                </tbody>
+            </table>
+        </form>
+    </div>
+    </div>
+    <div class="table-header">
         <?php if (!isset($_SESSION['emp_id'])) { ?>
-        <form class="requires-validation f3 lh-copy tc" novalidate action="complaint_table.php" method="post">
-            <select class="custom-select my-1 mr-sm-2" id="inlineFormCustomSelectPref" name="Id">
-                <option name="employee_code" selected>Choose...</option>
+            <form class="requires-validation f3 lh-copy tc" novalidate action="complaint_table.php" method="post">
+                <select class="custom-select my-1 mr-sm-2" id="inlineFormCustomSelectPref" name="Id">
+                    <option name="employee_code" selected>Choose...</option>
 
-                <?php
-                $emp_det = mysqli_query($conn, "SELECT * FROM employee");
+                    <?php
+                    $emp_det = mysqli_query($conn, "SELECT * FROM employee");
 
-                foreach ($emp_det as $row) { ?>
-                <option name="employee_code" value="<?= $row["emp_code"] ?>"><?= $row["emp_code"]; ?></option>
-                <?php
-                }
+                    foreach ($emp_det as $row) { ?>
+                        <option name="employee_code" value="<?= $row["emp_code"] ?>"><?= $row["emp_code"]; ?></option>
+                        <?php
+                    }
                     ?>
                 </select>
                 <button class="btn btn-dark px-3" class="btnn" type="submit" name="save" value="save">Save</button>
             </form>
             <?php
-            
-        } 
-        
+
+        }
+
 
         ?>
-        <!-- <div class="tr">
-        <button class="btn btn-dark">
-            <h5><i class="bi bi-filter-circle"> Sort By</i></h5>
-        </button>
-    </div> -->
     </div>
 
+    <?php
+    $sqli = "SELECT * FROM complaint_type join complaints ON type=type_id join accomodation USING(acc_code) WHERE 1=1";
+    $sort_condition = "";
+    if (isset($_GET['sort_alpha'])) {
+        if ($_GET['sort_alpha'] == "a-z") {
+            $sort_condition = "ASC";
+        } else if ($_GET['sort_alpha'] == "z-a") {
+            $sort_condition = "DESC";
+        }
+    }
+    if(isset($_GET['type'])){
+        $filter_checked = [];
+        $filter_checked = $_GET['type'];
+        $sqli .= " AND ( ";
+        foreach($filter_checked as $row_filter){
+            $sqli .= " complaint_type='$row_filter' OR"; 
+        }
+        $sqli =substr($sqli,0,strripos($sqli,"OR"));  
+        $sqli .=" ) ";
+        
+    }
+    if(isset($_GET['acc_name'])){
+        $filter_checked = [];
+        $filter_checked = $_GET['acc_name'];
+        $sqli .= " AND ( ";
+        foreach($filter_checked as $row_filter){
+            $sqli .= " acc_name='$row_filter' OR"; 
+        }
+        $sqli =substr($sqli,0,strripos($sqli,"OR"));  
+        $sqli .=" ) ";
+        
+    }
+    $sqli .=" ORDER BY complaint_type $sort_condition";
+    // echo $sqli;
+    $complaint_qry=$sqli;
+   // $results = mysqli_query($conn, $sqli);
+    ?>
+    <?php
+    /* ***************** PAGINATION ***************** */
+    $limit=10;
+    $page=isset($_GET['page'])?$_GET['page']:1;
+    $start=($page-1) * $limit;
+    $sqli .=" LIMIT $start,$limit";
+    $result=mysqli_query($conn,$sqli);
 
+    $q1="SELECT * FROM vaccination";
+    $result1=mysqli_query($conn,$q1);
+    $total=mysqli_num_rows($result1);
+    $pages=ceil($total/$limit);
+    $Previous=$page-1;
+    $Next=$page+1;
+    /* ************************************************ */
+    ?>
     <div class="table-div">
         <?php if (isset($_SESSION['message'])): ?>
-        <div class="msg">
-            <?php
-            echo $_SESSION['message'];
-            unset($_SESSION['message']);
-                    ?>
-        </div>
+            <div class="msg">
+                <?php
+                echo $_SESSION['message'];
+                unset($_SESSION['message']);
+                ?>
+            </div>
         <?php endif ?>
 
-        <?php
-        if (isset($_POST['save'])|| (isset($_SESSION['emp_id']) && $isPrivilaged)) {
-            if(isset($_POST['Id']))$emp_code = $_POST['Id'];
-            echo "<script>console.log('$emp_code')</script>";
-                $results = isset($_SESSION['emp_id'])?mysqli_query($conn, "SELECT * FROM complaints"):mysqli_query($conn, "SELECT * FROM complaints where emp_code='$emp_code'");
+            <?php
+            if (isset($_POST['save']) || (isset($_SESSION['emp_id']) && $isPrivilaged)) {
+            if (isset($_POST['Id']))
+                $emp_code = $_POST['Id'];
+            // $results = isset($_SESSION['emp_id']) ? mysqli_query($conn, "SELECT * FROM complaints") : mysqli_query($conn, "SELECT * FROM complaints where emp_code='$emp_code'");
             ?>
-        
-        <div class="pa1 table-responsive">
-            <table class="table table-bordered tc">
-                <thead>
-                    <tr>
-                        <th>Complaint Id </th>
-                        <th>Raised Time </th>
-                        <th>Complaint Category </th>
-                        <th>Description </th>
-                        <th>Status </th>
-                        <th>Closure Time<br>(Technician)</th>
-                        
-                        <th>Closure Time<br>(Security) </th>
-                        <th>Closure Time<br>(Warden) </th>
-                        <th>Remarks </th>
-                        <th>Employee Name </th>
-                        <th>Employee Code </th>
-                        <th>Accomodation Name</th>
-                        <th>Room Number</th>
-                        <th colspan="2">Action</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <?php while ($row = mysqli_fetch_array($results)) { ?>
-                    <?php
-                $emp_code = $row['emp_code'];
-                $queryEmpName = mysqli_query($conn, "SELECT * FROM employee where emp_code='$emp_code'");
-                $EmpName_row = mysqli_fetch_assoc($queryEmpName);
-                
-                $queryAccName = mysqli_query($conn, "SELECT * FROM accomodation where warden_emp_code='$emp_code'");
-                $AccName_row = mysqli_fetch_assoc($queryAccName);
-                        ?>
-                    <?php
-                    $comp_type = $row['type'];
-                    $queryCompType = mysqli_query($conn, "SELECT * FROM complaint_type WHERE id='$comp_type'");
-                    $CompType_row = mysqli_fetch_assoc($queryCompType);
-                    $query = mysqli_query($conn, "SELECT * FROM jobs WHERE complaint_id = '{$row['id']}'");
-                
-                        ?>
-                    <tr>
-                        <td>
-                            <?php echo $row['id']; ?>
-                        </td>
-                        <td>
-                            <?php echo $row['raise_timestamp']; ?>
-                        </td>
-                        <!-- fetch complaint category -->
-                        <td>
-                            <?php echo $CompType_row['type']; ?>
-                        </td>
-                        <td>
-                            <?php echo $row['description']; ?>
-                        </td>
-                        <td>
-                            <?php
-                                if (!isset($row['tech_closure_timestamp'])||!isset($row['sec_closure_timestamp'])||!isset($row['warden_closure_timestamp'])) {
-                                    echo "<p>Pending</p>";
-                                  } else{
-                                    echo "<p>Completed</p>";
-                                  }
-                             ?>
-                        </td>
-                        <td>
-                            <?php echo $row['tech_closure_timestamp']; ?>
-                        </td>
-                        <td>
-                            <?php echo $row['sec_closure_timestamp']; ?>
-                        </td>
-                        <td>
-                            <?php echo $row['warden_closure_timestamp']; ?>
-                        </td>
-                        <td>
-                            <?php echo $row['remarks']; ?>
-                        </td>
-                        <!-- fetch emp name -->
-                        <td>
-                            <?php echo $EmpName_row['fname']; ?>
-                        </td>
-                        <td>
-                            <?php echo $row['emp_code']; ?>
-                        </td>
-                        <!-- fetch acc name -->
-                        <td>
-                            <?php echo $AccName_row['acc_name']; ?>
-                        </td>
-                        <td>
-                            <?php echo $Room_row['room_no']; ?>
-                        </td>
-                        <td>
 
-                        <?php 
-                            if ($query) {
-                            if (mysqli_num_rows($query) > 0) {
-                        ?>
-                        <b style="color: green;">Job Raised</b>
-                        <?php
-                            } else {
-                        ?>
-                        <a href="jobs.php?raise=<?php echo $row['id']; ?>" class="edit_btn" style="color: red;">Raise Job</a>
-                        <?php
-                            }
-                            
-                            }
-                        ?>
+            <div class="pa1 table-responsive">
+                <table class="table table-bordered tc">
+                    <thead>
+                        <tr>
+                            <th>Complaint Id </th>
+                            <th>Raised Time </th>
+                            <th>Complaint Category </th>
+                            <th>Description </th>
+                            <th>Status </th>
+                            <th>Closure Time<br>(Technician)</th>
 
-                            
-                        </td>
-                        <td>
-                            <a href="../../controllers/complaint_controller.php?del=<?php echo '%27' ?><?php echo $row['id']; ?><?php echo '%27' ?>"
-                                class="del_btn">Delete</a>
-                        </td>
-                    </tr>
-                    <?php } ?>
-                </tbody>
-            </table>
+                            <th>Closure Time<br>(Security) </th>
+                            <th>Closure Time<br>(Warden) </th>
+                            <th>Remarks </th>
+                            <th>Employee Name </th>
+                            <th>Employee Code </th>
+                            <th>Accomodation Name</th>
+                            <th>Room Number</th>
+                            <th colspan="2">Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <?php while ($row = mysqli_fetch_array($result)) { 
+                            $emp_code = $row['emp_code'];
+                            $EmpName_row = mysqli_fetch_assoc(mysqli_query($conn, "SELECT * FROM employee where emp_code='$emp_code'"));
+                            $EmployeeRoom_row = mysqli_fetch_assoc(mysqli_query($conn, "SELECT * FROM rooms WHERE id = '{$EmpName_row['room_id']}'"));
+
+                            $AccName_row = mysqli_fetch_assoc(mysqli_query($conn, "SELECT * FROM accomodation where acc_code='{$row['acc_code']}'"));
+                    
+                            $query = mysqli_query($conn, "SELECT * FROM jobs WHERE complaint_id = '{$row['id']}'");
+
+                            ?>
+                            <tr class="live">
+                                <td>
+                                    <?php echo $row['id']; ?>
+                                </td>
+                                <td>
+                                    <?php echo $row['raise_timestamp']; ?>
+                                </td>
+                                <!-- fetch complaint category -->
+                                <td>
+                                    <?php echo $row['complaint_type']; ?>
+                                </td>
+                                <td>
+                                    <?php echo $row['description']; ?>
+                                </td>
+                                <td>
+                                    <?php
+
+                                    if (isset($row['tech_closure_timestamp']) && isset($row['sec_closure_timestamp']) && isset($row['warden_closure_timestamp'])) {
+                                        echo "<p>Completed</p>";
+                                    } else if (isset($row['tech_pending_timestamp']) && !isset($row['tech_closure_timestamp']) && !isset($row['sec_closure_timestamp']) && !isset($row['warden_closure_timestamp'])) {
+                                        echo "<p>Waiting for material</p>";
+                                    } else if (!isset($row['tech_closure_timestamp']) && !isset($row['sec_closure_timestamp']) && !isset($row['warden_closure_timestamp'])) {
+                                        echo "<p>Not Started</p>";
+                                    } else {
+                                        echo "<p>In Progress</p>";
+                                    }
+
+                                    ?>
+                                </td>
+                                <td>
+                                    <?php echo $row['tech_closure_timestamp']; ?>
+                                </td>
+                                <td>
+                                    <?php echo $row['sec_closure_timestamp']; ?>
+                                </td>
+                                <td>
+                                    <?php echo $row['warden_closure_timestamp']; ?>
+                                </td>
+                                <td>
+                                    <?php echo $row['remarks']; ?>
+                                </td>
+                                <!-- fetch emp name -->
+                                <td>
+                                    <?php echo $EmpName_row['fname']; ?>
+                                </td>
+                                <td>
+                                    <?php echo $row['emp_code']; ?>
+                                </td>
+                                <!-- fetch acc name -->
+                                <td>
+                                    <?php echo $AccName_row['acc_name']; ?>
+                                </td>
+                                <td>
+                                    <?php
+                                    if (isset($EmployeeRoom_row['room_no']) && !empty($EmployeeRoom_row['room_no'])) {
+                                        echo $EmployeeRoom_row['room_no'];
+                                    } else {
+                                        echo $EmployeeRoom_row['room_no'] = 'N/A';
+                                    }
+                                    ?>
+                                </td>
+                                <td>
+
+                                    <?php
+                                    if ($query) {
+                                        if (mysqli_num_rows($query) > 0) {
+                                            ?>
+                                            <a href="jobs_table.php" class="edit_btn"
+                                                        style="color: green;">Job Raised</a>
+                                            <!-- <b style="color: green;">Job Raised</b> -->
+                                            <?php
+                                        } else {
+                                            if ($isWarden) {
+                                                if ($rights['rights_jobs'] > 1 && $rights['rights_jobs'] != 5 && $rights['rights_jobs'] != 4) { ?>
+                                                    <a href="jobs.php?raise=<?php echo $row['id']; ?>" class="edit_btn"
+                                                        style="color: red;">Raise Job</a>
+                                                    <?php
+                                                }
+                                            }
+                                        }
+                                    }
+                                    ?>
+
+
+                                </td>
+                                <td>
+                                    <?php if ($isPrivilaged >= 4) { ?>
+                                        <a href="../../controllers/complaint_controller.php?del=<?php echo '%27' ?><?php echo $row['id']; ?><?php echo '%27' ?>"
+                                            class="del_btn">Delete</a>
+                                    <?php } ?>
+                                </td>
+                            </tr>
+                        <?php } ?>
+                    </tbody>
+                </table>
             <?php } ?>
         </div>
     </div>
+    <nav aria-label="Page navigation example">
+        <ul class="pagination pagination justify-content-center">
+            <li class="page-item"><a class="page-link" href="complaint_table.php?page=<?=$Previous;?>" aria-label="Previous"><span aria-hidden="true">&laquo; Previous</span></a></li>
+            <?php for($i=1;$i<=$pages;$i++) :?>
+    <li class="page-item"><a class="page-link" href="complaint_table.php?page=<?=$i?>">
+                <?php echo $i; ?>
+            </a></li>
+            <?php endfor;?>
+            <li class="page-item"><a class="page-link" href="complaint_table.php?page=<?=$Next;?>" aria-label="Next"><span aria-hidden="true">Next &raquo;</span></a></li>
+        </ul>
+    </nav>
 
-    <!-- <div class="table-footer pa4">
+    <div class="table-footer pa4">
         <div class="fl w-75 tl">
-            <button class="btn btn-warning">
-                <h4><i class="bi bi-file-earmark-pdf"> Export</i></h4>
-            </button>
+        <form action="../EXCEL_export.php" method="post">
+                <button class="btn btn-warning" name="complaint_export" value="<?php echo $complaint_qry;?>"><h4><i class="bi bi-file-earmark-pdf"> Export</i></h4></button>
+            </form>
         </div>
-        <div class="fl w-25 tr">
-            <button class="btn btn-light">
-                <h4><a href="tanker.php">Add Tanker</a></h4>
-            </button>   
-        </div>
-    </div> -->
+    </div>
 
     <!-- Footer -->
     <footer class="tc f3 lh-copy mt4">Copyright &copy; 2022 Delta@STAAR. All Rights Reserved</footer>

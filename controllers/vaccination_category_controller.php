@@ -1,4 +1,5 @@
-<?php if (isset($_POST['submit'])|| isset($_POST['update'])||isset($_GET['del'])) {
+<?php 
+if (isset($_POST['submit'])|| isset($_POST['update'])||isset($_GET['del'])) {
     include('includes/common.php');
 }else{
     include('includes/common.php');
@@ -39,3 +40,4 @@
         $_SESSION['message'] = "Vaccination Category deleted!"; 
         header('location: ../views/config/vaccination_category_table.php');
     }
+?>
