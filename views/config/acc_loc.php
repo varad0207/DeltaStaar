@@ -23,7 +23,6 @@ if (isset($_GET['edit']))
 <html>
 
 <head>
-	<link rel="stylesheet" type="text/css" href="style.css">
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
 
@@ -39,31 +38,33 @@ if (isset($_GET['edit']))
 </head>
 
 <body class="b ma2">
+    <style>
+        span{
+            color: gold;
+            font-size: 14px;
+        }
+    </style>
     <!-- Sidebar and Navbar-->
    <?php
     include '../../controllers/includes/sidebar.php';
     include '../../controllers/includes/navbar.php';
     ?>
 	
-  <div class="form-body">
+    <div class="form-body">
     <div class="row">
         <div class="form-holder">
             <div class="form-content">
                 <div class="form-items">
                     <h1 class="f2 lh-copy tc" style="color: white;">Enter Location Details</h1>
-                    <form class="requires-validation f3 lh-copy" novalidate action="../../controllers/acc_loc_controller.php" method="post">
+                    <form class="requires-validation f3 lh-copy" novalidate action="../../controllers/acc_loc_controller.php" method="post" name="myForm" onsubmit="return validateAccLoc()">
                       
                     <input class="form-control" type="hidden" name="id" value="<?php echo $id ?>">
-
                         <div class="col-md-12 pa2">
                             <label for="loc_name">Location Name</label>
-                              <input class="form-control" type="text" name="loc" value="<?php echo $loc ?>" placeholder="Location" required>
-                              <div class="valid-feedback">field is valid!</div>
-                              <div class="invalid-feedback">field cannot be blank!</div>
+                                <input class="form-control" type="text" name="loc" value="<?php echo $loc ?>" placeholder="Location" required>
+                                <span id="valid-field"></span>
+                                
                         </div>
-
-                        
-
                         <div class="form-button mt-3 tc">
                             <?php if ($update == true): ?>
                                 <button id="submit" name="update" value="update" type="submit"
@@ -78,12 +79,20 @@ if (isset($_GET['edit']))
             </div>
         </div>
     </div>
-  </div>
-  <footer class="tc f3 lh-copy mt4">Copyright &copy; 2022 Delta@STAAR. All Rights Reserved</footer>
+    </div>
+    <footer class="tc f3 lh-copy mt4">Copyright &copy; 2022 Delta@STAAR. All Rights Reserved</footer>
 
-  <script src="../../js/form.js"></script>
-	<!-- JavaScript Bundle with Popper -->
-	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4" crossorigin="anonymous"></script>
+    <script src="../../js/form.js"></script>
+	<script src="../../js/Sidebar/sidebar.js"></script>
+    <script src="../../js/validation.js"></script>
+    <script src="https://kit.fontawesome.com/319379cac6.js" crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
+        integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
+        crossorigin="anonymous"></script>
+    <!-- JavaScript Bundle with Popper -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4"
+        crossorigin="anonymous"></script>
 </body>
 
 </html>

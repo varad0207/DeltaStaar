@@ -63,6 +63,9 @@ if (isset($_POST['submit']) && !empty($_POST['submit'])) {
             $_SESSION['emp_code'] = $emp_code;
             $_SESSION['user']=$user;
             $_SESSION['login_history_id'] = $last_insert_id;
+            // if (!isset($_COOKIE['new_user'])) {
+            //     setcookie('new_user', 'true', time() + (86400 * 30), '/'); // set the cookie to expire in 30 days
+            // }
             header("location:../views/dashboard.php");
         }
     }

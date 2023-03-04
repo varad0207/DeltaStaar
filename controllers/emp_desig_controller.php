@@ -13,11 +13,11 @@
     }
     $designation = $id = "";
 
-    if(isset($_POST['submit']) && !empty($_POST['submit']))
+    if(isset($_POST['submit']))
     {
-        $designation = mysqli_real_escape_string($conn, $_POST['designation']);
+        $designation = $_POST['designation'];
 
-        $insert = "insert into employee_designation (designation) values ('$designation')";
+        $insert = "INSERT INTO employee_designation (designation) VALUES ('$designation')";
 
         echo mysqli_error($conn);
         $submit = mysqli_query($conn, $insert) or die(mysqli_error($conn));

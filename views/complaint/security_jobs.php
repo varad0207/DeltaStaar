@@ -16,16 +16,16 @@ if ($rights['rights_jobs'] > 0) {
 } 
 // else
 //     die('<script>alert("You dont have access to this page, Please contact admin");window.location = history.back();</script>');
-// $sql = mysqli_query($conn, "SELECT * FROM technician where emp_id='{$_SESSION['emp_id']}' ");
+// $sql = mysqli_query($conn, "SELECT * FROM security where emp_id='{$_SESSION['emp_id']}' ");
 // if(mysqli_num_rows($sql)==0) 
 //     die('<script>alert("You dont have access to this page, Please contact admin");window.location = history.back();</script>');
 
 
 if(!$isPrivilaged)
     die('<script>alert("You dont have access to this page, Please contact admin");window.location = history.back();</script>');
-$sql = mysqli_query($conn, "SELECT * FROM technician where emp_id='{$_SESSION['emp_id']}' ");
+$sql = mysqli_query($conn, "SELECT * FROM security where emp_id='{$_SESSION['emp_id']}' ");
 if(mysqli_num_rows($sql)>0) 
-    $technician_id = mysqli_fetch_array($sql);
+    $security_id = mysqli_fetch_array($sql);
 else
     die('<script>alert("You dont have access to this page, Please contact admin");window.location = history.back();</script>');
 ?>
@@ -133,12 +133,12 @@ else
         $results = mysqli_query($conn, "SELECT complaints.*,
         j.id as job_id,
         j.complaint_id as complaint_id,
-        j.technician_id as technician_id,
+        j.security_id as security_id,
         j.raise_timestamp as job_raise_time,
         j.description as job_desc,
         j.completion_date as job_comp_time,
         j.warden_emp_code as warden_emp_code
-         FROM jobs j join complaints on complaint_id=complaints.id where technician_id='{$technician_id['id']}' ");
+         FROM jobs j join complaints on complaint_id=complaints.id where security_id='{$security_id['id']}' ");
         ?>
         <div class="pa1 table-responsive">
             <table class="table table-bordered tc">
@@ -146,7 +146,7 @@ else
                     <tr>
                         <!-- <th>Job Id </th> -->
                         <th>Complaint Id</th>
-                        <!-- <th>Assigned technician </th> -->
+                        <!-- <th>Assigned security </th> -->
                         <th>Raised By </th>
                         <th>Raised on </th>
                         <th>Description</th>

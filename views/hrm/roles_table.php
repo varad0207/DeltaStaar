@@ -331,7 +331,7 @@ $all = '<span class="material-icons">done_all</span>';
                                     <a href="./roles.php?edit=<?php echo '%27' ?><?php echo $row['role_id']; ?><?php echo '%27' ?>" class="edit_btn"> <i class="bi bi-pencil-square" style="font-size: 1.2rem; color: black;"></i>
                                     </a>
                                     &nbsp;
-                                    <a href="../../controllers/role_controller.php?del_role=<?php echo $row['role_id']; ?>" class="del_btn"><i class="bi bi-trash" style="font-size: 1.2rem; color: black;"></i>
+                                    <a href="../../controllers/role_controller.php?del=<?php echo $row['role_id']; ?>" class="del_btn"><i class="bi bi-trash" style="font-size: 1.2rem; color: black;"></i>
                                     </a>
                                 <?php } ?>
                             </td>

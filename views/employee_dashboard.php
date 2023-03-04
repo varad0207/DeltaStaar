@@ -49,11 +49,11 @@
         include '../controllers/includes/navbar.php';
         ?>
 
-        <div align=center class="welcome-message">
+        <div align=center class="welcome-message h1">
             Welcome back, <span style="color:#ceaa6d">Employee</span>
         </div>
 
-        <?php include '../controllers/includes/employee.php'; ?>
+        <?php include '../controllers/includes/security.php'; ?>
 
 
         <!-- Footer -->

@@ -51,7 +51,7 @@ if (isset($_POST['submit']) && !empty($_POST['submit'])) {
     $message = "Hello Technician! A new job has been assigned to you. Please check your email for details.";
 
     // Sending a WhatsApp message using the Twilio API
-    $message = $client->messages->create($to_number, array('from' => 'whatsapp:+919021207997', 'body' => $message));
+    $message = $client->messages->create($to_number, array('from' => 'whatsapp:+14155238886', 'body' => $message));
 
     // Output message ID
     echo "Message ID: " . $message->sid;

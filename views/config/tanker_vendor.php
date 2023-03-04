@@ -40,8 +40,14 @@ if(isset($_GET['edit']))
     
 </head>
 <body class="b ma2">
+    <style>
+        span{
+            color: gold;
+            font-size: 14px;
+        }
+    </style>
     <!-- Sidebar and Navbar-->
-   <?php
+    <?php
     include '../../controllers/includes/sidebar.php';
     include '../../controllers/includes/navbar.php';
     ?>
@@ -51,34 +57,30 @@ if(isset($_GET['edit']))
             <div class="form-content">
                 <div class="form-items">
                     <h1 class="f2 lh-copy tc" style="color: white;">Tanker Vendor Entry</h1>
-                    <form class="requires-validation f3 lh-copy" novalidate action="../../controllers/tanker_vendor_controller.php" method="post">
+                    <form class="requires-validation f3 lh-copy" novalidate action="../../controllers/tanker_vendor_controller.php" method="post" name="myForm" onsubmit="return validateTankerVendor()">
                     
                        <div class="col-md-12 pa2">
                         <label for="vname">Vendor Name</label> 
                             <input class="form-control" type="text" name="vname" placeholder="Vendor Name" value = "<?php $vname ?>" required>
-                            <div class="valid-feedback">field is valid!</div>
-                            <div class="invalid-feedback">field cannot be blank!</div>
+                            <span id="valid-vname"></span>
                        </div>
 
                        <div class="col-md-12 pa2">
                         <label for="cname">Company Name</label> 
                             <input class="form-control" type="text" name="cname" placeholder="Company Name" value = "<?php $cname ?>" required>
-                            <div class="valid-feedback">field is valid!</div>
-                            <div class="invalid-feedback">field cannot be blank!</div>
+                            <span id="valid-cname"></span>
                        </div>
 
                        <div class="col-md-12 pa2">
                         <label for="number">Number</label>
                           <input class="form-control" type="number" name="num" placeholder="Number" value = "<?php $num ?>" required>
-                          <div class="valid-feedback">field is valid!</div>
-                          <div class="invalid-feedback">field cannot be blank!</div>
+                          <span id="valid-num"></span>
                       </div>
 
                       <div class="col-md-12 pa2">
                         <label for="address">Vendor Address</label> 
                             <input class="form-control" type="text" name="add" placeholder="Vendor Address" value = "<?php $add ?>" required>
-                            <div class="valid-feedback">field is valid!</div>
-                            <div class="invalid-feedback">field cannot be blank!</div>
+                            <span id="valid-add"></span>
                        </div>
                        
                         
@@ -99,8 +101,17 @@ if(isset($_GET['edit']))
   </div>
   <footer class="tc f3 lh-copy mt4">Copyright &copy; 2022 Delta@STAAR. All Rights Reserved</footer>
 
-  <script src="../../js/form.js"></script>
-  <!-- JavaScript Bundle with Popper -->
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4" crossorigin="anonymous"></script>
+    <!-- Script files -->
+    <script src="../../js/form.js"></script>
+    <script src="../../js/Sidebar/sidebar.js"></script>
+    <script src="../../js/validation.js"></script>
+    <script src="https://kit.fontawesome.com/319379cac6.js" crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
+        integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
+        crossorigin="anonymous"></script>
+    <!-- JavaScript Bundle with Popper -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4"
+        crossorigin="anonymous"></script>
 </body>
 </html>

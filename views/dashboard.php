@@ -13,13 +13,22 @@ if ($_SESSION['is_superadmin']) {
     $isSuperadmin = 1;
 } else {
     if (mysqli_num_rows($check_technician) > 0 && mysqli_num_rows($check_security) > 0) {
-        //security is also techinician
+        //security is also technician
     } else if (mysqli_num_rows($check_technician) > 0) {
         $isTechnician = 1;
     } else if (mysqli_num_rows($check_security) > 0) {
         $isSecurity = 1;
     }
 }
+// echo "<script>alert('1');</script>";
+// if (isset($_COOKIE['new_user'])) {
+//     // User has logged in before
+//     setcookie('new_user', '', time() - 3600); // delete the cookie
+//   } else {
+    // User is logging in for the first time
+    //setcookie('new_user', 'true', time() + (86400 * 30), '/'); // set the cookie to expire in 30 days
+    //echo "<script>alert('Welcome to DELTASTAAR!');</script>";
+//   }
 ?>
 <!DOCTYPE html>
 <html>
@@ -33,6 +42,7 @@ if ($_SESSION['is_superadmin']) {
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.3/font/bootstrap-icons.css">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 
     <link href="../css/sidebar.css" rel="stylesheet">
     <!-- Bootstrap -->
@@ -46,6 +56,8 @@ if ($_SESSION['is_superadmin']) {
     <link rel="stylesheet" href="../css/securityDashboard.css">
     <link rel="stylesheet" href="../css/employeeDashboard.css">
     <link rel="stylesheet" href="../css/style1.css">
+    <link rel="stylesheet" href="../css/overlay.css">
+
     <!-- Tachyons -->
     <link rel="stylesheet" href="https://unpkg.com/tachyons@4.12.0/css/tachyons.min.css" />
 
@@ -72,7 +84,8 @@ if ($_SESSION['is_superadmin']) {
         include '../controllers/includes/navbar.php';
         ?>
 
-        <div class="tc f1 lh-title txt">Welcome back, 
+        <div class="tc f1 lh-title txt7">
+            Welcome back, 
             <span class="spr">
                 <?php echo $emp_details['fname']; ?>
             </span>!
@@ -87,18 +100,58 @@ if ($_SESSION['is_superadmin']) {
         else
             include '../controllers/includes/employee.php';
         ?>
-
-
         <!-- Footer -->
         <footer class="tc f3 lh-copy mt4">Copyright &copy; 2022 Delta@STAAR. All Rights Reserved</footer>
-
-
     </div>
+    
+        <div class="overlay" id="overlay"> 
+            <div class="overlay-window">
+                <div class="overlay-window-titlebar">
+                    <span class="overlay-title">Welcome <span class=name><?php echo $emp_details['fname']; ?></span></span>
+                    <button class="close material-icons">close</button>
+                </div>
+                <div class="overlay-content" style="color:black">
+                        Welcome to DELTASTAAR!<br><br>
+                        To change password <a href="../views/config/reset_password.php">Click Here</a>
+                </div>
+            </div>
+        </div>
+
+    
 
     <!--End of Main content-->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.0.0/core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/3.1.9-1/md5.js"></script>
+
+    <script>
+window.onload = function() {
+    console.log(localStorage.getItem('visited'));
+    if (!localStorage.getItem('visited')) {
+        var xmlhttp = new XMLHttpRequest();
+            xmlhttp.onreadystatechange = function () {
+                if (this.readyState == 4 && this.status == 200) {
+                    var myObj = JSON.parse(this.responseText);
+                    console.log(myObj[0]);
+                    if(CryptoJS.MD5("password").toString()==myObj[0]){
+                        document.getElementById('overlay').style.display = "flex";
+                        localStorage.setItem('visited', true);
+                    }
+                    else{
+                        localStorage.setItem('visited', false);
+                        document.getElementById('overlay').style.display = "none";
+                    }
+                }
+            };
+            xmlhttp.open("GET", "../controllers/validation.php?id=" + <?php echo $_SESSION['emp_id']; ?>, true);
+            xmlhttp.send(); 
+    }
+    else
+        document.getElementById('overlay').style.display = "none";
+};
+    </script>
 
     <script src="../js/Sidebar/sidebar.js"></script>
-
+    <script src="../js/Overlay.js"></script>
 
     <!--Scripts for Navbar (as in dashboard.php)-->
     <script src="https://kit.fontawesome.com/319379cac6.js" crossorigin="anonymous"></script>

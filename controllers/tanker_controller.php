@@ -23,7 +23,7 @@
 
         //change tracking code
         if($AllowTrackingChanges)
-        mysqli_query($conn,"insert into change_tracking_tankers (user,type,acc_id, tanker_id, security_emp_id, quality_check, qty, bill_no,vendor_id,tanker_timestamp) values ('{$_SESSION['user']}','Insert','$acc_id','$last_insert_id', '$acc_code', '$emp_sec_id', '$quality', '$qty', '$bill_no', '$ven_id', '$timestamp')");
+        mysqli_query($conn,"insert into change_tracking_tankers (user,type,acc_id, tanker_id, security_emp_id, quality_check, qty, bill_no,vendor_id,tanker_timestamp) values ('{$_SESSION['user']}','Insert','$acc_id','$last_insert_id', '$emp_sec_id', '$quality', '$qty', '$bill_no', '$ven_id', '$timestamp')");
 
 
         header("location: ../views/security/tanker_table.php");

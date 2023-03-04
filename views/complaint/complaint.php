@@ -167,7 +167,7 @@ if (isset($_GET['edit'])) {
                 document.getElementById("acccode").value = myObj[0];
             }
         };
-        xmlhttp.open("GET", "../../controllers/complaint_validation.php?emp_code=" + str, true);
+        xmlhttp.open("GET", "../../controllers/validation.php?emp_code=" + str, true);
         xmlhttp.send();
     }
   }

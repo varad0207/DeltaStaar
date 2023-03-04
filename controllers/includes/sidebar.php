@@ -31,16 +31,15 @@ if (basename($_SERVER['PHP_SELF'],'.php') != "dashboard")
 </head>
 
 <body style="background-color: #1b1c1e;">
-<div id="mySidebar" class="sidebar">
+    <div id="mySidebar" class="sidebar">
         <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
-
         <a class="navbar-brand mb-2" href="#" style="padding: 8px;">
             <img src="../<?php echo $link; ?>images/logo-no-name-circle.png" height="120px" alt="Deltin Logo" class="">
         </a>
-
         <ul class="nav flex-column p-4" id="nav_accordion" style="--bs-nav-link-hover-color: #f8f9fa;">
-<!-- accomodation -->
-<?php if($rights['rights_accomodation']>0 || $rights['rights_rooms']>0){ ?>
+
+            <!-- accomodation -->
+            <?php if($rights['rights_accomodation']>0 || $rights['rights_rooms']>0){ ?>
             <li class="nav-item has-submenu">
                 <a class="nav-link border-dark border-bottom" href="#">
                     <i class="bi bi-building"></i>
@@ -48,7 +47,7 @@ if (basename($_SERVER['PHP_SELF'],'.php') != "dashboard")
                     <i class="bi bi-chevron-down"></i>
                 </a>
                 <ul class="submenu collapse">
-                <?php if($rights['rights_accomodation']>0){  ?>
+                    <?php if($rights['rights_accomodation']>0){  ?>
                     <li>
                         <a class="nav-link border-dark border-bottom" href="../<?php echo $link; ?>views/accomodation/accomodation.php">
                             Add Accommodation
@@ -60,7 +59,6 @@ if (basename($_SERVER['PHP_SELF'],'.php') != "dashboard")
                             Accommodation Table
                         </a>
                     </li>
-                    
                     <li>
                         <a class="nav-link border-dark border-bottom"
                             href="../<?php echo $link; ?>views/config/acc_loc_table.php">
@@ -83,8 +81,9 @@ if (basename($_SERVER['PHP_SELF'],'.php') != "dashboard")
                 </ul>
             </li>
             <?php } ?>
-<!-- complaint -->
-<?php if($rights['rights_complaints']>0 || $rights['rights_jobs']>0){ ?>
+
+            <!-- complaint -->
+            <?php if($rights['rights_complaints']>0 || $rights['rights_jobs']>0){ ?>
             <li class="nav-item has-submenu">
                 <a class="nav-link border-dark border-bottom" href="#">
                     <i class="bi bi-file-text"></i>Complaints<i class="bi bi-chevron-down"></i>
@@ -102,14 +101,14 @@ if (basename($_SERVER['PHP_SELF'],'.php') != "dashboard")
                     </li>
                     <!--
                     <li>
-                        <a class="nav-link border-dark border-bottom" href="../<?php echo $link; ?>views/complaint/jobs_table.php">
+                        <a class="nav-link border-dark border-bottom" href="../<?php //echo $link; ?>views/complaint/jobs_table.php">
                             View Jobs
                         </a>
-                    </li>
+                    </li> -->
                   <?php  if($_SESSION['is_superadmin']){ ?>
-
-                    <!-- <li>
-                        <a class="nav-link border-dark border-bottom" href="../<?php echo $link; ?>views/config/complaint_type.php">
+                    <!-- 
+                    <li>
+                        <a class="nav-link border-dark border-bottom" href="../<?php //echo $link; ?>views/config/complaint_type.php">
                             Add Complaint Type
                         </a>
                     </li> -->
@@ -123,8 +122,9 @@ if (basename($_SERVER['PHP_SELF'],'.php') != "dashboard")
                 </ul>
             </li>
             <?php } ?>
-<!-- hrm -->
-<?php if($rights['rights_employee_details']>0 || $rights['rights_vaccination']>0 || $rights['rights_vaccination_category']>0){ ?> <!-- check more things like vaccintion and outing -->
+
+            <!-- hrm -->
+            <?php if($rights['rights_employee_details']>0 || $rights['rights_vaccination']>0 || $rights['rights_vaccination_category']>0){ ?> <!-- check more things like vaccintion and outing -->
             <li class="nav-item has-submenu">
                 <a class="nav-link border-dark border-bottom" href="#">
                     <i class="bi bi-person"></i> HRM <i class="bi bi-chevron-down"></i>
@@ -132,7 +132,7 @@ if (basename($_SERVER['PHP_SELF'],'.php') != "dashboard")
                 <ul class="submenu collapse">
                     <?php if($rights['rights_employee_details']>0){ ?>
                     <!-- <li>
-                        <a class="nav-link border-dark border-bottom" href="../<?php echo $link; ?>views/config/emp_desig.php">
+                        <a class="nav-link border-dark border-bottom" href="../<?php //echo $link; ?>views/config/emp_desig.php">
                             Add Designation Details
                         </a>
                     </li> -->
@@ -151,7 +151,6 @@ if (basename($_SERVER['PHP_SELF'],'.php') != "dashboard")
                             Add Employee Details
                         </a>
                     </li>
-                    
                     <li>
                         <a class="nav-link border-dark border-bottom" href="../<?php echo $link; ?>views/hrm/employee_table.php">
                             Employees Table
@@ -191,12 +190,12 @@ if (basename($_SERVER['PHP_SELF'],'.php') != "dashboard")
                         </a>
                     </li>
                     <?php } ?>
-
                 </ul>
             </li>
             <?php } ?>
-<!-- security -->
-<?php if($rights['rights_tankers']>0 || $rights['rights_employee_outing']>0 || $rights['rights_visitor_log']>0){ ?>
+            
+            <!-- security -->
+            <?php if($rights['rights_tankers']>0 || $rights['rights_employee_outing']>0 || $rights['rights_visitor_log']>0){ ?>
             <li class="nav-item has-submenu">
                 <a class="nav-link border-dark border-bottom" href="#">
                     <i class="bi bi-shield"></i> Security <i class="bi bi-chevron-down"></i>
@@ -242,7 +241,7 @@ if (basename($_SERVER['PHP_SELF'],'.php') != "dashboard")
                     <?php } ?>
                 </ul>
             </li>
-<?php } ?>
+            <?php } ?>
             <!--
             <li class="nav-item">
                 <a class="nav-link" href="#"> Other link </a>
