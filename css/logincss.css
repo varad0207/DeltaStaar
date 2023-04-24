@@ -21,4 +21,6 @@ body {
     background: -webkit-linear-gradient(#FEBE10, #F0E68C);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
+    background-clip: text;
 }
+

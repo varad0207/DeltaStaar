@@ -1,4 +1,4 @@
-#overlay {
+.overlay {
     position: fixed;
     width: 100vw;
     height: 100vh;
@@ -13,8 +13,8 @@
 .overlay-window {
     width: 40vw;
     max-width:500px;
-    min-width:20vh;
-    min-height:10vw;
+    min-width:20vw;
+    min-height:10vh;
     height:200px;
     background: #ffffff;
     border: 2px solid #ffffff;
@@ -41,11 +41,7 @@
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
 }
-@media only screen and (max-width: 695px) {
-    .name {
-      display:none;
-    }
-  }
+
 .close {
     width: 40px;
     height: 40px;
@@ -64,3 +60,25 @@
     padding: 15px;
     font-size: 0.9em;
    }
+
+.btns{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+}
+
+
+@media only screen and (max-width: 695px) {
+    .name {
+      display:none;
+    }
+    .btns{
+        flex-direction: column;
+        align-items: center;
+        justify-content: space-around;
+
+      }
+      .wrap{
+        flex-direction: column;
+      }
+  }

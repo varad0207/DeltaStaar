@@ -171,12 +171,14 @@ nav{
 .active {
     background: -webkit-linear-gradient(#f5f5c4, #fdfff9);
     -webkit-background-clip: text;
+    background-clip: text;
     -webkit-text-fill-color: transparent;
 }
 
 .active:hover {
     background: -webkit-linear-gradient(#FEBE10, #F0E68C);
     -webkit-background-clip: text;
+    background-clip: text;
     -webkit-text-fill-color: transparent;
     /* transition: all 0.5s ease-in-out;
     transform: scale(1.2); */
@@ -191,6 +193,7 @@ nav{
 .txtgold {
     background: -webkit-linear-gradient(#FEBE10, #F0E68C);
     -webkit-background-clip: text;
+    background-clip: text;
     -webkit-text-fill-color: transparent;
 }
 
