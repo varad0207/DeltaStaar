@@ -32,31 +32,6 @@ if (isset($_POST['submit']) && !empty($_POST['submit'])) {
  
         header("location: ../views/complaint/jobs_table.php");
     
-
-
-    // Load Twilio library
-    require "../vendor/autoload.php";
-
-    // Your Twilio account SID and auth token
-    $sid = "SK282023bf28e07f7a1c256486b0b9de83";
-    $token = "tqrkGR21GwAvwuqDyFMdVyGHLYLrqLuI";
-
-    // Creating a Twilio Client object
-    $client = new Twilio\Rest\Client($sid, $token);
-
-    // Phone number of the technician (with country code)
-    $to_number = "whatsapp:+919850609820";
-
-    // Message to be sent
-    $message = "Hello Technician! A new job has been assigned to you. Please check your email for details.";
-
-    // Sending a WhatsApp message using the Twilio API
-    $message = $client->messages->create($to_number, array('from' => 'whatsapp:+14155238886', 'body' => $message));
-
-    // Output message ID
-    echo "Message ID: " . $message->sid;
-
-    header("location: ../views/complaint/jobs_table.php");
 }
 
 if (isset($_POST['update'])) {

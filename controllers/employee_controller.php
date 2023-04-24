@@ -61,6 +61,7 @@ if (isset($_POST['submit'])) {
     }
     else{
         mysqli_query($conn, "INSERT INTO employee (emp_code, fname,mname,lname,designation,dob,contact,address,state,country,pincode,email,department,blood_group,joining_date,aadhaar_number,salary,room_id) VALUES ('$emp_code', '$fname','$mname','$lname','$designation','$dob','$contact','$address','$state','$country','$pincode','$email','$department','$blood_group','$joining_date','$aadhaar_number','$salary',nullif('$room_id',' '))");
+        $last_insert_id = mysqli_insert_id($conn);
     }
     
     
@@ -146,14 +147,13 @@ if (isset($_POST['update'])) {
 
 if (isset($_GET['del'])) {
     $emp_code = $_GET['del'];
-
         //change tracking code
         if($AllowTrackingChanges){
         $row_affected=mysqli_fetch_array(mysqli_query($conn,"select * FROM employee WHERE emp_code='$emp_code'"));
         mysqli_query($conn,"insert into change_tracking_employee(user,type,emp_id,emp_code, fname,mname,lname,designation,dob,contact,address,state,country,pincode,email,department,blood_group,joining_date,aadhaar_number,salary,room_id,role)
         values ('{$_SESSION['user']}','Delete','{$row_affected['emp_id']}', '{$row_affected['emp_code']}','{$row_affected['fname']}','{$row_affected['mname']}','{$row_affected['lname']}','{$row_affected['designation']}',
         '{$row_affected['dob']}','{$row_affected['contact']}','{$row_affected['address']}','{$row_affected['state']}','{$row_affected['country']}','{$row_affected['pincode']}','{$row_affected['email']}','{$row_affected['department']}','{$row_affected['blood_group']}',
-        '{$row_affected['joining_date']}','{$row_affected['aadhaar_number']}','{$row_affected['salary']}','{$row_affected['room_id']}','{$row_affected['role']}')");
+        nullif({$row_affected['joining_date']},''),'{$row_affected['aadhaar_number']}','{$row_affected['salary']}','{$row_affected['room_id']}','{$row_affected['role']}')");
         
         $outing_record=mysqli_query($conn,"select * FROM employee_outing WHERE emp_code='$emp_code'");
         if(mysqli_num_rows($outing_record)>0){
@@ -194,3 +194,4 @@ if (isset($_GET['del'])) {
     $_SESSION['message'] = "Employee Deleted!";
     header('location: ../views/hrm/employee_table.php');
 }
+?>

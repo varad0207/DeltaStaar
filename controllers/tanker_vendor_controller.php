@@ -20,7 +20,7 @@
         $add = $_POST['add'];
         $num = $_POST['num'];
 
-        mysqli_query($conn, "INSERT INTO tanker_vendors(id, vname, company_name, address, number) VALUES('','$vname','$cname','$add','$num')");
+        mysqli_query($conn, "INSERT INTO tanker_vendors(vname, company_name, address, number) VALUES('$vname','$cname','$add','$num')");
         $_SESSION['message'] = "Tanker Vendor Info Added!";
         header("location: ../views/config/tanker_vendor_table.php");
     }

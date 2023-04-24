@@ -83,11 +83,11 @@ if (isset($_POST['submit'])|| isset($_POST['update'])||isset($_GET['del'])) {
 
         //change tracking code
         if($AllowTrackingChanges){
-            $row_affected=mysqli_fetch_array(mysqli_query($conn,"SELECT * FROM accomodation WHERE acc_code=$acc_code"));
+            $row_affected=mysqli_fetch_array(mysqli_query($conn,"SELECT * FROM accomodation WHERE acc_code='$acc_code'"));
             mysqli_query($conn,"insert into change_tracking_accomodation (user,type,acc_id, acc_code, acc_name, bldg_status, location, gender, no_of_rooms, warden_emp_code, owner, remark) 
             values ('{$_SESSION['user']}','Delete','{$row_affected['acc_id']}', '{$row_affected['acc_code']}', '{$row_affected['acc_name']}', '{$row_affected['bldg_status']}', '{$row_affected['location']}', '{$row_affected['gender']}', '{$row_affected['no_of_rooms']}', '{$row_affected['warden_emp_code']}', '{$row_affected['owner']}', '{$row_affected['remark']}')");
             
-            $rooms_affected=mysqli_query($conn,"SELECT * FROM rooms join accomodation using (acc_id) WHERE acc_code=$acc_code");
+            $rooms_affected=mysqli_query($conn,"SELECT * FROM rooms join accomodation using (acc_id) WHERE acc_code='$acc_code'");
             if(mysqli_num_rows($rooms_affected)>0){
                 while($record=mysqli_fetch_array($rooms_affected)){
                     mysqli_query($conn,"insert into change_tracking_rooms (user,type,acc_id, room_id, room_no, room_capacity, status, current_room_occupancy) 
@@ -96,7 +96,7 @@ if (isset($_POST['submit'])|| isset($_POST['update'])||isset($_GET['del'])) {
                 }
             }
 
-            $tankers_affected=mysqli_query($conn,"SELECT * FROM tankers join accomodation using (acc_id) WHERE acc_code=$acc_code");
+            $tankers_affected=mysqli_query($conn,"SELECT * FROM tankers join accomodation using (acc_id) WHERE acc_code='$acc_code'");
             if(mysqli_num_rows($tankers_affected)>0){
                 while($record=mysqli_fetch_array($tankers_affected)){
                     mysqli_query($conn,"insert into change_tracking_tankers (user,type,acc_id, tanker_id, security_emp_id, quality_check, qty, bill_no,vendor_id,tanker_timestamp) 
@@ -106,7 +106,7 @@ if (isset($_POST['submit'])|| isset($_POST['update'])||isset($_GET['del'])) {
             }
         }
 
-        mysqli_query($conn, "DELETE FROM accomodation WHERE acc_code=$acc_code");
+        mysqli_query($conn, "DELETE FROM accomodation WHERE acc_code='$acc_code'");
         $_SESSION['message'] = "Accomodation deleted!"; 
         header('location: ../views/accomodation/accomodation_table.php');
     }

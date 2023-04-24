@@ -29,7 +29,7 @@
     if (isset($_GET['del'])) {
         $id = $_GET['del'];
         
-        mysqli_query($conn, "DELETE FROM security WHERE id=$id");
+        mysqli_query($conn, "DELETE FROM security WHERE emp_id='$id'");
         $_SESSION['message'] = "security deleted!"; 
         header('location: ../views/config/security_table.php');
     }
