@@ -22,6 +22,9 @@ die('<script>alert("You dont have access to this page, Please contact admin");wi
     <!--Favicon link-->
     <link rel="icon" type="image/x-icon" href="../../images/logo-no-name-circle.png">
     <title>DELTA@STAAR | Employee Outing</title>
+
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link rel="stylesheet" href="../../css/overlay.css">
     
     <!-- Bootstrap 5 -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
@@ -156,8 +159,20 @@ die('<script>alert("You dont have access to this page, Please contact admin");wi
     $result1=mysqli_query($conn,$q1);
     $total=mysqli_num_rows($result1);
     $pages=ceil($total/$limit);
-    $Previous=$page-1;
-    $Next=$page+1;
+    //check if current page is less then or equal 1
+    if(($page>1)||($page<$pages))
+    {
+        $Previous=$page-1;
+        $Next=$page+1;
+    }
+    if($page<=1)
+    {
+        $Previous=1;
+    }
+    if($page>=$pages)
+    {
+        $Next=$pages;
+    }
     /* ************************************************ */
     ?>
 
@@ -178,6 +193,7 @@ die('<script>alert("You dont have access to this page, Please contact admin");wi
                     <th scope="col">Outing Date</th>
                     <th scope="col">Arrival Date</th>
                     <th scope="col">Purpose of Outing</th>
+                    <th>Description</th>
                     <th scope="col" colspan="2">Action</th>
                     </tr>
                 </thead>
@@ -187,6 +203,8 @@ die('<script>alert("You dont have access to this page, Please contact admin");wi
                     $empid = $row['emp_id'];
                     $queryEmpID = mysqli_query($conn, "SELECT * FROM employee where emp_id='$empid'");
                     $EmpID_row = mysqli_fetch_assoc($queryEmpID);
+                    $sql1 = mysqli_query($conn, "SELECT * FROM outing_type where type_id='{$row['type']}'");
+                    $row1 = mysqli_fetch_array($sql1);
                     ?>
                     <tr>
                     <th scope="row">
@@ -197,7 +215,12 @@ die('<script>alert("You dont have access to this page, Please contact admin");wi
                             <?php echo $row['outing_date']; ?>
                         </td>
                         <td>
-                            <?php echo $row['arrival_date']; ?>
+                            <?php 
+                            echo $row['arrival_date']; ?>
+                        </td>
+                        <td>
+                            <?php 
+                                echo $row1['type_name']; ?>
                         </td>
                         <td>
                             <?php echo $row['category']; ?>
@@ -211,8 +234,10 @@ die('<script>alert("You dont have access to this page, Please contact admin");wi
                             <?php } ?>
                                 &nbsp;
                                 <?php if($isPrivilaged>=4){ ?>
-                            <a href="../../controllers/employee_outing_controller.php?del=<?php echo '%27' ?><?php echo $row['emp_code']; ?><?php echo '%27' ?>"
-                                class="del_btn"><i class="bi bi-trash" style="font-size: 1.2rem; color: black;"></i></a>
+                            <a class="del_btn" onclick="myfunc('<?php echo $row['emp_code']; ?>')"><i class="bi bi-trash" style="font-size: 1.2rem; color: black;"></i></a>
+                                <form id="del_response" action="../../controllers/employee_outing_controller.php" method="get">
+                                    <input type="hidden" id="hidden-del" name="del" value="" />
+                                </form>
                         <?php } ?>
                             </td>
                     </tr>
@@ -251,5 +276,15 @@ die('<script>alert("You dont have access to this page, Please contact admin");wi
     
     <!-- Footer -->
     <footer class="tc f3 lh-copy mt4">Copyright &copy; 2022 Delta@STAAR. All Rights Reserved</footer>
+    <?php include '../../controllers/overlays/deleteOverlay.php'; ?>
+
+<script>
+    function myfunc(code) {
+        console.log(code);
+        document.getElementById("hidden-del").value = code;
+        document.getElementById('overlay').style.display = 'flex';
+    }
+</script>
+    <script src="../../js/Overlay.js"></script>
 </body>
 </html>

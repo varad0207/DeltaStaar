@@ -28,6 +28,9 @@ if (mysqli_num_rows($check) > 0)
     <link rel="icon" type="image/x-icon" href="../../images/logo-no-name-circle.png">
     <title>DELTA@STAAR | Complaints</title>
 
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link rel="stylesheet" href="../../css/overlay.css">
+
     <!-- Bootstrap 5 -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
@@ -235,17 +238,32 @@ if (mysqli_num_rows($check) > 0)
     <?php
     /* ***************** PAGINATION ***************** */
     $limit=10;
+    $pages = 0;
     $page=isset($_GET['page'])?$_GET['page']:1;
-    $start=($page-1) * $limit;
+    //check if current page is less then or equal 1
+    if(($page>=1)||($page<$pages))
+    {
+        $start=($page-1) * $limit;
+        $Previous=$page-1;
+        $Next=$page+1;
+    }
+    if($page<1)
+    {
+        $Previous=1;
+        $start = 1;
+    }
+    if($page>=$pages)
+    {
+        $Next=$pages;
+    }
     $sqli .=" LIMIT $start,$limit";
     $result=mysqli_query($conn,$sqli);
 
-    $q1="SELECT * FROM vaccination";
+    $q1="SELECT * FROM complaints";
     $result1=mysqli_query($conn,$q1);
     $total=mysqli_num_rows($result1);
     $pages=ceil($total/$limit);
-    $Previous=$page-1;
-    $Next=$page+1;
+    
     /* ************************************************ */
     ?>
     <div class="table-div">
@@ -287,7 +305,7 @@ if (mysqli_num_rows($check) > 0)
                         </tr>
                     </thead>
                     <tbody>
-                        <?php while ($row = mysqli_fetch_array($result)) { 
+                        <?php while ($row = mysqli_fetch_array($result1)) { 
                             $emp_code = $row['emp_code'];
                             $EmpName_row = mysqli_fetch_assoc(mysqli_query($conn, "SELECT * FROM employee where emp_code='$emp_code'"));
                             $EmployeeRoom_row = mysqli_fetch_assoc(mysqli_query($conn, "SELECT * FROM rooms WHERE id = '{$EmpName_row['room_id']}'"));
@@ -306,7 +324,7 @@ if (mysqli_num_rows($check) > 0)
                                 </td>
                                 <!-- fetch complaint category -->
                                 <td>
-                                    <?php echo $row['complaint_type']; ?>
+                                    <?php echo $row['type']; ?>
                                 </td>
                                 <td>
                                     <?php echo $row['description']; ?>
@@ -384,8 +402,10 @@ if (mysqli_num_rows($check) > 0)
                                 </td>
                                 <td>
                                     <?php if ($isPrivilaged >= 4) { ?>
-                                        <a href="../../controllers/complaint_controller.php?del=<?php echo '%27' ?><?php echo $row['id']; ?><?php echo '%27' ?>"
-                                            class="del_btn">Delete</a>
+                                        <a class="del_btn" onclick="myfunc('<?php echo $row['id']; ?>')"><i class="bi bi-trash" style="font-size: 1.2rem; color: black;"></i></a>
+                                            <form id="del_response" action="../../controllers/complaint_controller.php" method="get">
+                                                <input type="hidden" id="hidden-del" name="del" value="" />
+                                            </form>
                                     <?php } ?>
                                 </td>
                             </tr>
@@ -417,6 +437,16 @@ if (mysqli_num_rows($check) > 0)
 
     <!-- Footer -->
     <footer class="tc f3 lh-copy mt4">Copyright &copy; 2022 Delta@STAAR. All Rights Reserved</footer>
+    <?php include '../../controllers/overlays/deleteOverlay.php'; ?>
+
+<script>
+    function myfunc(code) {
+        console.log(code);
+        document.getElementById("hidden-del").value = code;
+        document.getElementById('overlay').style.display = 'flex';
+    }
+</script>
+    <script src="../../js/Overlay.js"></script>
 </body>
 
 </html>

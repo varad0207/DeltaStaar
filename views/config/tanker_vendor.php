@@ -57,30 +57,34 @@ if(isset($_GET['edit']))
             <div class="form-content">
                 <div class="form-items">
                     <h1 class="f2 lh-copy tc" style="color: white;">Tanker Vendor Entry</h1>
-                    <form class="requires-validation f3 lh-copy" novalidate action="../../controllers/tanker_vendor_controller.php" method="post" name="myForm" onsubmit="return validateTankerVendor()">
+                    <form class="requires-validation f3 lh-copy" novalidate action="../../controllers/tanker_vendor_controller.php" method="post" name="myForm">
                     
                        <div class="col-md-12 pa2">
                         <label for="vname">Vendor Name</label> 
-                            <input class="form-control" type="text" name="vname" placeholder="Vendor Name" value = "<?php $vname ?>" required>
-                            <span id="valid-vname"></span>
+                            <input class="form-control" type="text" name="vname" placeholder="Vendor Name" value = "<?php $vname ?>" required onkeyup = "return validateText(document.myForm.vname.value,0)">
+                            <span class="valid-text"></span>
+                            <span class="invalid-feedback" style="color: gold; font-size: 14px;">Field cannot be empty!</span>
                        </div>
 
                        <div class="col-md-12 pa2">
                         <label for="cname">Company Name</label> 
-                            <input class="form-control" type="text" name="cname" placeholder="Company Name" value = "<?php $cname ?>" required>
-                            <span id="valid-cname"></span>
+                            <input class="form-control" type="text" name="cname" placeholder="Company Name" value = "<?php $cname ?>" required onkeyup = "return validateText(document.myForm.cname.value,1)">
+                            <span class="valid-text"></span>
+                            <span class="invalid-feedback" style="color: gold; font-size: 14px;">Field cannot be empty!</span>
                        </div>
 
                        <div class="col-md-12 pa2">
                         <label for="number">Number</label>
-                          <input class="form-control" type="number" name="num" placeholder="Number" value = "<?php $num ?>" required>
-                          <span id="valid-num"></span>
+                          <input class="form-control" type="number" name="num" placeholder="Number" value = "<?php $num ?>" required onkeyup = "return validateNum(document.myForm.num.value,0)">
+                          <span class="valid-field"></span>
+                          <span class="invalid-feedback" style="color: gold; font-size: 14px;">Field cannot be empty!</span>
                       </div>
 
                       <div class="col-md-12 pa2">
                         <label for="address">Vendor Address</label> 
                             <input class="form-control" type="text" name="add" placeholder="Vendor Address" value = "<?php $add ?>" required>
-                            <span id="valid-add"></span>
+                            <span class="valid-text"></span>
+                            <span class="invalid-feedback" style="color: gold; font-size: 14px;">Field cannot be empty!</span>
                        </div>
                        
                         
@@ -104,7 +108,8 @@ if(isset($_GET['edit']))
     <!-- Script files -->
     <script src="../../js/form.js"></script>
     <script src="../../js/Sidebar/sidebar.js"></script>
-    <script src="../../js/validation.js"></script>
+    <script src="../../js/validateEmp.js"></script>
+    <script src="../../js/validateAcc.js"></script>
     <script src="https://kit.fontawesome.com/319379cac6.js" crossorigin="anonymous"></script>
     <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
         integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"

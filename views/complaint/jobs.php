@@ -134,7 +134,13 @@ if (isset($_GET['edit'])) {
                                 <textarea name="description" placeholder="Please describe your problem" cols="30"
                                     rows="10" value="<?php echo $description; ?>"></textarea>
                             </div>
-
+                                    <!--Backend remaining-->
+                            <div class="col-md-12 pa2">
+                                <label for="completion_date">Tentative Completion Date</label>
+                                <input class="form-control" type="date" name="completion_date" value="<?php echo $completion_date; ?>" required>
+                                <div class="valid-feedback">field is valid!</div>
+                                <div class="invalid-feedback">field cannot be blank!</div>
+                            </div>
                             <div class="col-md-12 pa2">
                                 <label for="completion_date">Completion Date</label>
                                 <input class="form-control" type="date" name="completion_date" value="<?php echo $completion_date; ?>" required>

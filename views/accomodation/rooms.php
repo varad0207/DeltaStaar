@@ -14,7 +14,7 @@ if ($isPrivilaged == 5 || $isPrivilaged == 4)
     die('<script>alert("You dont have access to this page, Please contact admin");window.location = history.back();</script>');
 
 $update = "";
-
+$acc_id = "";
 if (isset($_GET['edit'])) {
     $room_id = $_GET['edit'];
     $update = true;
@@ -23,6 +23,7 @@ if (isset($_GET['edit'])) {
     $n = mysqli_fetch_array($record);
 
     $acc_id = $n['acc_id'];
+    echo $acc_id;
     $room_no = $n['room_no'];
     $room_cap = $n['room_capacity'];
     $status = $n['status'];
@@ -70,7 +71,7 @@ if (isset($_GET['edit'])) {
                     <div class="form-items">
                         <h1 class="f2 lh-copy tc" style="color: white;">Enter Room Details</h1>
                         <form class="requires-validation f3 lh-copy" novalidate
-                            action="../../controllers/rooms_controller.php" method="post" name="myForm" onsubmit="return validateRoom()">
+                            action="../../controllers/rooms_controller.php" method="post" name="myForm" >
                             <input class="form-control" type="hidden" name="id" value="<?php echo $room_id ?>">
 
                             <div class="col-md-12 pa2">
@@ -79,9 +80,13 @@ if (isset($_GET['edit'])) {
                                     <option selected disabled value="">Select Accomodation</option>
                                     <?php
                                     $acc_code = mysqli_query($conn, "SELECT * FROM accomodation");
-
                                     foreach ($acc_code as $row) { ?>
-                                        <option name="acc" value="<?= $row["acc_id"] ?>"><?= $row["acc_name"]; ?></option>
+                                    <option name="acc" value="<?= $row["acc_id"] ?>"
+                                        <?php if($acc_id == $row['acc_id']) { ?> 
+                                            selected 
+                                        <?php } ?>>
+                                        <?= $row["acc_name"]; ?>
+                                    </option>
                                     <?php
                                     }
                                     ?>
@@ -93,15 +98,17 @@ if (isset($_GET['edit'])) {
                             <div class="col-md-12 pa2">
                                 <label for="room_no">Room Number</label>
                                 <input class="form-control" type="number" name="room_no" value="<?php echo $room_no ?>"
-                                    placeholder="Room Number" required>
-                                <span id="valid-roomno"></span>
+                                    placeholder="Room Number" required onkeyup = "return validateNum(document.myForm.room_no.value,0)">
+                                <span class="valid-field"></span>
+                                <span class="invalid-feedback" style="color: gold; font-size: 14px;">Field cannot be empty!</span>
                             </div>
 
                             <div class="col-md-12 pa2">
                                 <label for="room_cap">Room Capacity</label>
                                 <input class="form-control" type="number" name="room_cap"
-                                    value="<?php echo $room_cap ?>" placeholder="Room Capacity" required>
-                                <span id="valid-roomcap"></span>
+                                    value="<?php echo $room_cap ?>" placeholder="Room Capacity" required onkeyup = "return validateNum(document.myForm.room_cap.value,1)">
+                                <span class="valid-field"></span>
+                                <span class="invalid-feedback" style="color: gold; font-size: 14px;">Field cannot be empty!</span>
                             </div>
 
                             <div class="form-button mt-3 tc">
@@ -109,7 +116,7 @@ if (isset($_GET['edit'])) {
                                     <button id="submit" name="update" value="update" type="submit"
                                         class="btn btn-warning f3 lh-copy" style="color: white;">Update</button>
                                 <?php else: ?>
-                                    <button id="submit" name="submit" value="sumbit" type="submit"
+                                    <button id="submit" name="submit" value="submit" type="submit"
                                         class="btn btn-warning f3 lh-copy" style="color: white;">Submit</button>
                                 <?php endif ?>
                             </div>
@@ -124,7 +131,7 @@ if (isset($_GET['edit'])) {
     <!-- Script files -->
     <script src="../../js/form.js"></script>
     <script src="../../js/Sidebar/sidebar.js"></script>
-    <script src="../../js/validation.js"></script>
+    <script src="../../js/validateAcc.js"></script>
     <script src="https://kit.fontawesome.com/319379cac6.js" crossorigin="anonymous"></script>
     <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
         integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"

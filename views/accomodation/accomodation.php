@@ -15,7 +15,7 @@ if ($rights['rights_accomodation'] > 1) {
 if ($isPrivilaged == 5 || $isPrivilaged == 4)
     die('<script>alert("You dont have access to this page, Please contact admin");window.location = history.back();</script>');
 
-$acc_code = $acc_name = $bldg_status = $location = $gender = $tot_capacity = $no_of_rooms = $occupied_rooms = $available_rooms = $owner = $remark = "";
+$acc_code = $acc_name = $bldg_status = $location = $gender = $tot_capacity = $no_of_rooms = $occupied_rooms = $available_rooms = $owner = $remark = $warden_emp_code = "";
 if (isset($_GET['edit'])) {
     $acc_code = $_GET['edit'];
     $update = true;
@@ -81,7 +81,7 @@ if (isset($_GET['edit'])) {
                     <div class="form-items">
                         <h1 class="f2 lh-copy tc" style="color: white;">Enter Accomodation Details</h1>
                         <form class="requires-validation f3 lh-copy" novalidate
-                            action="../../controllers/accomodation_controller.php" method="post" name="myForm" onsubmit="return validateAcc()">
+                            action="../../controllers/accomodation_controller.php" method="post" name="myForm">
 
                             <div class="col-md-12 pa2">
                                 <label for="acc_code">Accomodation Code</label>
@@ -94,8 +94,9 @@ if (isset($_GET['edit'])) {
                             <div class="col-md-12 pa2">
                                 <label for="acc_name">Accomodation Name</label>
                                 <input class="form-control" type="text" name="name" value="<?php echo $acc_name ?>"
-                                    placeholder="Accomodation Name" required>
+                                    placeholder="Accomodation Name" required onkeyup = "return validateText()">
                                 <span id="valid-accname"></span>
+                                <span class="invalid-feedback" style="color: gold; font-size: 14px;">Field cannot be empty!</span>
                             </div>
 
                             <div class="col-md-12 pa2">
@@ -103,9 +104,21 @@ if (isset($_GET['edit'])) {
                                 <select class="form-select mt-3" name="bldg" value="<?php echo $bldg_status ?>"
                                     required>
                                     <option selected disabled value="">Select status</option>
-                                    <option value="Active">Active</option>
-                                    <option value="Permanently Closed">Permanently Closed</option>
-                                    <option value="Temporarily Closed">Temporarily Closed</option>
+                                    <option value="Active"
+                                    <?php if($bldg_status == 'Active') { ?>
+                                        selected
+                                    <?php } ?>
+                                    >Active</option>
+                                    <option value="Permanently Closed" 
+                                    <?php if($bldg_status == 'Permanently Closed') { ?>
+                                        selected
+                                    <?php } ?>
+                                    >Permanently Closed</option>
+                                    <option value="Temporarily Closed" 
+                                    <?php if($bldg_status == 'Temporarily Closed') { ?>
+                                        selected
+                                    <?php } ?>
+                                    >Temporarily Closed</option>
                                 </select>
                                 <span class="valid-feedback" style="color: gold; font-size: 14px;">Field is valid!</span>
                                 <span class="invalid-feedback" style="color: gold; font-size: 14px;">Field cannot be empty!</span>
@@ -119,7 +132,10 @@ if (isset($_GET['edit'])) {
                                     $acc_loc = mysqli_query($conn, "SELECT * FROM acc_locations");
 
                                     foreach ($acc_loc as $row) { ?>
-                                        <option name="acc_loc" value="<?= $row["loc_id"] ?>">
+                                        <option name="acc_loc" value="<?= $row["loc_id"] ?>"
+                                        <?php if($location == $row['loc_id']) { ?>
+                                            selected
+                                        <?php } ?>>
                                             <?= $row["location"]; ?>
                                         </option>
                                         <?php
@@ -134,9 +150,21 @@ if (isset($_GET['edit'])) {
                                 <label for="gender">Gender (Accommodation for which gender)</label>
                                 <select class="form-select mt-3" name="gender" value="<?php echo $gender ?>" required>
                                     <option selected disabled value="">Select Gender</option>
-                                    <option value="Male">Male</option>
-                                    <option value="Female">Female</option>
-                                    <option value="Unisex">Unisex</option>
+                                    <option value="Male"
+                                    <?php if($gender == 'Male') { ?>
+                                        selected
+                                    <?php } ?>
+                                    >Male</option>
+                                    <option value="Female"
+                                    <?php if($gender == 'Female') { ?>
+                                        selected
+                                    <?php } ?>
+                                    >Female</option>
+                                    <option value="Unisex"
+                                    <?php if($gender == 'Unisex') { ?>
+                                        selected
+                                    <?php } ?>
+                                    >Unisex</option>
                                 </select>
                                 <span class="valid-feedback" style="color: gold; font-size: 14px;">Field is valid!</span>
                                 <span class="invalid-feedback" style="color: gold; font-size: 14px;">Field cannot be empty!</span>
@@ -145,8 +173,9 @@ if (isset($_GET['edit'])) {
                             <div class="col-md-12 pa2">
                                 <label for="no_of_rooms">Number of Rooms</label>
                                 <input class="form-control" type="number" id="nor" name="rooms"
-                                    value="<?php echo $no_of_rooms ?>" placeholder="Number of Rooms" required>
-                                <span id="valid-room"></span>
+                                    value="<?php echo $no_of_rooms ?>" placeholder="Number of Rooms" required onkeyup = "return validateNum(document.myForm.rooms.value,0)">
+                                <span class="valid-field"></span>
+                                <span class="invalid-feedback" style="color: gold; font-size: 14px;">Field cannot be empty!</span>
                             </div>
 
                             <div class="col-md-12 pa2">
@@ -159,8 +188,11 @@ if (isset($_GET['edit'])) {
                                             $emp_det = mysqli_query($conn, "SELECT * FROM employee");
 
                                             foreach ($emp_det as $row) { ?>
-                                                <option name="employee_code" value="<?= $row["emp_code"] ?>"><?=
-                                                      $row["emp_code"]; ?>
+                                                <option name="employee_code" value="<?= $row["emp_code"] ?>"
+                                                <?php if($warden_emp_code == $row['emp_code']) { ?>
+                                                    selected
+                                                <?php } ?>>
+                                                <?= $row["emp_code"]; ?>
                                                 </option>
                                             <?php
                                             }
@@ -175,6 +207,7 @@ if (isset($_GET['edit'])) {
                                 <input class="form-control" type="text" name="owner" value="<?php echo $owner ?>"
                                     placeholder="Owner" required>
                                 <span id="valid-owner"></span>
+                                <span class="invalid-feedback" style="color: gold; font-size: 14px;">Field cannot be empty!</span>
                             </div>
 
                             <div class="col-md-12 pa2">
@@ -217,7 +250,7 @@ if (isset($_GET['edit'])) {
     <!-- Script files -->
     <script src="../../js/form.js"></script>
     <script src="../../js/Sidebar/sidebar.js"></script>
-    <script src="../../js/validation.js"></script>
+    <script src="../../js/validateAcc.js"></script>
     <script src="https://kit.fontawesome.com/319379cac6.js" crossorigin="anonymous"></script>
     <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
         integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"

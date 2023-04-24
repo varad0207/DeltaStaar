@@ -104,11 +104,12 @@ if ($_SESSION['is_superadmin']) {
         <footer class="tc f3 lh-copy mt4">Copyright &copy; 2022 Delta@STAAR. All Rights Reserved</footer>
     </div>
     
+    <!-- overlay code start -->
         <div class="overlay" id="overlay"> 
             <div class="overlay-window">
                 <div class="overlay-window-titlebar">
                     <span class="overlay-title">Welcome <span class=name><?php echo $emp_details['fname']; ?></span></span>
-                    <button class="close material-icons">close</button>
+                    <button class="close material-icons" onclick="document.getElementById('overlay').style.display='none'">close</button>
                 </div>
                 <div class="overlay-content" style="color:black">
                         Welcome to DELTASTAAR!<br><br>
@@ -116,7 +117,7 @@ if ($_SESSION['is_superadmin']) {
                 </div>
             </div>
         </div>
-
+    <!-- overlay end -->
     
 
     <!--End of Main content-->
@@ -125,7 +126,7 @@ if ($_SESSION['is_superadmin']) {
 
     <script>
 window.onload = function() {
-    console.log(localStorage.getItem('visited'));
+    // console.log(localStorage.getItem('visited'));
     if (!localStorage.getItem('visited')) {
         var xmlhttp = new XMLHttpRequest();
             xmlhttp.onreadystatechange = function () {
@@ -151,7 +152,6 @@ window.onload = function() {
     </script>
 
     <script src="../js/Sidebar/sidebar.js"></script>
-    <script src="../js/Overlay.js"></script>
 
     <!--Scripts for Navbar (as in dashboard.php)-->
     <script src="https://kit.fontawesome.com/319379cac6.js" crossorigin="anonymous"></script>

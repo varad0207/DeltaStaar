@@ -18,6 +18,9 @@ if ($_SESSION['is_superadmin'] == 0)
     <!--Favicon link-->
     <link rel="icon" type="image/x-icon" href="../../images/logo-no-name-circle.png">
     <title>DELTA@STAAR | Complaints</title>
+
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link rel="stylesheet" href="../../css/overlay.css">
     
     <!-- Bootstrap 5 -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
@@ -59,16 +62,17 @@ if ($_SESSION['is_superadmin'] == 0)
 
     <div class="table-header">
         <h1 class="tc f1 lh-title spr">Complaint Types</h1>
-        <div class="fl w-75 form-outline srch">
+        <div class="fl w-100 form-outline srch">
             <input type="search" id="form1" class="form-control" placeholder="Search" aria-label="Search"
                 oninput="search()" />
             <h4 id="demo"></h4>
         </div>
-        <div class="fl w-25 tr">
+        
+        <!-- <div class="fl w-25 tr">
             <button class="btn btn-dark">
-                <h5><i class="bi bi-filter-circle"> Sort By</i></h5>
-            </button>
-        </div>
+                <h5><i class="bi bi-filter-circle"> Sort By</i></h5> 
+            </button> 
+        </div> -->
     </div>
    
     <div class="table-div">
@@ -104,8 +108,10 @@ if ($_SESSION['is_superadmin'] == 0)
                                 class="edit_btn">Edit</a>
                         </td>
                         <td>
-                            <a href="../../controllers/complaint_type_controller.php?del=<?php echo '%27' ?><?php echo $row['type_id']; ?><?php echo '%27' ?>"
-                                class="del_btn">Delete</a>
+                            <a class="del_btn" onclick="myfunc('<?php echo $row['type_id']; ?>')"><i class="bi bi-trash" style="font-size: 1.2rem; color: black;"></i></a>
+                                <form id="del_response" action="../../controllers/complaint_type_controller.php" method="get">
+                                    <input type="hidden" id="hidden-del" name="del" value="" />
+                                </form>
                         </td>
                     </tr>
                     <?php } ?>
@@ -115,5 +121,15 @@ if ($_SESSION['is_superadmin'] == 0)
     </div>
     <!-- Footer -->
     <footer class="tc f3 lh-copy mt4">Copyright &copy; 2022 Delta@STAAR. All Rights Reserved</footer>
+    <?php include '../../controllers/overlays/deleteOverlay.php'; ?>
+
+<script>
+    function myfunc(code) {
+        console.log(code);
+        document.getElementById("hidden-del").value = code;
+        document.getElementById('overlay').style.display = 'flex';
+    }
+</script>
+    <script src="../../js/Overlay.js"></script>
 </body>
 </html>

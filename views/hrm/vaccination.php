@@ -150,14 +150,6 @@ if (isset($_GET['edit'])) {
                             </div>
 
                             <div class="col-md-12 pa2">
-                                <label for="date_of_next_dose">Date of Next Dose</label>
-                                <input class="form-control" type="date" name="dond" value="<?php echo $nextdose ?>"
-                                    required>
-                                <div class="valid-feedback">field is valid!</div>
-                                <div class="invalid-feedback">field cannot be blank!</div>
-                            </div>
-
-                            <div class="col-md-12 pa2">
                                 <label for="location">Location</label>
                                 <input class="form-control" type="text" name="loc" value="<?php echo $location ?>"
                                     placeholder="Location" required>

@@ -77,8 +77,8 @@ if (isset($_SESSION["emp_id"])) {
         Password: <input type="password" name="pass"><br><br>
         <input type="submit" value="Login" name="submit"></input>
     </form>-->
-
-    <section class="h-100 gradient-form">
+    
+    <section class="h-100 gradient-form" >
         <div class="container py-5 h-100">
             <div class="row d-flex justify-content-center align-items-center h-100">
 

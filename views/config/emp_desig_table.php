@@ -18,7 +18,10 @@ if ($_SESSION['is_superadmin'] == 0)
 
     <!--Favicon link-->
     <link rel="icon" type="image/x-icon" href="../../images/logo-no-name-circle.png">
-    <title>DELTA@STAAR | Vaccination</title>
+    <title>DELTA@STAAR | Designation</title>
+
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link rel="stylesheet" href="../../css/overlay.css">
     
     <!-- Bootstrap 5 -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
@@ -81,9 +84,10 @@ if ($_SESSION['is_superadmin'] == 0)
                                 class="edit_btn"><i class="bi bi-pencil-square" style="font-size: 1.2rem; color: black;"></i>
                             </a>
                                 &nbsp;
-                            <a href="../../controllers/emp_desig_controller.php?del=<?php echo '%27' ?><?php echo $row['id']; ?><?php echo '%27' ?>"
-                                class="del_btn"><i class="bi bi-trash" style="font-size: 1.2rem; color: black;"></i>
-                            </a>
+                            <a class="del_btn" onclick="myfunc('<?php echo $row['id']; ?>')"><i class="bi bi-trash" style="font-size: 1.2rem; color: black;"></i></a>
+                            <form id="del_response" action="../../controllers/emp_desig_controller.php" method="get">
+                                    <input type="hidden" id="hidden-del" name="del" value="" />
+                                </form>
                         </td>
                     </tr>
                     <?php } ?>
@@ -107,5 +111,16 @@ if ($_SESSION['is_superadmin'] == 0)
     
     <!-- Footer -->
     <footer class="tc f3 lh-copy mt4">Copyright &copy; 2022 Delta@STAAR. All Rights Reserved</footer>
+
+    <?php include '../../controllers/overlays/deleteOverlay.php'; ?>
+
+<script>
+    function myfunc(code) {
+        console.log(code);
+        document.getElementById("hidden-del").value = code;
+        document.getElementById('overlay').style.display = 'flex';
+    }
+</script>
+    <script src="../../js/Overlay.js"></script>
 </body>
 </html>

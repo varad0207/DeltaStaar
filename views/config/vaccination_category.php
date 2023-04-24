@@ -55,12 +55,13 @@ if (isset($_GET['edit']))
             <div class="form-content">
                 <div class="form-items">
                     <h1 class="f2 lh-copy tc" style="color: white;">Enter Vaccination Details</h1>
-                    <form class="requires-validation f3 lh-copy" novalidate action="../../controllers/vaccination_category_controller.php" method="post" name="myForm" onsubmit="return validateVacCat()">
+                    <form class="requires-validation f3 lh-copy" novalidate action="../../controllers/vaccination_category_controller.php" method="post" name="myForm">
 
                         <div class="col-md-12 pa2">
                             <label for="category_name">Vaccination Category</label>
-                                <input class="form-control" type="text" name="category_name" value="<?php echo $category_name ?>" placeholder="Category" required>
-                                <span id="valid-field"></span>
+                                <input class="form-control" type="text" name="category_name" value="<?php echo $category_name ?>" placeholder="Category" required onkeyup = "return validateText(document.myForm.category_name.value,0)">
+                                <span class="valid-text"></span>
+                                <span class="invalid-feedback" style="color: gold; font-size: 14px;">Field cannot be empty!</span>
                         </div>
                         <div class="form-button mt-3 tc">
                             <?php if ($update == true): ?>
@@ -81,7 +82,7 @@ if (isset($_GET['edit']))
 
     <script src="../../js/form.js"></script>
 	<script src="../../js/Sidebar/sidebar.js"></script>
-    <script src="../../js/validation.js"></script>
+    <script src="../../js/validateEmp.js"></script>
     <script src="https://kit.fontawesome.com/319379cac6.js" crossorigin="anonymous"></script>
     <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
         integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"

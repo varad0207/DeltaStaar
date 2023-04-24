@@ -24,7 +24,10 @@ die('<script>alert("You dont have access to this page, Please contact admin");wi
     <!--Favicon link-->
     <link rel="icon" type="image/x-icon" href="../../images/logo-no-name-circle.png">
     <title>DELTA@STAAR | Vaccination</title>
-    
+
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link rel="stylesheet" href="../../css/overlay.css">
+
     <!-- Bootstrap 5 -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
     <!-- Bootstrap Icons -->
@@ -187,8 +190,24 @@ die('<script>alert("You dont have access to this page, Please contact admin");wi
     <?php
     /* ***************** PAGINATION ***************** */
     $limit=10;
+    $pages = 0;
     $page=isset($_GET['page'])?$_GET['page']:1;
-    $start=($page-1) * $limit;
+    //check if current page is less then or equal 1
+    if(($page>=1)||($page<$pages))
+    {
+        $start=($page-1) * $limit;
+        $Previous=$page-1;
+        $Next=$page+1;
+    }
+    if($page<1)
+    {
+        $Previous=1;
+        $start = 1;
+    }
+    if($page>=$pages)
+    {
+        $Next=$pages;
+    }
     $sql .=" LIMIT $start,$limit";
     $result=mysqli_query($conn,$sql);
 
@@ -196,8 +215,7 @@ die('<script>alert("You dont have access to this page, Please contact admin");wi
     $result1=mysqli_query($conn,$q1);
     $total=mysqli_num_rows($result1);
     $pages=ceil($total/$limit);
-    $Previous=$page-1;
-    $Next=$page+1;
+    
     /* ************************************************ */
     ?>
     <div class="table-div">
@@ -218,7 +236,6 @@ die('<script>alert("You dont have access to this page, Please contact admin");wi
                     <th scope="col">Category</th>
                     <th scope="col">Date of Administration</th>
                     <th scope="col">Location</th>
-                    <th scope="col">Date of Next Dose</th>
                     <th scope="col" colspan="2">Action</th>
                     </tr>
                 </thead>
@@ -242,9 +259,6 @@ die('<script>alert("You dont have access to this page, Please contact admin");wi
                             <?php echo $row['location']; ?>
                         </td>
                         <td>
-                            <?php echo $row['date_of_next_dose']; ?>
-                        </td>
-                        <td>
                         <?php if($isPrivilaged>1 && $isPrivilaged!=5 && $isPrivilaged!=4){ ?>
                             <a href="./vaccination.php?edit=<?php echo '%27' ?><?php echo $row['vaccination_id']; ?><?php echo '%27' ?>"
                                 class="edit_btn"><i class="bi bi-pencil-square" style="font-size: 1.2rem; color: black;"></i>
@@ -252,9 +266,10 @@ die('<script>alert("You dont have access to this page, Please contact admin");wi
                             <?php } ?>
                                 &nbsp;
                                 <?php if($isPrivilaged>=4){ ?>
-                            <a href="../../controllers/vaccination_controller.php?del=<?php echo '%27' ?><?php echo $row['vaccination_id']; ?><?php echo '%27' ?>"
-                                class="del_btn"><i class="bi bi-trash" style="font-size: 1.2rem; color: black;"></i>
-                            </a>
+                            <a class="del_btn" onclick="myfunc('<?php echo $row['vaccination_id']; ?>')"><i class="bi bi-trash" style="font-size: 1.2rem; color: black;"></i></a>
+                            <form id="del_response" action="../../controllers/vaccination_controller.php" method="get">
+                                            <input type="hidden" id="hidden-del" name="del" value="" />
+                                        </form>
                             <?php } ?>
                         </td>
                     </tr>
@@ -294,7 +309,18 @@ die('<script>alert("You dont have access to this page, Please contact admin");wi
     <!-- Footer -->
     <footer class="tc f3 lh-copy mt4">Copyright &copy; 2022 Delta@STAAR. All Rights Reserved</footer>
 
+    <?php include '../../controllers/overlays/deleteOverlay.php'; ?>
+
+<script>
+    function myfunc(code) {
+        console.log(code);
+        document.getElementById("hidden-del").value = code;
+        document.getElementById('overlay').style.display = 'flex';
+    }
+</script>
+
     <!-- Script Files -->
+    <script src="../../js/Overlay.js"></script>
     <script src="../../js/form.js"></script>
     <script src="../../js/Sidebar/sidebar.js"></script>
     <script src="https://kit.fontawesome.com/319379cac6.js" crossorigin="anonymous"></script>

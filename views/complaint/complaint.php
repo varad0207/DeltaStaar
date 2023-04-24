@@ -31,6 +31,7 @@ if (isset($_GET['edit'])) {
 	$remarks = $n['remarks'];
 	$emp_code = $n['emp_code'];
     $acc_code=$n['acc_code'];
+    $acc_name=$n['acc_name'];
 
 }
 ?>
@@ -78,23 +79,53 @@ if (isset($_GET['edit'])) {
                         <input type="hidden" name="acc_code" value="<?php echo $acc_code; ?>">
 
                             <div class="col-md-12 pa2">
-                                <label for="empcode">Employee Code</label>
+                                <label for="empcode">Employee Name</label>
+                                <?php $empdet="select emp_code,concat(fname,' ',lname,' - ',emp_code) as name from employee";
+                                $detresult=mysqli_query($conn,$empdet);
+                                $detdata=array();
+                                while($detrow=mysqli_fetch_assoc($detresult)){
+                                    $detdata[]=$detrow['name'];
+                                } ?>
                                 <?php if (isset($_SESSION['emp_id']) && !$update) { ?>
                                 <input class="form-control" id="empcode" style="pointer-events: none;"  type="text" name="emp_code" value="<?php echo $_SESSION['emp_code']; ?>">
                                 <?php } else {?>
-                                <input class="form-control" id="empcode" value="" type="text" name="emp_code" placeholder="eg.HV1234" required onkeyup="GetDetail(this.value)">
+                                <input class="form-control" id="empcode" value="" type="text" name="emp_code" placeholder="Start typing" required autocomplete="off" list="options_list" onkeyup="GetDetail(this.value)">
+                                <datalist id="options_list">
+                                    <?php foreach($detdata as $option): ?>
+                                        <option value="<?= $option; ?>">
+                                    <?php endforeach; ?>
+                                </datalist>    
+                                <!-- <input class="form-control" id="empcode" value="" type="text" name="emp_code" placeholder="eg.HV1234" required onkeyup="GetDetail(this.value)"> -->
                                 <div class="valid-feedback">field is valid!</div>
                                 <div class="invalid-feedback">field cannot be blank!</div>
                                 <?php } ?>
                             </div>
 
-                            <div class="col-md-12 pa2">
+                            <!-- <div class="col-md-12 pa2">
                                 <label for="accCode">Accomodation Code</label>
                                 <input class="form-control" value="<?php echo $acc_code; ?>" type="text" id="acccode" name="acc_code" placeholder="eg.ACC1234" required>
                                 <div class="valid-feedback">field is valid!</div>
                                 <div class="invalid-feedback">field cannot be blank!</div>
+                            </div> -->
+                         <!--Accomodation code not getting fetched properly-->
+                            <div class="col-md-12 pa2">
+                                <label for="type">Accomodation name</label>
+                                <select class="form-select mt-3" name="acc_id" required>
+                                <option selected disabled value="">Select accomodation</option>
+                                    <?php
+                                    $comp_type = mysqli_query($conn, "SELECT * FROM accomodation");
+
+                                    foreach ($comp_type as $row) { ?>
+                                        <option  value="<?php echo $row["acc_id"]; ?>">
+                                            <?= $row["acc_name"]; ?>
+                                        </option>
+                                    <?php
+                                    }
+
+                                    ?>
+                                </select>
+                                <div class="invalid-feedback">Please select an option!</div>
                             </div>
-                        
                         <!-- <div class="col-md-12 pa2">
                             <label for="category">Category</label>
                                 <select class="form-select mt-3" name="category" value="<?php //echo $category; ?>" required>
@@ -155,6 +186,8 @@ if (isset($_GET['edit'])) {
 
     <script>
   function GetDetail(str) {
+    var empcode = str.split(' - ')[1];
+        $('#empcode').val(empcode);
     if (str.length == 0) {
         document.getElementById("acccode").value = "";
         return;
@@ -165,12 +198,36 @@ if (isset($_GET['edit'])) {
             if (this.readyState == 4 && this.status == 200) {
                 var myObj = JSON.parse(this.responseText);
                 document.getElementById("acccode").value = myObj[0];
+                
             }
         };
-        xmlhttp.open("GET", "../../controllers/validation.php?emp_code=" + str, true);
+        xmlhttp.open("GET", "../../controllers/validation.php?emp_code=" + empcode, true);
         xmlhttp.send();
     }
   }
+</script>
+
+<!-- Include jQuery and the autocomplete plugin -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-autocomplete/1.0.7/jquery.auto-complete.min.js"></script>
+
+<!-- Initialize the autocomplete plugin -->
+<script>
+    $(document).ready(function() {
+        $('#empcode').autoComplete({
+            minChars: 1,
+            source: function(term, suggest){
+                term = term.toLowerCase();
+                var suggestions = [];
+                <?php foreach ($detdata as $option): ?>
+                    if (~<?php echo json_encode(strtolower($option)); ?>.indexOf(term)) {
+                        suggestions.push('<?php echo addslashes($option); ?>');
+                    }
+                <?php endforeach; ?>
+                suggest(suggestions);
+            }
+        });
+    });
 </script>
 
     <script src="../../js/form.js"></script>
