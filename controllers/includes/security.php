@@ -18,16 +18,28 @@ include 'common.php';
             <h4>Employee<span style="font-family:'Courier New', Courier, monospace;">/</span>Vistor Log</h4>
 
             <div class="button-con">
+                <a href="../views/security/visitor_log.php">
+                    <button class="button-56" role="button">Visitor Log Form</button>
+                </a>
+            </div>
+            <div class="button-con">
+                <a href="../views/security/visitor_log_table.php">
+                    <button class="button-56" role="button">Visitor Log Table</button>
+                </a>
+            </div>
+
+            
+            <div class="button-con">
                 <a href="../views/security/employee_outing.php">
                     <button class="button-56" role="button">Add Employee Outing</button>
                 </a>
             </div>
             <div class="button-con">
-                <a href="../views/security/visitor_log.php">
-                    <button class="button-56" role="button">Visitor Log Form</button>
+                <a href="../views/security/employee_outing_table.php">
+                    <button class="button-56" role="button">Employee Outing Table</button>
                 </a>
             </div>
-
+           
         </div>
 
 
@@ -38,11 +50,16 @@ include 'common.php';
             <img src="../images/water_tanker.png" alt="tanker_logo">
         </div>
         <div class="links">
-            <h4>Tanker Details</h4>
+            <h4 class="text-center">Tanker Details</h4>
 
             <div class="button-con">
-                <a href="">
+                <a href="../views/security/tanker.php">
                     <button class="button-56" role="button">Add Tanker Details</button>
+                </a>
+            </div>
+            <div class="button-con">
+                <a href="../views/security/employee_outing_table.php">
+                    <button class="button-56" role="button">Tanker Details Table</button>
                 </a>
             </div>
         </div>
