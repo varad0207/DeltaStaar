@@ -18,7 +18,7 @@ include 'common.php';
             <h4>Employee<span style="font-family:'Courier New', Courier, monospace;">/</span>Vistor Log</h4>
 
             <div class="button-con">
-                <a href="../views/security/visitor_log.php">
+                <a href="../views/security/visitor.php">
                     <button class="button-56" role="button">Visitor Log Form</button>
                 </a>
             </div>

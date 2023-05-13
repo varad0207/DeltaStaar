@@ -4,8 +4,24 @@
 if(isset($_REQUEST['employeecode'])){
 
     $employeecode = $_REQUEST['employeecode'];
+    $acc_name="";
+    $room_number="";
     if ($employeecode != "") {
-        $row12 = mysqli_fetch_array(mysqli_query($conn, "SELECT * FROM employee JOIN employee_designation ON employee_designation.id = employee.designation AND employee.emp_code='$employeecode'"));
+        $row12 = mysqli_fetch_array(mysqli_query($conn, "SELECT * FROM employee JOIN employee_designation ON employee_designation.id = employee.designation JOIN employee_dept ON employee_dept.dept_id = employee.department AND employee.emp_code='$employeecode'"));
+
+        if($row12['room_id']=="")
+        {
+            $acc_name="N.A";
+            $room_number="N.A";
+        }
+        else{
+            $room_id=$row12['room_id'];
+            $room_det=mysqli_fetch_array(mysqli_query($conn,"SELECT * FROM rooms where id=$room_id"));
+            $room_number=$room_det['room_no'];
+            $acc_id=$room_det['acc_id'];
+            $acc_det=mysqli_fetch_array(mysqli_query($conn,"SELECT * FROM accomodation where acc_id=$acc_id"));
+            $acc_name=$acc_det['acc_name'];
+        }
     }
 }
 
@@ -34,7 +50,7 @@ if(isset($_REQUEST['employeecode'])){
                     <div class="wrap" style="display:flex;justify-content:space-around;">
                         <div class="left" style="display:block;text-align: left;">
                             <p class="card-text">Employee code :<b><?php echo $row12['emp_code']; ?></b></p>
-                            <p class="card-text">Department : <b><?php echo $row12['department']; ?></b></p>
+                            <p class="card-text">Department : <b><?php echo $row12['dept_name']; ?></b></p>
 
                             <p class="card-text">Designation : <b><?php echo $row12['designation']; ?></b></p>
                             <p class="card-text">Salary : <b><?php echo $row12['salary']; ?></b></p>                        
@@ -52,6 +68,8 @@ if(isset($_REQUEST['employeecode'])){
                             <p class="card-text">Date of birth : <b><?php echo date('d-m-Y', strtotime($row12['dob'])); ?></b></p>
                             <p class="card-text">Blood group : <b><?php echo $row12['blood_group']; ?></b></p>
                             <p class="card-text">Aadhar number : <b><?php echo $row12['aadhaar_number']; ?></b></p>
+                            <p class="card-text">Accomodation name : <b><?php echo $acc_name; ?></b></p>
+                            <p class="card-text">Room number : <b><?php echo $room_number;?></b></p>
                         </div>
                     </div>
                     <div class="overlay-window-footer" style="display:flex;justify-content:center;margin-top:50px;margin-bottom:10px;">

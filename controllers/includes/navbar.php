@@ -6,7 +6,7 @@ if (basename($_SERVER['PHP_SELF'], '.php') != "dashboard")
     $link = "../";
 ?>
 
-<nav class="navbar  navbar-expand-lg navbar-dark f3 lh-copy pa3 fw4">
+<nav class="navbar navbar-expand-lg navbar-dark f3 lh-copy pa3 fw4">
     <div class="container-fluid">
         <button class="openbtn" onclick="openNav()">&#9776; Menu</button>
         <a class="navbar-brand" href="#">
@@ -82,6 +82,7 @@ if (basename($_SERVER['PHP_SELF'], '.php') != "dashboard")
                                         <a class="dropdown-item" href="../views/config/security.php">Define Security</a>
                                         <a class="dropdown-item" href="../views/config/technician.php">Define/Add Technician</a>
                                         <a class="dropdown-item" href="../views/config/complaint_type.php">Complaint Type</a>
+                                        <a class="dropdown-item" href="../controllers/includes/logs.php">Logs</a>
                                         <?php } ?>
 
                                     </div>
