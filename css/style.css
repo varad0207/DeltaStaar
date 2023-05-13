@@ -1,5 +1,9 @@
 @import url('https://fonts.googleapis.com/css2?family=Bungee+Spice&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
 
+.navbar-nav{
+    padding-right: 2rem;
+}
+
 .bgcolor {
     font-family: 'Bungee Spice', cursive;
     font-family: 'Poppins', sans-serif;
@@ -33,27 +37,88 @@
     -webkit-text-fill-color: transparent;
 }
 
-.container {
-    display: grid;
-    grid-gap: 10px;
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-    align-content: stretch;
-    align-items: center;
-    justify-content: stretch;
-    justify-items: center;
-    color: white;
 
+.wrapper-class {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.card {
+    margin: 0 4rem 0 0rem;
+    padding: 2.5rem;
 }
 
 .child1 {
-    grid-column: span 2;
+    width: 70%;
+}
+
+.child1>h1 {
+    font-size: 3em;
 }
 
 .child2 {
-    grid-column: span 3;
+    width: 30%;
 }
 
-.child2 > img {
-    border-radius: 30px;
-    width: 100%;
+.child1>img {
+
+    margin: 0 0 0 4rem;
+    width: 80%;
+    display: block;
+
+    margin-left: auto;
+    margin-right: auto;
+
+}
+
+.form-outline {
+    text-align: left;
+    font-size: 1rem;
+    color: #1b1c1e;
+}
+
+.form-head {
+    color: #1b1c1e;
+}
+
+@media screen and (max-width: 1050px) {
+    .wrapper-class {
+        flex-direction: column;
+    }
+
+    .child1,
+    .child2 {
+        width: 100%;
+    }
+
+    /*.child1 h1 {
+        font-size: 2rem;
+    }*/
+
+    .child2 {
+        padding-top: 4rem;
+    }
+
+    .card {
+        text-align: center;
+        margin: 0 5rem;
+        padding: 1.5rem;
+    }
+}
+
+@media screen and (max-width: 600px) {
+
+    .child1 h1 {
+        font-size: 2rem;
+    }
+
+    .child2 {
+        padding-top: 2rem;
+    }
+
+    .card {
+
+        margin: 0 3rem;
+        padding: 1.2rem;
+    }
 }

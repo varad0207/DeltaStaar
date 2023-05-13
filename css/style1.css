@@ -25,6 +25,12 @@
     -webkit-text-fill-color: transparent;
 }
 
+.ulcolor {
+    background: -webkit-linear-gradient(#f5f5c4, #fdfff9);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
 .containeer {
     display: grid;
     grid-gap: 20px;
