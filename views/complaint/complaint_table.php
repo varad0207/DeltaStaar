@@ -311,6 +311,7 @@ if (mysqli_num_rows($check) > 0)
                             $EmployeeRoom_row = mysqli_fetch_assoc(mysqli_query($conn, "SELECT * FROM rooms WHERE id = '{$EmpName_row['room_id']}'"));
 
                             $AccName_row = mysqli_fetch_assoc(mysqli_query($conn, "SELECT * FROM accomodation where acc_code='{$row['acc_code']}'"));
+                            $complaintType_row = mysqli_fetch_assoc(mysqli_query($conn, "SELECT * FROM complaint_type where type_id='{$row['type']}'"));
                     
                             $query = mysqli_query($conn, "SELECT * FROM jobs WHERE complaint_id = '{$row['id']}'");
 
@@ -324,7 +325,7 @@ if (mysqli_num_rows($check) > 0)
                                 </td>
                                 <!-- fetch complaint category -->
                                 <td>
-                                    <?php echo $row['type']; ?>
+                                    <?php echo $complaintType_row['complaint_type']; ?>
                                 </td>
                                 <td>
                                     <?php echo $row['description']; ?>
@@ -332,7 +333,7 @@ if (mysqli_num_rows($check) > 0)
                                 <td>
                                     <?php
 
-                                    if (isset($row['tech_closure_timestamp']) && isset($row['sec_closure_timestamp']) && isset($row['warden_closure_timestamp'])) {
+                                    if (isset($row['tech_closure_timestamp']) && isset($row['sec_closure_timestamp']) || isset($row['warden_closure_timestamp'])) {
                                         echo "<p>Completed</p>";
                                     } else if (isset($row['tech_pending_timestamp']) && !isset($row['tech_closure_timestamp']) && !isset($row['sec_closure_timestamp']) && !isset($row['warden_closure_timestamp'])) {
                                         echo "<p>Waiting for material</p>";

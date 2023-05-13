@@ -28,11 +28,15 @@ if(isset($_POST["emp_export"]))
             <th>Country</th>
             <th>Aadhar Number</th>
             <th>Salary</th>
-            <th>Room id</th>
+            <th>Room Number</th>
+            <th>Accomodation Name</th>
             </tr>
             ';
+
         while($row=mysqli_fetch_array($result))
         {    
+            if($row['room_id']=="")
+            {
             $output .= '
                 <tr>
                 <td>' .$row['emp_code']. '</td>
@@ -53,9 +57,48 @@ if(isset($_POST["emp_export"]))
                 <td>' .$row['joining_date']. '</td>
                 <td>' .$row['aadhaar_number']. '</td>
                 <td>' .$row['salary']. '</td>
-                <td>' .$row['room_id']. '</td>
+                <td>'.'N.A'.'</td>
+                <td>'.'N.A'.'</td>
                 </tr>
                 ';
+            }
+            else
+            {
+                $room_id=$row['room_id'];
+                $fetch_room_no=mysqli_query($conn,"SELECT * FROM rooms where id=$room_id");
+                $room_details=mysqli_fetch_array($fetch_room_no);
+                $room_no=$room_details['room_no'];
+                $acc_id=$room_details['acc_id'];
+                $fetch_acc_det=mysqli_query($conn,"SELECT * from accomodation where acc_id=$acc_id");
+                $acc_details=mysqli_fetch_array($fetch_acc_det);
+                $acc_name=$acc_details['acc_name'];
+
+                $output .= '
+                <tr>
+                <td>' .$row['emp_code']. '</td>
+                <td>' .$row['fname']. '</td>
+                <td>' .$row['mname']. '</td>
+                <td>' .$row['lname']. '</td>
+                <td>' .$row['designation']. '</td>
+                <td>' .$row['dob']. '</td>
+                <td>' .$row['contact']. '</td>
+                <td>' .$row['address']. '</td>
+                <td>' .$row['state']. '</td>
+                <td>' .$row['country']. '</td>
+                <td>' .$row['pincode']. '</td>
+                <td>' .$row['email']. '</td>
+                <td>' .$row['contact']. '</td>
+                <td>' .$row['dept_name']. '</td>
+                <td>' .$row['blood_group']. '</td>
+                <td>' .$row['joining_date']. '</td>
+                <td>' .$row['aadhaar_number']. '</td>
+                <td>' .$row['salary']. '</td>
+                <td style="background-color:#00FFCA;">'.$room_no.'</td>
+                <td style="background-color:#00FFCA;">'.$acc_name.'</td>
+                </tr>
+                ';
+            }
+
         }
         $output .= "</table>";
         header("Content-Type: application/xls");
@@ -330,7 +373,75 @@ if(isset($_POST['tanker_export']))
 
 }
 
-                        
-                            
-                        
+//VISITOR LOG EXPORT
+if(isset($_POST['visitor_log_export']))
+{
+    $sql=$_POST['visitor_log_export'];
+    $sql=substr($sql,0,strripos($sql,"LIMIT"));
+    $result = mysqli_query($conn, $sql);
+   
+    if(mysqli_num_rows($result)>0) 
+    {
+        $output='
+        <table class="table" bordered="1px">
+        <thead>
+            <tr>
+                <th scope="col">Sr.No</th>
+                <th scope="col">Visitor Name</th>
+                <th scope="col">Vehicle No</th>
+                <th scope="col">Type of visitor</th>
+                <th scope="col">Purpose</th>
+                <th scope="col">Phone No</th>
+                <th scope="col">Check-in</th>
+                <th scope="col">Check-out</th>
+            </tr>
+        </thead>
+        ';
+        $i=1;
+        while($row=mysqli_fetch_array($result))
+        {
+            $check_in=strtotime($row['check_in']);
+            $checkout=$row['check_out'];
+            if($checkout=="")
+            {
+                $checkout="Visitor Not Checked out.";
+                $checkout_date="Visitor Not Checked out.";
+                $checkout_time="";
+            }
+            else
+            {
+                $checkout=strtotime($row['check_out']);
+                $checkout_date=date('d M Y',$checkout);
+                $checkout_time=date('H:i',$checkout);
+            }
+            $checkin_date=date('d M Y',$check_in);
+            $checkin_time=date('H:i',$check_in);
+
+            $output .='
+            <tbody>
+            <tr>
+                <td>'. $i .'</td>
+                <td>'. $row['visitor_name'] .'</td>
+                <td>'. $row['vehicle_no'] .'</td>
+                <td>'. $row['type'] .'</td>
+                <td>'. $row['purpose'] .'</td>
+                <td>'. $row['phone_no'] .'</td>
+                <td>'. $checkin_date." ". $checkin_time .'</td>
+                <td>'. $checkout_date." ". $checkout_time .'</td>
+            </tr>
+            </tbody>
+            ';
+            $i++;
+        }
+        $output .= "</table>";
+        header("Content-Type: application/xls");
+        header("Content-Disposition: attachment; filename=Visitor_log.xls");
+        echo $output;
+    }
+    else
+    {
+        echo "Table is empty";
+    }
+    
+}                
 ?>

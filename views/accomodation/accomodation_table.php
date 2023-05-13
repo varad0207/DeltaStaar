@@ -287,7 +287,7 @@ die('<script>alert("You dont have access to this page, Please contact admin");wi
                     <th scope="col">Building Status</th>
                     <th scope="col">Location</th>
                     <th scope="col">Gender</th>
-                    <th scope="col">Total Capacity</th>
+                    <th scope="col">Total Capacity/Current Occupancy</th>
                     <th scope="col">Number of Rooms</th>
                     <th scope="col">Warden</th>
                     <!-- <th scope="col">Occupied Rooms</th>
@@ -303,6 +303,11 @@ die('<script>alert("You dont have access to this page, Please contact admin");wi
                     <?php 
                     if(mysqli_num_rows($results) > 0) {
                     while ($row = mysqli_fetch_array($results)) { 
+                    ?>
+                    <?php
+                    $accid = $row['acc_id'];
+                    $queryRoom = mysqli_query($conn, "SELECT * FROM rooms WHERE acc_id = '$accid'");
+                    $room_row = mysqli_fetch_assoc($queryRoom);
                     ?>
                         
                     <tr>
@@ -320,7 +325,11 @@ die('<script>alert("You dont have access to this page, Please contact admin");wi
                             <?php echo $row['gender']; ?>
                         </td>
                         <td>
-                            <?php echo $row['tot_capacity']; ?>
+                            <?php 
+                            if(@$room_row['current_room_occupancy'] == NULL){
+                                @$room_row['current_room_occupancy'] = 0;
+                            }
+                            echo $row['tot_capacity']; ?>/<?php echo @$room_row['current_room_occupancy'] ; ?>
                         </td>
                         <td>
                             <?php echo $row['no_of_rooms']; ?>

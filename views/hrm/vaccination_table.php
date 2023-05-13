@@ -192,29 +192,14 @@ die('<script>alert("You dont have access to this page, Please contact admin");wi
     $limit=10;
     $pages = 0;
     $page=isset($_GET['page'])?$_GET['page']:1;
-    //check if current page is less then or equal 1
-    if(($page>=1)||($page<$pages))
-    {
-        $start=($page-1) * $limit;
-        $Previous=$page-1;
-        $Next=$page+1;
-    }
-    if($page<1)
-    {
-        $Previous=1;
-        $start = 1;
-    }
-    if($page>=$pages)
-    {
-        $Next=$pages;
-    }
-    $sql .=" LIMIT $start,$limit";
-    $result=mysqli_query($conn,$sql);
+    $start = ($page - 1) * $limit;
+    $sql .= " LIMIT $start,$limit";
+    $result = mysqli_query($conn, $sql);
 
-    $q1="SELECT * FROM vaccination";
-    $result1=mysqli_query($conn,$q1);
-    $total=mysqli_num_rows($result1);
-    $pages=ceil($total/$limit);
+    $q1 = "SELECT * FROM vaccination";
+    $result1 = mysqli_query($conn, $q1);
+    $total = mysqli_num_rows($result1);
+    $pages = ceil($total / $limit);
     
     /* ************************************************ */
     ?>

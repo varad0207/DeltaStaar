@@ -15,9 +15,8 @@ $isPrivilaged = 0;
 $rights = unserialize($_SESSION['rights']);
 if ($rights['rights_jobs'] > 0) {
     $isPrivilaged = $rights['rights_jobs'];
-}
-else
-die('<script>alert("You dont have access to this page, Please contact admin");window.location = history.back();</script>');
+} else
+    die('<script>alert("You dont have access to this page, Please contact admin");window.location = history.back();</script>');
 
 ?>
 
@@ -75,49 +74,49 @@ die('<script>alert("You dont have access to this page, Please contact admin");wi
 
     <div class="table-header">
         <h1 class="tc f1 lh-title spr">Raised Jobs</h1>
-        <!-- <div class="fl w-75 form-outline srch">
-        <input type="search" id="form1" class="form-control" placeholder="Search" aria-label="Search" oninput="search()" />
+         
+    <input type="search" id="form1" class="form-control" placeholder="Search" aria-label="Search" oninput="search()" class="fl w-75" />
         <h4 id="demo"></h4>
-    </div> -->
         <!-- Displaying Database Table -->
         <!-- <div class="tr">
         <button class="btn btn-dark">
-            <h5><i class="bi bi-filter-circle"> Sort By</i></h5>
+            <h5><i class="bi bi-filter-circle"></i></h5>
         </button>
-    </div> -->
+    </div>  -->
     </div>
 
-    <?php  //Entries per-page
-        $results_per_page = 5;
 
-        //Number of results in the DB
-        $sql = "SELECT * FROM jobs";
-        $result = mysqli_query($conn, $sql);
-        $number_of_results = mysqli_num_rows($result); 
-        //number of pages
-        $number_of_pages = ceil($number_of_results / $results_per_page);
+    <?php //Entries per-page
+    $results_per_page = 5;
 
-        // on which is the user
-        if (!isset($_GET['page']))
+    //Number of results in the DB
+    $sql = "SELECT * FROM jobs";
+    $result = mysqli_query($conn, $sql);
+    $number_of_results = mysqli_num_rows($result);
+    //number of pages
+    $number_of_pages = ceil($number_of_results / $results_per_page);
+
+    // on which is the user
+    if (!isset($_GET['page']))
         $page = 1;
     else
         $page = $_GET['page'];
     //starting limit number for the results
     $this_page_first_result = ($page - 1) * $results_per_page;
 
-   // retrieve the selected results
-   $sqli = "SELECT * FROM jobs LIMIT " . $this_page_first_result . ',' . $results_per_page;
-   $results = mysqli_query($conn, $sqli);
+    // retrieve the selected results
+    $sqli = "SELECT * FROM jobs LIMIT " . $this_page_first_result . ',' . $results_per_page;
+    $results = mysqli_query($conn, $sqli);
 
-        ?>
+    ?>
     <div class="table-div">
         <?php if (isset($_SESSION['message'])): ?>
-        <div class="msg">
-            <?php
-            echo $_SESSION['message'];
-            unset($_SESSION['message']);
-            ?>
-        </div>
+            <div class="msg">
+                <?php
+                echo $_SESSION['message'];
+                unset($_SESSION['message']);
+                ?>
+            </div>
         <?php endif ?>
 
         <?php
@@ -143,14 +142,14 @@ die('<script>alert("You dont have access to this page, Please contact admin");wi
                 <tbody>
                     <?php while ($row = mysqli_fetch_array($results)) { ?>
 
-                    <?php
+                        <?php
 
 
                         $query = mysqli_query($conn, "SELECT * FROM complaints WHERE id = '{$row['complaint_id']}'");
                         $row3 = mysqli_fetch_array($query);
 
-                    ?>
-                    <?php
+                        ?>
+                        <?php
                         $tech_id = mysqli_query($conn, "SELECT * FROM technician");
 
 
@@ -160,12 +159,6 @@ die('<script>alert("You dont have access to this page, Please contact admin");wi
                         $row1 = mysqli_fetch_array($emp_det);
 
                         $total_time_pending = strtotime($row['completion_date']) - strtotime($row['raise_timestamp']);
-
-                        // if (is_numeric($total_time_pending)) {
-                        //     $time_elapsed = time() - is_numeric($row['raise_timestamp']);
-                        //   } else {
-                        //     $time_elapsed = 0;
-                        //   }
                         $time_elapsed = time() - strtotime($row['raise_timestamp']);
 
                         if (is_numeric($time_elapsed) && is_numeric($total_time_pending) && $total_time_pending > 0) {
@@ -174,46 +167,55 @@ die('<script>alert("You dont have access to this page, Please contact admin");wi
                             $progress = 0;
                         }
 
-                        if ($progress > 100) {
-                            $progress = 100;
-                        }
+                        // Ensure that the progress is within the valid range of 0 to 100
+                        $progress = max(0, min(100, $progress));
 
-                    ?>
+                        // Check if the ticket is already closed
+                        $is_closed = isset($row3['tech_closure_timestamp']) && isset($row3['sec_closure_timestamp']) || isset($row3['warden_closure_timestamp']);
 
-                    <tr>
-                        <td>
-                            <?php echo $row['id']; ?>
-                        </td>
-                        <td>
-                            <?php echo $row['complaint_id']; ?>
-                        </td>
-                        <!-- fetch complaint category -->
-                        <td>
-                            <?= $row1["fname"] ?><?=" " ?><?= $row1["lname"] ?>(<?= $row1["emp_code"]; ?>)
-                        </td>
-                        <td>
-                            <?php echo $row['warden_emp_code']; ?>
-                        </td>
-                        <td>
-                            <?php echo $row['raise_timestamp']; ?>
-                        </td>
-                        <td>
-                            <?php echo $row['description']; ?>
-                        </td>
-                        <td>
-                            <?php echo $row['completion_date']; ?>
-                        </td>
-                        <td>
-                            <div class='progress-bar'>
-                                <div style='width:  <?= $progress ?>%' class='progress'><?= $progress ?>%</div>
-                            </div>
-                        </td>
-                        <td>
-                            <?php echo $row['remarks']; ?>
-                        </td>
-                        <!-- fetch emp name -->
+                        ?>
 
-                        <!-- <td>
+                        <tr>
+                            <td>
+                                <?php echo $row['id']; ?>
+                            </td>
+                            <td>
+                                <?php echo $row['complaint_id']; ?>
+                            </td>
+                            <!-- fetch complaint category -->
+                            <td>
+                                <?= $row1["fname"] ?>
+                                <?= " " ?>
+                                <?= $row1["lname"] ?>(
+                                <?= $row1["emp_code"]; ?>)
+                            </td>
+                            <td>
+                                <?php echo $row['warden_emp_code']; ?>
+                            </td>
+                            <td>
+                                <?php echo $row['raise_timestamp']; ?>
+                            </td>
+                            <td>
+                                <?php echo $row['description']; ?>
+                            </td>
+                            <td>
+                                <?php echo $row['completion_date']; ?>
+                            </td>
+                            <td>
+                                <div class="progress-bar">
+                                    <?php if ($is_closed) { ?>
+                                        <div style="width: 100%" class="progress">100%</div>
+                                    <?php } else { ?>
+                                        <div style="width: <?= $progress ?>%" class="progress"><?= round($progress) ?>%</div>
+                                    <?php } ?>
+                                </div>
+                            </td>
+                            <td>
+                                <?php echo $row['remarks']; ?>
+                            </td>
+                            <!-- fetch emp name -->
+
+                            <!-- <td>
 
                         
                         <a href="jobs.php?edit=<?php echo $row['id']; ?>" class="edit_btn">Edit</a>
@@ -225,71 +227,70 @@ die('<script>alert("You dont have access to this page, Please contact admin");wi
                             <a href="../../controllers/jobs_controller.php?del=<?php echo '%27' ?><?php echo $row['id']; ?><?php echo '%27' ?>"
                                 class="del_btn">Delete</a>
                         </td> -->
-                        <td style="text-align:center;">
-                            <?php if (!isset($row3['tech_closure_timestamp'])) { ?>
-                            <a href="../../controllers/complaint_controller.php?tech=<?php echo '%27' ?><?php echo $row['complaint_id']; ?><?php echo '%27' ?>"
-                                class="del_btn"
-                                >Done</a><br>
-                            <span class="closure-label">Technician</span>
-                            <?php } else { ?>
-                            <p class="del_btn"
-                                style="background-color: green; color: white; padding: 5px 10px; border-radius: 5px; margin-bottom: 0px; text-align: center; display: inline-block;"
-                                disabled>Closed</p><br>
-                            <span class="closure-label">Technician</span>
-                            <?php } ?>
-                        </td>
+                            <td style="text-align:center;">
+                                <?php if (!isset($row3['tech_closure_timestamp'])) { ?>
+                                    <a href="../../controllers/complaint_controller.php?tech=<?php echo '%27' ?><?php echo $row['complaint_id']; ?><?php echo '%27' ?>"
+                                        class="del_btn">Done</a><br>
+                                    <span class="closure-label">Technician</span>
+                                <?php } else { ?>
+                                    <p class="del_btn"
+                                        style="background-color: green; color: white; padding: 5px 10px; border-radius: 5px; margin-bottom: 0px; text-align: center; display: inline-block;"
+                                        disabled>Closed</p><br>
+                                    <span class="closure-label">Technician</span>
+                                <?php } ?>
+                            </td>
 
-                        <td style="text-align:center;">
-                            <?php if (!isset($row3['sec_closure_timestamp'])) { ?>
-                                
-                                <?php    if (!isset($row3['tech_closure_timestamp'])) { ?>
-                                    <a href="../../controllers/complaint_controller.php?sec=<?php echo '%27' ?><?php echo $row['complaint_id']; ?><?php echo '%27' ?>"
-                                class="btn btn-secondary" style="pointer-events: none;"
-                                >Done</a><br>
-                            <span class="closure-label">Security</span>
+                            <td style="text-align:center;">
+                                <?php if (isset($row3['sec_closure_timestamp']) || isset($row3['warden_closure_timestamp'])) { ?>
+
+                                    <p class="del_btn"
+                                        style="background-color: green; color: white; padding: 5px 10px; border-radius: 5px; margin-bottom: 0px; text-align: center; display: inline-block;"
+                                        disabled>Closed</p><br>
+                                    <span class="closure-label">Security</span>
+
+                                <?php } else if (!isset($row3['sec_closure_timestamp'])) { ?>
+                                    <?php if (!isset($row3['tech_closure_timestamp'])) { ?>
+                                            <a href="../../controllers/complaint_controller.php?sec=<?php echo '%27' ?><?php echo $row['complaint_id']; ?><?php echo '%27' ?>"
+                                                class="btn btn-secondary" style="pointer-events: none;">Done</a><br>
+                                            <span class="closure-label">Security</span>
                                     <?php } else { ?>
-                                        <a href="../../controllers/complaint_controller.php?sec=<?php echo '%27' ?><?php echo $row['complaint_id']; ?><?php echo '%27' ?>"
-                                class="del_btn"
-                                >Done</a><br>
-                            <span class="closure-label">Security</span>
-                                        <?php } ?>
-                            <?php } else { ?>
-                            <p class="del_btn"
-                                style="background-color: green; color: white; padding: 5px 10px; border-radius: 5px; margin-bottom: 0px; text-align: center; display: inline-block;"
-                                disabled>Closed</p><br>
-                            <span class="closure-label">Security</span>
-                            <?php } ?>
-                        </td>
+                                            <a href="../../controllers/complaint_controller.php?sec=<?php echo '%27' ?><?php echo $row['complaint_id']; ?><?php echo '%27' ?>"
+                                                class="del_btn">Done</a><br>
+                                            <span class="closure-label">Security</span>
+                                    <?php } ?>
+                                <?php } ?>
+                            </td>
 
-                        <td style="text-align:center;">
-                            <?php if (!isset($row3['warden_closure_timestamp'])) { ?>
-                                <?php    if (!isset($row3['tech_closure_timestamp']) && !isset($row3['sec_closure_timestamp'])) { ?>
-                                    <a href="../../controllers/complaint_controller.php?warden=<?php echo '%27' ?><?php echo $row['complaint_id']; ?><?php echo '%27' ?>"
-                                class="btn btn-secondary" style="pointer-events: none;"
-                                >Done</a><br>
-                            <span class="closure-label">Warden</span>
-                            <?php } else { ?>
-                            <a href="../../controllers/complaint_controller.php?warden=<?php echo '%27' ?><?php echo $row['complaint_id']; ?><?php echo '%27' ?>"
-                                class="del_btn"
-                                >Done</a><br>
-                            <span class="closure-label">Warden</span>
-                            <?php } ?>
-                            <?php } else { ?>
-                            <p class="del_btn"
-                                style="background-color: green; color: white; padding: 5px 10px; border-radius: 5px; margin-bottom: 0px; text-align: center; display: inline-block;"
-                                disabled>Closed</p><br>
-                            <span class="closure-label">Warden</span>
-                            <?php } ?>
-                        </td>
-                    </tr>
+                            <td style="text-align:center;">
+                                <?php if (isset($row3['sec_closure_timestamp']) || isset($row3['warden_closure_timestamp'])) { ?>
+
+                                    <p class="del_btn"
+                                        style="background-color: green; color: white; padding: 5px 10px; border-radius: 5px; margin-bottom: 0px; text-align: center; display: inline-block;"
+                                        disabled>Closed</p><br>
+                                    <span class="closure-label">Warden</span>
+
+                                <?php } else if (!isset($row3['warden_closure_timestamp'])) { ?>
+                                    <?php if (!isset($row3['tech_closure_timestamp'])) { ?>
+                                            <a href="../../controllers/complaint_controller.php?warden=<?php echo '%27' ?><?php echo $row['complaint_id']; ?><?php echo '%27' ?>"
+                                                class="btn btn-secondary" style="pointer-events: none;">Done</a><br>
+                                            <span class="closure-label">Warden</span>
+                                    <?php } else { ?>
+                                            <a href="../../controllers/complaint_controller.php?warden=<?php echo '%27' ?><?php echo $row['complaint_id']; ?><?php echo '%27' ?>"
+                                                class="del_btn">Done</a><br>
+                                            <span class="closure-label">Warden</span>
+                                    <?php } ?>
+                                <?php } ?>
+                            </td>
+
+                        </tr>
                     <?php } ?>
                 </tbody>
             </table>
             <?php
-            
+
             //display the links to the pages
-            for($page=1;$page<=$number_of_pages;$page++)
-                echo '<a href="jobs_table.php?page=' .$page .'">' .$page .'</a>';
+            for ($page = 1; $page <= $number_of_pages; $page++)
+                echo '<a href="jobs_table.php?page=' . $page . '">' . $page . '</a>';
             ?>
         </div>
     </div>

@@ -2,6 +2,7 @@
 require "../controllers/includes/common.php";
 if (!isset($_SESSION["emp_id"]))
     header("location:../index.php");
+    
 $emp = mysqli_query($conn, "select * from employee where emp_id='{$_SESSION['emp_id']}'");
 $emp_details = mysqli_fetch_array($emp);
 $check_technician = mysqli_query($conn, "select * from employee join technician using(emp_id) where emp_id='{$_SESSION['emp_id']}' and employee.role is not null");
@@ -9,6 +10,7 @@ $check_security = mysqli_query($conn, "select * from employee join security usin
 $isSecurity = 0;
 $isSuperadmin = 0;
 $isTechnician = 0;
+
 if ($_SESSION['is_superadmin']) {
     $isSuperadmin = 1;
 } else {
@@ -39,19 +41,16 @@ if ($_SESSION['is_superadmin']) {
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet"
-        integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.3/font/bootstrap-icons.css">
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 
-    <link href="../css/sidebar.css" rel="stylesheet">
     <!-- Bootstrap -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css" rel="stylesheet"
-        integrity="sha384-Zenh87qX5JnK2Jl0vWa8Ck2rdkQ2Bzep5IDxbcnCeuOxjzrPF/et3URy9Bv1WTRi" crossorigin="anonymous">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
     <!-- Tachyons -->
     <link rel="stylesheet" href="https://unpkg.com/tachyons@4.12.0/css/tachyons.min.css" />
 
-    
+    <link rel="stylesheet" href="../css/sidebar.css">
     <link rel="stylesheet" href="../css/technician.css">
     <link rel="stylesheet" href="../css/securityDashboard.css">
     <link rel="stylesheet" href="../css/employeeDashboard.css">
@@ -105,18 +104,18 @@ if ($_SESSION['is_superadmin']) {
     </div>
     
     <!-- overlay code start -->
-        <div class="overlay" id="overlay"> 
-            <div class="overlay-window">
-                <div class="overlay-window-titlebar">
-                    <span class="overlay-title">Welcome <span class=name><?php echo $emp_details['fname']; ?></span></span>
-                    <button class="close material-icons" onclick="document.getElementById('overlay').style.display='none'">close</button>
-                </div>
-                <div class="overlay-content" style="color:black">
-                        Welcome to DELTASTAAR!<br><br>
-                        To change password <a href="../views/config/reset_password.php">Click Here</a>
-                </div>
+    <div class="overlay" id="overlay"> 
+        <div class="overlay-window">
+            <div class="overlay-window-titlebar">
+                <span class="overlay-title">Welcome <span class=name><?php echo $emp_details['fname']; ?></span></span>
+                <button class="close material-icons" onclick="document.getElementById('overlay').style.display='none'">close</button>
+            </div>
+            <div class="overlay-content" style="color:black">
+                    Welcome to DELTASTAAR!<br><br>
+                    To change password <a href="../views/config/reset_password.php">Click Here</a>
             </div>
         </div>
+    </div>
     <!-- overlay end -->
     
 
@@ -125,10 +124,11 @@ if ($_SESSION['is_superadmin']) {
     <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/3.1.9-1/md5.js"></script>
 
     <script>
-window.onload = function() {
-    // console.log(localStorage.getItem('visited'));
-    if (!localStorage.getItem('visited')) {
-        var xmlhttp = new XMLHttpRequest();
+        window.onload = function() {
+        // console.log(localStorage.getItem('visited'));
+        if (!localStorage.getItem('visited')) {
+            var xmlhttp = new XMLHttpRequest();
+
             xmlhttp.onreadystatechange = function () {
                 if (this.readyState == 4 && this.status == 200) {
                     var myObj = JSON.parse(this.responseText);
@@ -143,12 +143,13 @@ window.onload = function() {
                     }
                 }
             };
+
             xmlhttp.open("GET", "../controllers/validation.php?id=" + <?php echo $_SESSION['emp_id']; ?>, true);
             xmlhttp.send(); 
-    }
-    else
-        document.getElementById('overlay').style.display = "none";
-};
+        }
+        else
+            document.getElementById('overlay').style.display = "none";
+        };
     </script>
 
     <script src="../js/Sidebar/sidebar.js"></script>
@@ -158,13 +159,14 @@ window.onload = function() {
     <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
         integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
         crossorigin="anonymous"></script>
-    <!-- JavaScript Bundle with Popper -->
 
+    <!-- JavaScript Bundle with Popper -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js"
         integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
         crossorigin="anonymous"></script>
 
     <!--Scripts required for Bootstrap and Sidebar-->
+
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4"
         crossorigin="anonymous"></script>

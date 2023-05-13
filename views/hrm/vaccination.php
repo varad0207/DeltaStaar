@@ -60,20 +60,18 @@ if (isset($_GET['edit'])) {
     include '../../controllers/includes/sidebar.php';
     include '../../controllers/includes/navbar.php';
     ?>
-
     <div class="form-body">
         <div class="row">
             <div class="form-holder">
                 <div class="form-content">
                     <div class="form-items">
                         <h1 class="f2 lh-copy tc" style="color: white;">Enter Vaccination Details</h1>
-                        <form class="requires-validation f3 lh-copy" novalidate
-                            action="../../controllers/vaccination_controller.php" method="post">
+                        <form class="f3 lh-copy" action="../../controllers/vaccination_controller.php" method="post" id="myForm">
 
                             <?php if (!$update) { ?>
-                                <div class="col-md-12 pa2">
+                                <div class="form-field col-md-12 pa2">
                                     <label for="empcode">Employee Code</label>
-                                    <select class="form-select mt-3" name="emp_id" required>
+                                    <select class="form-select mt-3" name="emp_id" id="empcode">
                                         <option selected disabled value="" name="employee_code">Select Employee Code
                                         </option>
                                         <?php
@@ -87,12 +85,11 @@ if (isset($_GET['edit'])) {
 
                                         ?>
                                     </select>
-
-                                    <div class="invalid-feedback">Please select an option!</div>
+                                    <small></small>
                                 </div>
-                                <div class="col-md-12 pa2">
+                                <div class="form-field col-md-12 pa2">
                                     <label for="category">Vaccination Category</label>
-                                    <select class="form-select mt-3" name="cat_id" required>
+                                    <select class="form-select mt-3" name="cat_id" id="cat">
                                         <option selected disabled value="">Select Category</option>
                                         <?php
                                         $vac_cat = mysqli_query($conn, "SELECT * FROM vaccination_category");
@@ -106,21 +103,21 @@ if (isset($_GET['edit'])) {
 
                                         ?>
                                     </select>
-
-                                    <div class="invalid-feedback">Please select an option!</div>
+                                    <small></small>
                                 </div>
                             <?php } else { ?>
-                                <div class="col-md-12 pa2">
-                                    <input class="form-control" type="hidden" name="emp_id" value="<?php echo $emp_id ?>">
+                                <div class="form-field col-md-12 pa2">
+                                    <input class="form-control" type="hidden" name="emp_id" class="empcode" value="<?php echo $emp_id ?>">
 
                                     <label for="empcode">Employee Code</label>
 
-                                    <input class="form-control" type="text" name="emp_code" value="<?php echo $emp_code ?>"
-                                        readonly>
+                                    <input class="form-control" type="text" name="emp_code" value="<?php echo $emp_code ?>" readonly>
+                                    <small></small>
                                 </div>
-                                <div class="col-md-12 pa2">
+
+                                <div class="form-field col-md-12 pa2">
                                     <label for="category">Vaccination Category</label>
-                                    <select class="form-select mt-3" name="cat_id" required>
+                                    <select class="form-select mt-3" name="cat_id" id="cat">
                                         <option selected disabled value="">Select Category</option>
                                         <?php
                                         $vac_cat = mysqli_query($conn, "select * from vaccination_category where category_id not in (select category_id from vaccination where emp_id = '$emp_id')");
@@ -134,30 +131,24 @@ if (isset($_GET['edit'])) {
 
                                         ?>
                                     </select>
-
-                                    <div class="invalid-feedback">Please select an option!</div>
+                                    <small></small>
                                 </div>
                             <?php } ?>
 
 
 
-                            <div class="col-md-12 pa2">
+                            <div class="form-field col-md-12 pa2">
                                 <label for="date_of_administration">Date of Administration</label>
-                                <input class="form-control" type="date" name="doa"
-                                    value="<?php echo $dateofadministration ?>" required>
-                                <div class="valid-feedback">field is valid!</div>
-                                <div class="invalid-feedback">field cannot be blank!</div>
+                                <input class="form-control" type="date" name="doa" id="doa" value="<?php echo $dateofadministration ?>">
+                                <small></small>
                             </div>
 
-                            <div class="col-md-12 pa2">
+                            <div class="form-field col-md-12 pa2">
                                 <label for="location">Location</label>
-                                <input class="form-control" type="text" name="loc" value="<?php echo $location ?>"
-                                    placeholder="Location" required>
-                                <div class="valid-feedback">field is valid!</div>
-                                <div class="invalid-feedback">field cannot be blank!</div>
+                                <input class="form-control" type="text" name="loc" id="loc" value="<?php echo $location ?>"
+                                    placeholder="Location">
+                                <small></small>
                             </div>
-
-
 
                             <div class="form-button mt-3 tc">
                                 <?php if ($update == true): ?>
@@ -179,6 +170,7 @@ if (isset($_GET['edit'])) {
     <!-- Script files -->
     <script src="../../js/form.js"></script>
     <script src="../../js/Sidebar/sidebar.js"></script>
+    <script src="../../js/validateVacc.js"></script>
     <script src="https://kit.fontawesome.com/319379cac6.js" crossorigin="anonymous"></script>
     <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
         integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"

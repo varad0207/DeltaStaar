@@ -134,6 +134,7 @@ if ($rights['rights_employee_details'] > 0) {
                     <thead>
                         <th>Designation : </th>
                         <th>Department : </th>
+                        <th>Accomodation :</th>
                         <th>Joining Date : </th>
                         <th>Sort By : </th>
                     </thead>
@@ -151,9 +152,8 @@ if ($rights['rights_employee_details'] > 0) {
                                         }
                                 ?>
                                         <div>
-                                            <input type="checkbox" name="designation[]" value="<?= $desig['id']; ?>" <?php if (in_array($desig['id'], $checked1)) {
-                                                                                                                            echo "checked";
-                                                                                                                        } ?>>
+                                            <input type="checkbox" name="designation[]" value="<?= $desig['id']; ?>" <?php if (in_array($desig['id'], $checked1)) 
+                                            {   echo "checked"; } ?>>
                                             <label><?= $desig['designation']; ?></label>
                                         </div>
                                 <?php
@@ -175,10 +175,8 @@ if ($rights['rights_employee_details'] > 0) {
                                         }
                                 ?>
                                         <div>
-                                            <input type="checkbox" name="department[]" value="<?= $dept['dept_id']; ?>" <?php if (in_array($dept['dept_id'], $checked2)) {
-                                                                                                                            echo "checked";
-                                                                                                                        }
-                                                                                                                        ?>>
+                                            <input type="checkbox" name="department[]" value="<?= $dept['dept_id']; ?>" <?php if (in_array($dept['dept_id'], $checked2)) 
+                                            {   echo "checked"; } ?>>
                                             <label><?= $dept['dept_name']; ?></label>
                                         </div>
                                 <?php
@@ -189,14 +187,19 @@ if ($rights['rights_employee_details'] > 0) {
                                 ?>
                             </td>
                             <td>
+                                <input type="checkbox" name="acc_stays" value="1"> Stays in Accomodation
+                                <br>
+                                <input type="checkbox" name="acc_not_stays" value="1"> Does not stay in Accomodation
+                            </td>
+                            <td>
                                 <label>From : </label>
                                 <input type="date" name="start_date" value="<?php if (isset($_POST['start_date']))
-                                                                                echo $_POST['start_date']; ?>">
+                                echo $_POST['start_date']; ?>">
                                 <br>
                                 <br>
                                 <label>To : </label>
                                 <input type="date" name="end_date" value="<?php if (isset($_POST['end_date']))
-                                                                                echo $_POST['end_date']; ?>"><br>
+                                echo $_POST['end_date']; ?>"><br>
 
                             </td>
                             <td>
@@ -248,6 +251,21 @@ if ($rights['rights_employee_details'] > 0) {
         $sql .= " ) ";
         // echo $sql;
     }
+    if(isset($_GET['acc_stays']))
+    {
+        $sql .=" and (room_id !='NULL' or";
+        $sql = substr($sql, 0, strripos($sql, "or"));
+        $sql .= " ) ";
+        // echo $sql;
+    }
+    if(isset($_GET['acc_not_stays']))
+    {
+        $sql .=" and (`room_id` is NULL or";
+        $sql = substr($sql, 0, strripos($sql, "or"));
+        $sql .= " ) ";
+        // echo $sql;
+    }
+    
     if (isset($_GET['start_date'])) {
         // $start_date=date("Y-m-d",($_GET['start_date'])); 
         // echo $start_date;
@@ -255,6 +273,7 @@ if ($rights['rights_employee_details'] > 0) {
         // echo $sql;
 
     }
+    
     if (isset($_GET['end_date'])) {
         // $end_date=date("Y-m-d",($_GET['end_date'])); 
         $_GET['end_date'] != "" ? $sql .= " and joining_date<='{$_GET['end_date']}' " : $a = 0;

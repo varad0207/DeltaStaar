@@ -56,18 +56,14 @@ if (isset($_GET['edit'])) {
                 <div class="form-content">
                     <div class="form-items">
                         <h1 class="f2 lh-copy tc" style="color: white;">Create Role</h1>
-                        <form class=" f3 lh-copy" novalidate
-                            action="../../controllers/role_controller.php" method="post">
+                        <form class=" f3 lh-copy" action="../../controllers/role_controller.php" method="post" id="myForm">
                             <input type="hidden" name="role_id" value="<?php echo $role_id; ?>">
                             <input type="hidden" name="rights" value="<?php echo $rights; ?>">
 
                             <div class="col-md-12 pa2">
                                 <label for="role_name">Role Name</label>
-
-                                <input class="form-control" type="text" name="role_name" placeholder="Role Name"
-                                    value="<?php echo $role_name; ?>" required>
-                                <div class="valid-feedback">field is valid!</div>
-                                <div class="invalid-feedback">field cannot be blank!</div>
+                                <input class="form-control" type="text" name="role_name" id="rolename" placeholder="Role Name" value="<?php echo $role_name; ?>">
+                                <small></small>
                             </div>
 
                             <h4 class="f2 lh-copy tc" style="color: white;">Rights</h4>
@@ -373,6 +369,61 @@ if (isset($_GET['edit'])) {
     </div>
     <footer class="tc f3 lh-copy mt4">Copyright &copy; 2022 Delta@STAAR. All Rights Reserved</footer>
 
+    <script>
+        const form = document.querySelector('#myForm');
+        const rolename = document.querySelector('#rolename');
+        const checkRname = () => {
+            const name = rolename.value.trim();
+            let valid = false;
+            if (name === '') {
+                showError(rolename, "Name cannot be blank");
+            } else if (!/^[a-zA-Z\s]+$/.test(name)) {
+                showError(rolename, "Name is invalid");
+            } else {
+                showSuccess(rolename);
+                valid = true;
+            }
+            return valid;
+        };
+        const showError = (input, message) => {
+            const formField = input.parentElement;
+            
+            formField.classList.remove('success');
+            formField.classList.add('error');
+
+            const error = formField.querySelector('small');
+            error.style.color = "#ff2400";
+            error.textContent = message;
+        };
+
+        const showSuccess = (input) => {
+            const formField = input.parentElement;
+
+            formField.classList.remove('error');
+            formField.classList.add('success');
+
+            const error = formField.querySelector('small');
+            error.style.color = "#0fff50";
+            error.textContent = 'Field is valid';
+        };
+
+        form.addEventListener('submit', function(e) {
+            if(checkRname()){
+                return true;
+            } else{
+                alert("Please fill the required details");
+                e.preventDefault();
+            }
+        })
+
+        form.addEventListener('input', function(e) {
+            switch(e.target.id) {
+                case 'rolename':
+                    checkRname();
+                    break;
+                }
+        })
+    </script>
     <script src="../../js/form.js"></script>
     <!-- JavaScript Bundle with Popper -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"

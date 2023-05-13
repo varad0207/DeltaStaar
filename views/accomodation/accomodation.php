@@ -62,12 +62,6 @@ if (isset($_GET['edit'])) {
 </head>
 
 <body class="b ma2">
-    <style>
-        span{
-            color: gold;
-            font-size: 14px;
-        }
-    </style>
     <!-- Sidebar and Navbar-->
     <?php
     include '../../controllers/includes/sidebar.php';
@@ -80,29 +74,23 @@ if (isset($_GET['edit'])) {
                 <div class="form-content">
                     <div class="form-items">
                         <h1 class="f2 lh-copy tc" style="color: white;">Enter Accomodation Details</h1>
-                        <form class="requires-validation f3 lh-copy" novalidate
-                            action="../../controllers/accomodation_controller.php" method="post" name="myForm">
+                        <form class="f3 lh-copy" action="../../controllers/accomodation_controller.php" method="post" id="myForm">
 
-                            <div class="col-md-12 pa2">
+                            <div class="form-field col-md-12 pa2">
                                 <label for="acc_code">Accomodation Code</label>
-                                <input class="form-control" type="text" name="code" value="<?php echo $acc_code ?>"
-                                    placeholder="Accomodation Code" <?php if(isset($_GET['edit'])) echo "readonly"; ?> required>
-                                <span class="valid-feedback" style="color: gold; font-size: 14px;">Field is valid!</span>
-                                <span class="invalid-feedback" style="color: gold; font-size: 14px;">Field cannot be empty!</span>
+                                <input class="form-control" type="text" name="code" id="acccode" value="<?php echo $acc_code ?>" placeholder="Accomodation Code" <?php if(isset($_GET['edit'])) echo "readonly"; ?>>
+                                <small></small>
                             </div>
 
-                            <div class="col-md-12 pa2">
+                            <div class="form-field col-md-12 pa2">
                                 <label for="acc_name">Accomodation Name</label>
-                                <input class="form-control" type="text" name="name" value="<?php echo $acc_name ?>"
-                                    placeholder="Accomodation Name" required onkeyup = "return validateText()">
-                                <span id="valid-accname"></span>
-                                <span class="invalid-feedback" style="color: gold; font-size: 14px;">Field cannot be empty!</span>
+                                <input class="form-control" type="text" name="name" id="accname" value="<?php echo $acc_name ?>" placeholder="Accomodation Name">
+                                <small></small>
                             </div>
 
-                            <div class="col-md-12 pa2">
+                            <div class="form-field col-md-12 pa2">
                                 <label for="bldg_status">Building Status</label>
-                                <select class="form-select mt-3" name="bldg" value="<?php echo $bldg_status ?>"
-                                    required>
+                                <select class="form-select mt-3" name="bldg" id="bldg" value="<?php echo $bldg_status ?>">
                                     <option selected disabled value="">Select status</option>
                                     <option value="Active"
                                     <?php if($bldg_status == 'Active') { ?>
@@ -120,13 +108,12 @@ if (isset($_GET['edit'])) {
                                     <?php } ?>
                                     >Temporarily Closed</option>
                                 </select>
-                                <span class="valid-feedback" style="color: gold; font-size: 14px;">Field is valid!</span>
-                                <span class="invalid-feedback" style="color: gold; font-size: 14px;">Field cannot be empty!</span>
+                                <small></small>
                             </div>
 
-                            <div class="col-md-12 pa2">
+                            <div class="form-field col-md-12 pa2">
                                 <label for="location">Location</label>
-                                <select class="form-select mt-3" name="loc" required>
+                                <select class="form-select mt-3" name="loc" id="loc">
                                     <option name="acc_loc" selected disabled value="">Select Location</option>
                                     <?php
                                     $acc_loc = mysqli_query($conn, "SELECT * FROM acc_locations");
@@ -142,13 +129,12 @@ if (isset($_GET['edit'])) {
                                     }
                                     ?>
                                 </select>
-                                <span class="valid-feedback" style="color: gold; font-size: 14px;">Field is valid!</span>
-                                <span class="invalid-feedback" style="color: gold; font-size: 14px;">Field cannot be empty!</span>
+                                <small></small>
                             </div>
 
-                            <div class="col-md-12 pa2">
+                            <div class="form-field col-md-12 pa2">
                                 <label for="gender">Gender (Accommodation for which gender)</label>
-                                <select class="form-select mt-3" name="gender" value="<?php echo $gender ?>" required>
+                                <select class="form-select mt-3" name="gender" id="gender" value="<?php echo $gender ?>">
                                     <option selected disabled value="">Select Gender</option>
                                     <option value="Male"
                                     <?php if($gender == 'Male') { ?>
@@ -166,51 +152,40 @@ if (isset($_GET['edit'])) {
                                     <?php } ?>
                                     >Unisex</option>
                                 </select>
-                                <span class="valid-feedback" style="color: gold; font-size: 14px;">Field is valid!</span>
-                                <span class="invalid-feedback" style="color: gold; font-size: 14px;">Field cannot be empty!</span>
+                                <small></small>
                             </div>
 
-                            <div class="col-md-12 pa2">
+                            <div class="form-field col-md-12 pa2">
                                 <label for="no_of_rooms">Number of Rooms</label>
-                                <input class="form-control" type="number" id="nor" name="rooms"
-                                    value="<?php echo $no_of_rooms ?>" placeholder="Number of Rooms" required onkeyup = "return validateNum(document.myForm.rooms.value,0)">
-                                <span class="valid-field"></span>
-                                <span class="invalid-feedback" style="color: gold; font-size: 14px;">Field cannot be empty!</span>
+                                <input class="form-control" type="number" id="nor" name="rooms" value="<?php echo $no_of_rooms ?>">
+                                <small></small>
                             </div>
 
-                            <div class="col-md-12 pa2">
+                            <div class="form-field col-md-12 pa2">
                                 <label class="d-block mb-4">Warden Employee Code</label>
-                                        <select class="custom-select my-1 mr-sm-2" id="inlineFormCustomSelectPref"
-                                            name="warden_emp_code">
-                                            <option name="employee_code" selected>Choose...</option>
-
-                                            <?php
-                                            $emp_det = mysqli_query($conn, "SELECT * FROM employee");
-
-                                            foreach ($emp_det as $row) { ?>
-                                                <option name="employee_code" value="<?= $row["emp_code"] ?>"
-                                                <?php if($warden_emp_code == $row['emp_code']) { ?>
-                                                    selected
-                                                <?php } ?>>
-                                                <?= $row["emp_code"]; ?>
-                                                </option>
-                                            <?php
-                                            }
-
-                                            ?>
-                                        </select>
-                                    
+                                <select class="custom-select my-1 mr-sm-2" id="inlineFormCustomSelectPref" name="warden_emp_code">
+                                <option name="employee_code" selected>Choose...</option>
+                                <?php
+                                $emp_det = mysqli_query($conn, "SELECT * FROM employee");
+                                foreach ($emp_det as $row) { ?>
+                                    <option name="employee_code" value="<?= $row["emp_code"] ?>"
+                                    <?php if($warden_emp_code == $row['emp_code']) { ?>
+                                        selected
+                                    <?php } ?>>
+                                    <?= $row["emp_code"]; ?>
+                                    </option>
+                                <?php } ?>
+                                </select>
+                                <small></small>
                             </div>
 
-                            <div class="col-md-12 pa2">
+                            <div class="form-field col-md-12 pa2">
                                 <label for="owner">Owner</label>
-                                <input class="form-control" type="text" name="owner" value="<?php echo $owner ?>"
-                                    placeholder="Owner" required>
-                                <span id="valid-owner"></span>
-                                <span class="invalid-feedback" style="color: gold; font-size: 14px;">Field cannot be empty!</span>
+                                <input class="form-control" type="text" name="owner" id="owner" value="<?php echo $owner ?>" placeholder="Owner">
+                                <small></small>
                             </div>
 
-                            <div class="col-md-12 pa2">
+                            <div class="form-field col-md-12 pa2">
                                 <label for="description">Remark</label>
                                 <textarea name="remark" value="<?php echo $remark ?>" placeholder="Enter remark if any"
                                 cols="30" rows="10"></textarea>
