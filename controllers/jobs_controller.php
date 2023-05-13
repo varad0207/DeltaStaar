@@ -8,6 +8,7 @@ $warden_emp_code = "";
 $raise_timestamp = "";
 $description = "";
 $status = "";
+$tentative_date = "";
 $completion_date = "";
 $remarks = "";
 
@@ -17,10 +18,11 @@ if (isset($_POST['submit']) && !empty($_POST['submit'])) {
     $warden_emp_code = mysqli_real_escape_string($conn, $_POST['warden_emp_code']);
     $raise_timestamp = date('Y-m-d', time());
     $description = mysqli_real_escape_string($conn, $_POST['description']);
+    $tentative_date = date('Y-m-d', strtotime($_POST['tentative_date']));
     $completion_date = date('Y-m-d', strtotime($_POST['completion_date']));
     $remarks = mysqli_real_escape_string($conn, $_POST['remarks']);
     echo "<script>console.log('$technician_id')</script>";
-    $insert = "insert into jobs(complaint_id, technician_id, warden_emp_code, raise_timestamp, description, completion_date, remarks) values ('$complaint_id','$technician_id', '$warden_emp_code', '$raise_timestamp', '$description', '$completion_date', '$remarks')";
+    $insert = "insert into jobs(complaint_id, technician_id, warden_emp_code, raise_timestamp, description, tentative_date ,completion_date, remarks) values ('$complaint_id','$technician_id', '$warden_emp_code', '$raise_timestamp', '$description', '$tentative_date', '$completion_date', '$remarks')";
     echo mysqli_error($conn);
     $submit = mysqli_query($conn, $insert) or die(mysqli_error($conn));
     $last_insert_id = mysqli_insert_id($conn);

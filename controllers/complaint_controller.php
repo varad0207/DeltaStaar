@@ -16,13 +16,17 @@ $remarks = "";
 
 if (isset($_POST['submit']) && !empty($_POST['submit'])) {
     $emp_code = mysqli_real_escape_string($conn, $_POST['emp_code']);
-    $row_emp = mysqli_fetch_array(mysqli_query($conn, "select acc_id FROM employee join rooms on employee.room_id=rooms.id join accomodation using(acc_id) WHERE emp_code='$emp_code'"));
+    $empcode_array = explode(" - ", $emp_code);
+    $emp_code = preg_replace("/[^a-zA-Z0-9]+/", "", $empcode_array[1]);
+    // $row_emp = mysqli_fetch_array(mysqli_query($conn, "select acc_id FROM employee join rooms on employee.room_id=rooms.id join accomodation using(acc_id) WHERE emp_code='$emp_code'"));
     $category = mysqli_real_escape_string($conn, $_POST['category']);
     $description = mysqli_real_escape_string($conn, $_POST['description']);
-    $acc_id=mysqli_real_escape_string($conn, $_POST['acc_id']);
-    $acc_code=mysqli_fetch_array(mysqli_query($conn, "select acc_code from accomodation where acc_id='$acc_id'"))['acc_code'];
+    $acc_code=mysqli_real_escape_string($conn, $_POST['acc']);
+    $acccode_array = explode(" - ", $acc_code);
+    $acc_code = preg_replace("/[^a-zA-Z0-9]+/", "", $acccode_array[1]);
     echo $acc_code;
-    $insert = "insert into complaints(emp_code, type, description,acc_id,acc_code) values ('$emp_code','$category','$description','$acc_id','$acc_code')";
+    $acc_id=mysqli_fetch_array(mysqli_query($conn, "select acc_id FROM accomodation WHERE acc_code='$acc_code'"));
+    $insert = "insert into complaints(emp_code, type, description,acc_id,acc_code) values ('$emp_code','$category','$description','{$acc_id['acc_id']}','$acc_code')";
     echo mysqli_error($conn);
     $submit = mysqli_query($conn, $insert) or die(mysqli_error($conn));
     $last_insert_id = mysqli_insert_id($conn);
