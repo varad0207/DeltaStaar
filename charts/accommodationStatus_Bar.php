@@ -74,7 +74,7 @@ unset($pdo);
             label: 'Capacity',
             //Write SQL
             data: revenue,
-            backgroundColor: 'rgba(75, 192, 192, 0.5',
+            backgroundColor: 'rgba(75, 192, 192, 0.5)',
             borderColor: 'rgb(75, 192, 192)',
             borderWidth: 1
         }, {
@@ -82,7 +82,7 @@ unset($pdo);
             label: 'Occupied',
             //Write SQL
             data: [10, 20, 30, 40, 50],
-            backgroundColor: 'rgba(54, 162, 235, 0.5',
+            backgroundColor: 'rgba(54, 162, 235, 0.5)',
             borderColor: 'rgb(54, 162, 235)',
             borderWidth: 1
         }, {
