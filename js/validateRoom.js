@@ -18,7 +18,7 @@ const checkNo = () => {
     let valid = false;
     if(No === '') {
         showError(rommno, "Field cannot be empty");
-    } else if(!/^[0-9]+$/.test(No)) {
+    } else if(!/^{a-zA-Z}*[0-9]+$/.test(No)) {
         showError(rommno, "Invalid room number");
     } else {
         showSuccess(rommno);

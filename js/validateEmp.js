@@ -12,6 +12,12 @@ const state = document.querySelector('#state');
 const country = document.querySelector('#country');
 const desig = document.querySelector('#desig');
 const dept = document.querySelector('#dept');
+// const date = new Date();
+// let yr = date.getFullYear();
+// let mo = date.getMonth();
+// let d = date.getDate();
+// ageyr = yr - 18;
+dob.max = "2004-12-31";
 
 const checkFname = () => {
     const name = fname.value.trim();
@@ -84,7 +90,7 @@ const checkState = () => {
     const min = 3, max = 20;
     if (State === '') {
         showError(state, "State cannot be blank");
-    } else if (!/^[a-zA-Z\s]+$/.test(State)) {
+    } else if (!/^[a-zA-Z]+$/.test(State)) {
         showError(state, "State is invalid");
     } else if(!isBetween(State.length,min,max)) {
         showError(state, "Min 3, Max 20 letters")
@@ -100,7 +106,7 @@ const checkCountry = () => {
     const min = 3, max = 25
     if (Country === '') {
         showError(country, "Country cannot be blank");
-    } else if (!/^[a-zA-Z\s]+$/.test(Country)) {
+    } else if (!/^[a-zA-Z]+$/.test(Country)) {
         showError(country, "Country is invalid");
     } else if(!isBetween(Country.length,min,max)) {
         showError(country, "Min 3, Max 20 letters")
@@ -110,32 +116,32 @@ const checkCountry = () => {
     }
     return valid;
 };
-const checkPincode = () => {
-    const Pincode = pincode.value.trim();
-    let valid = false;
-    if (Pincode === '') {
-        showError(pincode, "Pincode cannot be blank");
-    } else if (!/^[0-9]{6}$/.test(Pincode)) {
-        showError(pincode, "Pincode is invalid, Pincode must be 6 digits");
-    } else {
-        showSuccess(pincode);
-        valid = true;
-    }
-    return valid;
-};
-const checkAadhar = () => {
-    const Aadhar = aadhar.value.trim();
-    let valid = false;
-    if (Aadhar === '') {
-        showError(aadhar, "Aadhar number cannot be blank");
-    } else if (!/^[0-9]{12}$/.test(Aadhar)) {
-        showError(aadhar, "Aadhar is invalid, Aadhar number must be 12 digits");
-    } else {
-        showSuccess(aadhar);
-        valid = true;
-    }
-    return valid;
-};
+// const checkPincode = () => {
+//     const Pincode = pincode.value.trim();
+//     let valid = false;
+//     if (Pincode === '') {
+//         showError(pincode, "Pincode cannot be blank");
+//     } else if (!/^[0-9]{6}$/.test(Pincode)) {
+//         showError(pincode, "Pincode is invalid, Pincode must be 6 digits");
+//     } else {
+//         showSuccess(pincode);
+//         valid = true;
+//     }
+//     return valid;
+// };
+// const checkAadhar = () => {
+//     const Aadhar = aadhar.value.trim();
+//     let valid = false;
+//     if (Aadhar === '') {
+//         showError(aadhar, "Aadhar number cannot be blank");
+//     } else if (!/^[0-9]{12}$/.test(Aadhar)) {
+//         showError(aadhar, "Aadhar is invalid, Aadhar number must be 12 digits");
+//     } else {
+//         showSuccess(aadhar);
+//         valid = true;
+//     }
+//     return valid;
+// };
 const checkDesig = () => {
     let valid = false;
     if(desig.selectedIndex > 0) {
@@ -160,10 +166,11 @@ const checkDOB = () => {
     let valid = false;
     if(dob.val() === '') {
         showError(dob, "Date of Birth cannot be empty");
-    } else{
+    }else{
         showSuccess(dob);
         valid = true;
     }
+    return valid;
 };
 const isBetween = (length, min, max) => length < min || length > max ? false : true;
 
@@ -190,7 +197,7 @@ const showSuccess = (input) => {
 };
 
 form.addEventListener('submit', function(e) {
-    if(checkFname() && checkMname() && checkLname() && checkPhone() && checkEmail() && checkState() && checkCountry() && checkPincode() && checkDesig() && checkDept() && checkAadhar() && checkDOB()){
+    if(checkFname() && checkMname() && checkLname() && checkPhone() && checkEmail() && checkState() && checkCountry() /*&& checkPincode()*/ && checkDesig() && checkDept() /*&& checkAadhar()*/ && checkDOB()){
         return true;
     } else{
         alert("Please fill the required details");
@@ -230,11 +237,11 @@ form.addEventListener('input', function(e) {
         case 'country':
             checkCountry();
             break;
-        case 'pin':
-            checkPincode();
-            break;
-        case 'ano':
-            checkAadhar();
-            break;
+        // case 'pin':
+        //     checkPincode();
+        //     break;
+        // case 'ano':
+        //     checkAadhar();
+        //     break;
     }
 })
