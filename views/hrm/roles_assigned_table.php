@@ -8,7 +8,7 @@
 
     // check rights
 
-    $none = '<span class="material-icons">block</span>';
+$none = '<span class="material-icons">block</span>';
 $read = '<span class="material-icons">menu_book</span>';
 $write = '<span class="material-icons">edit</span>';
 $delete = '<span class="material-icons">delete</span>';

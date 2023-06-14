@@ -183,7 +183,8 @@ if($_SESSION['is_superadmin']==1) $aid['acc_id']="rooms.acc_id";
     if($page<=1)
     {
         $Previous=1;
-        $Next=0;
+        $Next=1;
+        $start=0;
     }
     if($page>=$pages)
     {

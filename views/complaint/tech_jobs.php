@@ -114,7 +114,6 @@ else
     $limit = 10;
     $page = isset($_GET['page']) ? $_GET['page'] : 1;
     $start = ($page - 1) * $limit;
-    
     $result1 = mysqli_query($conn, $q1);
     $total = mysqli_num_rows($result1);
     $pages = ceil($total / $limit);
@@ -127,6 +126,7 @@ else
     if($page<=1)
     {
         $Previous=1;
+        $Next=1;
         $start=0;
     }
     if($page>=$pages)
@@ -134,7 +134,7 @@ else
         $Next=$pages;
     }
     $sql .= " LIMIT $start,$limit";
-    echo $sql;
+    // echo $sql;
     $result = mysqli_query($conn, $sql);
     /* ************************************************ */
 

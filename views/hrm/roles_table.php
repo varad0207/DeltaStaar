@@ -132,32 +132,53 @@ $all = '<span class="material-icons">done_all</span>';
 
         <?php
     /* ***************** PAGINATION ***************** */
-    $limit=10;
-    $pages = 0;
-    $page=isset($_GET['page'])?$_GET['page']:1;
-    //check if current page is less then or equal 1
-    if(($page>=1)||($page<$pages))
-    {
-        $start=($page-1) * $limit;
-        $Previous=$page-1;
-        $Next=$page+1;
-    }
-    if($page<1)
-    {
-        $Previous=1;
-        $start = 1;
-    }
-    if($page>=$pages)
-    {
-        $Next=$pages;
-    }
-    $sql .=" LIMIT $start,$limit";
-    $result=mysqli_query($conn,$sql);
+    // $limit=10;
+    // $pages = 0;
+    // $page=isset($_GET['page'])?$_GET['page']:1;
+    // $start=($page-1) * $limit;
+    // //check if current page is less then or equal 1
+    // if(($page>=1)||($page<$pages))
+    // {
+        
+    //     $Previous=$page-1;
+    //     $Next=$page+1;
+    // }
+    // if($page<=1)
+    // {
+    //     $Previous=1;
+    //     $Next=1;
+    //     $start=0;
+    // }
+    // if($page>=$pages)
+    // {
+    //     $Next=$pages;
+    // }
+    // $sql .=" LIMIT $start,$limit";
+    // $result=mysqli_query($conn,$sql);
 
-    $q1="SELECT * FROM roles";
-    $result1=mysqli_query($conn,$q1);
-    $total=mysqli_num_rows($result1);
-    $pages=ceil($total/$limit);
+    // $q1="SELECT * FROM roles";
+    // $result1=mysqli_query($conn,$q1);
+    // $total=mysqli_num_rows($result1);
+    // $pages=ceil($total/$limit);
+    $limit = 10;
+    $page = isset($_GET['page']) && is_numeric($_GET['page']) ? $_GET['page'] : 1;
+
+
+    $q1 = "SELECT COUNT(*) as total FROM roles";
+    $result1 = mysqli_query($conn, $q1);
+    $row = mysqli_fetch_assoc($result1);
+    $total = $row['total'];
+    $pages = ceil($total / $limit);
+
+    if ($page < 1 || $page > $pages) {
+        $page = 1;
+    }
+
+    $Previous = ($page > 1) ? $page - 1 : 1;
+    $Next = ($page < $pages) ? $page + 1 : $pages;
+
+    $start = ($page - 1) * $limit;
+    $sql = "SELECT * FROM roles LIMIT $start, $limit";
     
     /* ************************************************ */
     ?>

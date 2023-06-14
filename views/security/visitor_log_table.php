@@ -171,8 +171,11 @@ if ($_SESSION['is_superadmin'] == 1) $aid['acc_id'] = "acc_code";
         $Previous = $page - 1;
         $Next = $page + 1;
     }
-    if ($page <= 1) {
-        $Previous = 1;
+    if ($page <= 1) 
+    {
+        $Previous=1;
+        $Next=1;
+        $start=0;
     }
     if ($page >= $pages) {
         $Next = $pages;

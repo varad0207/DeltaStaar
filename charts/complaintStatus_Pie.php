@@ -31,7 +31,7 @@ var solved = <?php echo $solved; ?>;
         labels: [
             
             'Pending jobs ',
-            'Solved jobs'
+            'Raised jobs'
         ],
         datasets: [{
             label: 'Count',

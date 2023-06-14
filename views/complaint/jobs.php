@@ -17,6 +17,8 @@ if ($isPrivilaged == 5 || $isPrivilaged == 4)
 
 $warden_id = $_SESSION['emp_id'];
 $complaints_id = $_GET['raise'];
+$complaints=mysqli_fetch_array(mysqli_query($conn,"SELECT * FROM complaints where complaints.id='$complaints_id'"));
+$desc=$complaints['description'];
 $update = "";
 if (isset($_GET['edit'])) {
     $id = $_GET['edit'];
@@ -132,8 +134,13 @@ if (isset($_GET['edit'])) {
 
                             <div class="col-md-12 pa2">
                                 <label for="description">Job Description</label>
+                                <?php if (isset($_GET['edit'])): ?>
                                 <textarea name="description" placeholder="Please describe your problem" cols="30"
                                     rows="10" value="<?php echo $description; ?>"></textarea>
+                                <?php else:?>
+                                    <textarea name="description" placeholder="Please describe your problem" cols="30"
+                                    rows="10" value="<?php echo $desc; ?>"><?php echo $desc; ?></textarea>
+                                <?php endif ?>
                             </div>
                                     <!--Backend remaining-->
                             <div class="col-md-12 pa2">

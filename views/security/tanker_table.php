@@ -85,14 +85,12 @@ if ($_SESSION['is_superadmin'] == 1) $aid['acc_id'] = "t.acc_id";
     <div class="table-header">
         <h1 class="tc f1 lh-title spr">Tanker Details</h1>
         <div class="fl w-75 form-outline srch">
-            <input type="search" id="form1" class="form-control" placeholderort="Live Search" aria-label="Search" oninput="search()" />
+            <input type="search" id="form1" class="form-control" placeholder="Live Search" aria-label="Search" oninput="search()" />
             <h4 id="demo"></h4>
         </div>
         <div class="fl w-25 tr pa1">
-            <button class="btn btn-dark" class="navbar-toggler collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#navbarTogglerDemo01" aria-controls="navbarTogglerDemo01" aria-expanded="false" aria-label="Toggle navigation">
-                <!-- <span class="navbar-toggler-icon"></span> -->
-                <i class="bi bi-filter-circle"> Sort</i>
-            </button>
+            <button class="btn btn-dark" class="navbar-toggler collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#navbarTogglerDemo01" aria-controls="navbarTogglerDemo01" aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span>
+                <i class="bi bi-filter-circle"> Sort By</i> </button>
 
         </div>
     </div>
@@ -274,8 +272,9 @@ if ($_SESSION['is_superadmin'] == 1) $aid['acc_id'] = "t.acc_id";
         $Next = $page + 1;
     }
     if ($page <= 1) {
-        $Previous = 1;
-        $Next=0;
+        $Previous=1;
+        $Next=1;
+        $start=0;
     }
     if ($page >= $pages) {
         $Next = $pages;

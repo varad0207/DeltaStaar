@@ -265,7 +265,8 @@ else{
     if($page<1)
     {
         $Previous=1;
-        $start = 0;
+        $Next=1;
+        $start=0;
     }
     if($page>=$pages)
     {

@@ -243,8 +243,11 @@ if(mysqli_num_rows($c) > 0)
     }
 $room="room_id";
     if($isWarden) $room=$fetch['id'];
-    elseif($isSecurity) $room=$fetch1['id'];
-    $sql = "SELECT * from employee JOIN employee_designation on employee_designation.id = employee.designation join employee_dept on employee.department=employee_dept.dept_id where room_id=$room and 1=1 "; //
+    elseif($isSecurity) @$room=@$fetch1['id'];
+    if($_SESSION['is_superadmin']){
+        $sql = "SELECT * from employee JOIN employee_designation on employee_designation.id = employee.designation join employee_dept on employee.department=employee_dept.dept_id where 1=1 ";
+    }
+   else $sql = "SELECT * from employee JOIN employee_designation on employee_designation.id = employee.designation join employee_dept on employee.department=employee_dept.dept_id where room_id=$room and 1=1 "; //
     if (isset($_GET['designation'])) {
         $designation_checked = [];
         $designation_checked = $_GET['designation'];
@@ -302,8 +305,6 @@ $room="room_id";
     $limit = 10;
     $page = isset($_GET['page']) ? $_GET['page'] : 1;
     $start = ($page - 1) * $limit;
-    
-
     $q1 = "SELECT * FROM employee";
     $result1 = mysqli_query($conn, $q1);
     $total = mysqli_num_rows($result1);
@@ -317,7 +318,8 @@ $room="room_id";
     if($page<=1)
     {
         $Previous=1;
-        $Next=0;
+        $Next=1;
+        $start=0;
     }
     if($page>=$pages)
     {
