@@ -99,12 +99,12 @@ if (basename($_SERVER['PHP_SELF'],'.php') != "dashboard")
                             Complaint Table
                         </a>
                     </li>
-                    <!--
+                    
                     <li>
-                        <a class="nav-link border-dark border-bottom" href="../<?php //echo $link; ?>views/complaint/jobs_table.php">
+                        <a class="nav-link border-dark border-bottom" href="../<?php echo $link; ?>views/complaint/jobs_table.php">
                             View Jobs
                         </a>
-                    </li> -->
+                    </li>
                   <?php  if($_SESSION['is_superadmin']){ ?>
                     <!-- 
                     <li>
@@ -189,6 +189,11 @@ if (basename($_SERVER['PHP_SELF'],'.php') != "dashboard")
                             Vacination Table
                         </a>
                     </li>
+                    <li>
+                        <a class="nav-link border-dark border-bottom" href="../<?php echo $link; ?>views/config/vaccination_category_table.php">
+                            Vacination Category Table
+                        </a>
+                    </li>
                     <?php } ?>
                 </ul>
             </li>
@@ -226,10 +231,15 @@ if (basename($_SERVER['PHP_SELF'],'.php') != "dashboard")
                             Tanker Table
                         </a>
                     </li>
+                    <li>
+                        <a class="nav-link border-dark border-bottom" href="../<?php echo $link; ?>views/config/tanker_vendor_table.php">
+                            Tanker Vendor Table
+                        </a>
+                    </li>
                     <?php }
                     if($rights['rights_visitor_log']>0){ ?>
                     <li>
-                        <a class="nav-link border-dark border-bottom" href="../<?php echo $link; ?>views/security/visitor_log.php">
+                        <a class="nav-link border-dark border-bottom" href="../<?php echo $link; ?>views/security/visitor.php">
                             Visitor Log Form
                         </a>
                     </li>

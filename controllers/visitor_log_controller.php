@@ -3,14 +3,10 @@ include('includes/common.php');
 if (!isset($_SESSION)) {
     session_start();
 }
-
-// Variables 
 $visitor_type = "";
-// EMP AS VISITOR
 $emp_id = "";
 $vehicle_no = "";
 $purpose = "";
-// NON EMP AS VISITOR
 $visitor_name = "";
 $vehicle_no = "";
 $purpose = "";
@@ -18,15 +14,11 @@ $phone = "";
 $security_emp_id = "";
 $acc_id = "";
 
-
-
 if (isset($_POST['submit'])) 
 {
-    
     date_default_timezone_set('Asia/Kolkata');
     $checkin = date('Y-m-d H:i:s');
     $security_emp_id = $_SESSION['emp_id'];
-    echo $security_emp_id;
     $acc_select = "SELECT * FROM security where emp_id=$security_emp_id";
     $res = mysqli_query($conn, $acc_select);
     $row = mysqli_fetch_array($res);
@@ -34,11 +26,9 @@ if (isset($_POST['submit']))
     $visitor_type = $_POST['visitor-type'];
     if ($visitor_type == 'non-employee') {
         $visitor_name = $_POST['visitor-name'];
-        $vehicle_no = $_POST['vehicle-number'];
-        $purpose = $_POST['purpose-of-visit'];
+        $vehicle_no = $_POST['vehiclenumber'];
+        $purpose = $_POST['purposeofvisit'];
         $phone = $_POST['visitor-phone'];
-        echo $acc_id;
-        echo $security_emp_id;
         $qry = "INSERT INTO `visitor_log`(`security_emp_id`,`acc_code`, `visitor_name`, `vehicle_no`,`type`,`check_in`,`purpose`,`phone_no`) VALUES($security_emp_id,$acc_id,'$visitor_name','$vehicle_no','$visitor_type','$checkin','$purpose',$phone);";
         if (mysqli_query($conn, $qry)) {
             echo "Checkin value inserted successfully";
@@ -46,17 +36,16 @@ if (isset($_POST['submit']))
             echo "Error inserting checkin value: " . mysqli_error($conn);
         }
         header('location: ../views/security/visitor_log_table.php');
-    } else {
+    } else if($visitor_type == 'employee') {
         $emp_id = $_POST['emp_id'];
-        //Fetch Emp details who has visited.
         $emp_det = "SELECT * FROM employee where emp_id=$emp_id";
         $fetched_emp_det = mysqli_query($conn, $emp_det);
         $fetched_detail = mysqli_fetch_array($fetched_emp_det);
 
         $visitor_name = $fetched_detail['fname'] . " " . $fetched_detail['lname'];
         $phone = $fetched_detail['contact'];
-        $vehicle_no = $_POST['vehiclenumber'];
-        $purpose = $_POST['purposeofvisit'];
+        $vehicle_no = $_POST['evehiclenumber'];
+        $purpose = $_POST['epurposeofvisit'];
 
         $qry = "INSERT INTO `visitor_log`(`emp_id`,`security_emp_id`,`acc_code`, `visitor_name`, `vehicle_no`,`type`,`check_in`,`purpose`,`phone_no`) VALUES($emp_id,$security_emp_id,$acc_id,'$visitor_name','$vehicle_no','$visitor_type','$checkin','$purpose',$phone);";
         if (mysqli_query($conn, $qry)) {
@@ -69,7 +58,7 @@ if (isset($_POST['submit']))
 }
 if (isset($_GET['del'])) {
     $id = $_GET['del'];
-    echo "Hello";
+    // echo "Hello";
     //change tracking code
     if ($AllowTrackingChanges) {
         $row_affected = mysqli_fetch_array(mysqli_query($conn, "select * FROM visitor_log WHERE id = '$id'"));

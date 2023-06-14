@@ -81,6 +81,7 @@ if (isset($_POST['update'])) {
 
     $role_id = $_POST['role_id'];
     $rights = $_POST['rights'];
+    // echo  $rights;
     $accomodation = $_POST['rights_acc'];
     $employee_details = $_POST['rights_employee_details'];
     $complaints = $_POST['rights_complaints'];

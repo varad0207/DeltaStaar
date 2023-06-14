@@ -1,5 +1,9 @@
 <?php
 include 'common.php';
+$rights = unserialize($_SESSION['rights']);
+$link = "";
+if (basename($_SERVER['PHP_SELF'],'.php') != "dashboard")
+    $link = "../";
 ?>
 <!--Styles for this are included in securityDashboard.css file with unique class names-->
 <div class="containerr">

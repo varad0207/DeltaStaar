@@ -89,7 +89,7 @@ if (isset($_POST['submit'])|| isset($_POST['update'])||isset($_GET['del'])) {
             
             $rooms_affected=mysqli_query($conn,"SELECT * FROM rooms join accomodation using (acc_id) WHERE acc_code='$acc_code'");
             if(mysqli_num_rows($rooms_affected)>0){
-                while($record=mysqli_fetch_array($rooms_affected)){
+                foreach($rooms_affected as $record){
                     mysqli_query($conn,"insert into change_tracking_rooms (user,type,acc_id, room_id, room_no, room_capacity, status, current_room_occupancy) 
                     values ('{$_SESSION['user']}','Delete','{$record['acc_id']}', '{$record['id']}', '{$record['room_no']}', '{$record['room_capacity']}', '{$record['status']}', NULLIF('{$record['current_room_occupancy']}',''))");
                     mysqli_query($conn, "DELETE FROM rooms WHERE acc_id='{$record['acc_id']}'");

@@ -4,7 +4,7 @@ if(isset($_REQUEST['employeecode'])){
 
     $employeecode = $_REQUEST['employeecode'];
     if ($employeecode != "") {
-        $row12 = mysqli_fetch_array(mysqli_query($conn, "SELECT employee.*,count(*) as freq FROM employee JOIN employee_outing using(emp_code) where employee.emp_code='$employeecode'"));
+        $row12 = mysqli_fetch_array(mysqli_query($conn, "SELECT employee.*,count(*) as freq FROM employee JOIN employee_outing using(emp_code) where employee.emp_code='$employeecode' and month(employee_outing.outing_date)=month(CURRENT_DATE)"));
         if(empty($row12)){
             die();
         }
@@ -84,6 +84,6 @@ if(isset($_REQUEST['employeecode'])){
     
     <div>
         <p>Employee Name: <?php echo $row12['fname']; ?></p>
-        <p>Frequency: <?php echo $row12['freq']; ?></p>
+        <p>Frequency of outing this month: <?php echo $row12['freq']; ?></p>
     </div>
 </div>

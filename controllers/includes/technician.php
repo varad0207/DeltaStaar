@@ -1,6 +1,19 @@
 <?php
 include 'common.php';
+$logged=$_SESSION['emp_id'];
+$tech_id = mysqli_fetch_assoc(mysqli_query($conn, "SELECT * FROM technician where technician.emp_id='$logged'"));
+$complaint_count = mysqli_fetch_assoc(mysqli_query($conn, "SELECT count(*) as count FROM jobs where technician_id='{$tech_id['id']}'"));
+$count_array = array();
+
+$pending=mysqli_fetch_assoc(mysqli_query($conn, "select count(*) as pending_count from complaints join jobs on complaints.id=jobs.complaint_id join technician on jobs.technician_id=technician.id where complaints.tech_closure_timestamp is NULL and jobs.technician_id='{$tech_id['id']}'"));
+
+// $count_array = $complaint_count['count'];
+// array_push($count_array,$complaint_count['count']);
+array_push($count_array,$pending['pending_count']);
+array_push($count_array,$complaint_count['count']- $pending['pending_count']);                           
+$solved = json_encode($count_array);
 ?>
+
 
 <div class="container">
     <div class="left-side">
@@ -11,9 +24,9 @@ include 'common.php';
             </div>
             <div class="complaint-statistics">
 
-                <div class="statistics-item">Solved Complaints: 100</div>
-                <div class="statistics-item">Pending Complaints: 10</div>
-                <div class="statistics-item">Assigned to you: 5</div>
+                <!-- <div class="statistics-item">Assigned to you: <?php // $complaint_count['count']?></div> -->
+                <div class="statistics-item">Pending jobs: <?= $pending['pending_count']?></div>
+                <div class="statistics-item">Solved jobs: <?=$complaint_count['count']- $pending['pending_count']?></div>
             </div>
         </div>
 
@@ -41,19 +54,19 @@ include 'common.php';
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script> //Doughnut Chart
-
+var solved = <?php echo $solved; ?>;
     //Setup Block
     const dataDoughnut = {
         labels: [
-            'Completed',
-            'Assigned',
-            'Pending'
+            // 'Assigned jobs',
+            'Pending jobs ',
+            'Solved jobs'
         ],
         datasets: [{
-            label: 'My First Dataset',
-            data: [300, 50, 100],
+            label: '',
+            data: solved,
             backgroundColor: [
-                'rgb(255, 99, 132)',
+                // 'rgb(255, 99, 132)',
                 'rgb(38,166,254)',
                 'rgb(255, 205, 86)'
             ],

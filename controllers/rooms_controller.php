@@ -49,6 +49,7 @@ if (isset($_POST['submit'])|| isset($_POST['update'])||isset($_GET['del'])) {
 
     if(isset($_POST['update']))
     {
+        $tot_cap = 0;
         $id=$_POST['id'];
         $acc_id = $_POST['acc'];
         $room_no = $_POST['room_no'];
@@ -56,17 +57,18 @@ if (isset($_POST['submit'])|| isset($_POST['update'])||isset($_GET['del'])) {
         $sql1 = mysqli_query($conn, "SELECT * FROM accomodation WHERE acc_id='$acc_id'");
         $accRow = mysqli_fetch_array($sql1);
         $no_of_rooms = $accRow['no_of_rooms'];
-
         $sql2 = mysqli_query($conn, "SELECT COUNT(id) AS count_room FROM `rooms` WHERE acc_id='$acc_id' GROUP BY `acc_id`");
         $roomCount = mysqli_fetch_array($sql2);
         $room_count = $roomCount['count_room'];
-        $sql3 = mysqli_query($conn, "SELECT SUM(room_capacity) AS Room_Capacity FROM rooms WHERE acc_id='$acc_id' GROUP BY `acc_id`");
-        $row3 = mysqli_fetch_array($sql3);
-        $tot_cap = $row3['Room_Capacity'];
-        $tot_cap += $room_cap;
+        
 
         if($room_count < $no_of_rooms){
             mysqli_query($conn,"UPDATE rooms SET acc_id = '$acc_id',room_no='$room_no', room_capacity = '$room_cap' where id=$id");
+            $sql3 = mysqli_query($conn, "SELECT SUM(room_capacity) AS Room_Capacity FROM rooms WHERE acc_id='$acc_id' GROUP BY `acc_id`");
+            $row3 = mysqli_fetch_array($sql3);
+            $tot_cap = $row3['Room_Capacity']; 
+            // $tot_cap += $room_cap;
+            // echo $tot_cap;
             mysqli_query($conn,"UPDATE accomodation SET tot_capacity = '$tot_cap' WHERE acc_id = '$acc_id'");
             $_SESSION['message'] = "Room Info Updated!";
         }
@@ -87,6 +89,7 @@ if (isset($_POST['submit'])|| isset($_POST['update'])||isset($_GET['del'])) {
 
     if(isset($_GET['del']))
     {
+        $tot_cap = 0;
         $id = $_GET['del'];
         //change tracking code
         if($AllowTrackingChanges){

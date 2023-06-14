@@ -9,7 +9,7 @@ if (basename($_SERVER['PHP_SELF'], '.php') != "dashboard")
 <nav class="navbar navbar-expand-lg navbar-dark f3 lh-copy pa3 fw4">
     <div class="container-fluid">
         <button class="openbtn" onclick="openNav()">&#9776; Menu</button>
-        <a class="navbar-brand" href="#">
+        <a class="navbar-brand ps-3" href="#">
             <img src="../<?php echo $link; ?>images/logo-no-name.png" height="50px" alt="Deltin Logo"
                 class="d-inline-block align-text-top" style="border-radius: 50px;">
         </a>
@@ -51,7 +51,7 @@ if (basename($_SERVER['PHP_SELF'], '.php') != "dashboard")
                 <!-- after login -->
 
                 <div class="offcanvas-body">
-                    <ul class="navbar-nav justify-content-end flex-grow-1 pe-3">
+                    <ul class="navbar-nav justify-content-end flex-grow-1">
                         <?php 
                         if (basename($_SERVER['PHP_SELF'], '.php') == "dashboard") { ?>
                             <li class="nav-item">
@@ -83,6 +83,7 @@ if (basename($_SERVER['PHP_SELF'], '.php') != "dashboard")
                                         <a class="dropdown-item" href="../views/config/technician.php">Define/Add Technician</a>
                                         <a class="dropdown-item" href="../views/config/complaint_type.php">Complaint Type</a>
                                         <a class="dropdown-item" href="../controllers/includes/logs.php">Logs</a>
+                                        <a class="dropdown-item" href="..//phpimport/excel_import.php">Data Import</a>
                                         <?php } ?>
 
                                     </div>
@@ -106,6 +107,17 @@ if (basename($_SERVER['PHP_SELF'], '.php') != "dashboard")
                         <li class="nav-item">
                             <a class="nav-link active1" id="adminlogin"
                                 href="../<?php echo $link; ?>controllers/logout.php">Log Out</a>
+                        </li>
+
+                        <li class="nav-item p-1 ps-3" style="align-items: center; justify-content:center; display:flex;">
+                        <?php  $EmpName_row = mysqli_fetch_assoc(mysqli_query($conn, "SELECT * FROM employee where emp_code='{$_SESSION['emp_code']}'")); ?>                         
+                            <i class="bi bi-person-circle" style="font-size: 1.8rem; color: #FFFF8C; padding:0;"></i>
+                                             
+                        </li>
+                        <li class="nav-item p-2">
+                            <p class="" style="color: #FFFF8C; font-size:1.5rem; margin-bottom:0px; align-items: center; justify-content:center; display:flex;">
+                                <?= $EmpName_row['fname'] ?>
+                            </p>
                         </li>
                     </ul>
                 </div>

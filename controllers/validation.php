@@ -44,4 +44,14 @@ if(isset($_REQUEST['id'])){
     $myJSON = json_encode($result);
     echo $myJSON;
 }
+if(isset($_REQUEST['emp_code_room_check'])){
+    $id = $_REQUEST['emp_code_room_check'];
+    $row = mysqli_fetch_array(mysqli_query($conn, "SELECT room_id FROM employee WHERE emp_code='$id'"));
+    $row1 = mysqli_query($conn, "SELECT concat(accomodation.acc_name,' - ',accomodation.acc_code) as acc FROM rooms join accomodation WHERE rooms.id='{$row['room_id']}'");
+    if(mysqli_num_rows($row1)>0){
+        $row12 = mysqli_fetch_array($row1);
+        echo $row12['acc'];
+    }
+    else echo"!";
+}
 ?>
