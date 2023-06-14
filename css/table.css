@@ -123,3 +123,13 @@ p.del_btn {
   text-align: center;
   display: inline-block;
 }
+
+
+
+
+/* Change label to "Order By" for screens narrower than 768px */
+@media (max-width: 500px) {
+  .btn-dark .bi-filter-circle:before {
+    content: "";
+  }
+}
