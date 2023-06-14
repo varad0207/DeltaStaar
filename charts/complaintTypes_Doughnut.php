@@ -1,10 +1,11 @@
-<div class="chart-container">
-
+<!-- <div class="chart-container"> -->
+    <!-- Ignore Comments for now, only this div below is included + scripting -->
+    <!-- Refer accommodationStatus_Bar.php if needed -->
     <div class="chartBox">
         <h4 class="text-center p-2">Complaint Types</h4>
         <canvas id="myDoughnutChart"></canvas>
     </div>
-</div>
+<!-- </div> -->
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 

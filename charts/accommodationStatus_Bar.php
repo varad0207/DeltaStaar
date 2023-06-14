@@ -1,34 +1,41 @@
 <?php
-// Change this connection code to commom.php
+// establishing db connection
+// $username = "root";
+// $password = "";
+// $database = "deltastaar";
 
-$username = "root";
-$password = "";
-$database = "chartjs";
-
-try {
-    $pdo = new PDO("mysql:host=localhost;database=$database", $username, $password);
-    // Set the PDO error mode to exception
-    $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-} catch (PDOException $e) {
-    die("ERROR: Could not connect. " . $e->getMessage());
-}
+// try {
+//     $pdo = new PDO("mysql:host=localhost;dbname=$database", $username, $password);
+//     // Set the PDO error mode to exception
+//     $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+// } catch (PDOException $e) {
+//     die("ERROR: Could not connect. " . $e->getMessage());
+// }
+include('../controllers/includes/common.php'); 
 
 // Attempt select query execution
 try {
-    $sql = "SELECT * FROM chartjs.barchart";
-    $result = $pdo->query($sql);
-    if ($result->rowCount() > 0) {
+    $sql = "SELECT no_of_rooms,occupied_rooms,available_rooms,acc_name FROM accomodation";
+    $res = mysqli_query($conn,$sql);
+    $data = array();
+    $data1 = array();
+    $data2 = array();
+    $data3 = array();
 
-        $revenue = array();
-        while ($row = $result->fetch()) {
-            $revenue[] = $row["revenue"];
-
-        }
-
-        unset($result);
-    } else {
-        echo "No records matching your query were found.";
+    while($row = mysqli_fetch_assoc($res)){
+        array_push($data,$row['no_of_rooms']);
+        array_push($data1,$row['occupied_rooms']);
+        array_push($data2,$row['available_rooms']);
+        array_push($data3,$row['acc_name']);
     }
+
+    $solved = json_encode($data);
+    $solved1 = json_encode($data1);
+    $solved2 = json_encode($data2);
+    $solved3 = json_encode($data3);
+
+    // print json_encode($data3);
+
 } catch (PDOException $e) {
     die("ERROR: Could not able to execute $sql. " . $e->getMessage());
 }
@@ -37,7 +44,7 @@ try {
 unset($pdo);
 ?>
 
-<style>
+<!--<style>
     .chart-container {
         display: flex;
         flex-wrap: wrap;
@@ -48,32 +55,36 @@ unset($pdo);
         width: 48%;
 
     }
-</style>
+</style>-->
 
-<div class="chart-container">
+<!-- <div class="chart-container"> -->
+    <!-- Ignore Comments for now, only this div below is included + scripting -->
     <div class="chartBox">
         <h4 class="text-center p-2">Accommodation Status</h4>
         <canvas id="myChart"></canvas>
     </div>
-</div>
+<!-- </div> -->
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
-<script>
+<script type="text/javascript">
     //Accommodation Bar Graph
     //Capacity, Occupied, Available
 
     //Setup Block
-    const revenue = <?php echo json_encode($revenue) ?>
-                
-        const data = {
+    var solved = <?php echo $solved; ?>;
+    var solved1 = <?php echo $solved1; ?>;
+    var solved2 = <?php echo $solved2; ?>;
+    var solved3 = <?php echo $solved3; ?>;
+
+    const data = {
         //Can be softcoded by fetching this from Accommodation Table
-        labels: ['Madhuban', 'Blue', 'Yellow', 'Green', 'Purple'],
+        labels: solved3,
         datasets: [{
             //Total Capacity dataset of each Accommodation
             label: 'Capacity',
             //Write SQL
-            data: revenue,
+            data: solved,
             backgroundColor: 'rgba(75, 192, 192, 0.5)',
             borderColor: 'rgb(75, 192, 192)',
             borderWidth: 1
@@ -81,14 +92,14 @@ unset($pdo);
             //Total Occupied dataset of each Accommodation
             label: 'Occupied',
             //Write SQL
-            data: [10, 20, 30, 40, 50],
+            data: solved1,
             backgroundColor: 'rgba(54, 162, 235, 0.5)',
             borderColor: 'rgb(54, 162, 235)',
             borderWidth: 1
         }, {
             label: 'Available',
             //Write SQL
-            data: [10, 20, 30, 40, 50],
+            data: solved2,
             backgroundColor: 'rgba(153, 102, 255, 0.5)',
             borderColor: 'rgb(153, 102, 255)',
             borderWidth: 1
