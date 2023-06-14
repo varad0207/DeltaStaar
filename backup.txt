@@ -1,3 +1,145 @@
+<div class="fl w-100 form-outline srch">
+        <input type="search" id="searchInput" class="form-control" placeholder="Live Search" aria-label="Search" />
+        <h4 id="demo"></h4>
+    </div>
+        <table class="table table-bordered table-responsive tc">
+            <thead>
+                <tr>
+                    <th scope="col" rowspan="2">Employee Code</th>
+                    <th scope="col" colspan="3">History</th>
+                </tr>
+                <tr>
+                    <th scope="col">Accommodation</th>
+                    <th scope="col">Room</th>
+                    <th scope="col">Start Date</th>
+                </tr>
+            </thead>
+            <tbody id="tableBody">
+                <?php
+                    $result = mysqli_query($conn, "SELECT emp_code, history FROM change_tracking_living_history");
+                    if ($result) {
+                        $prevEmpCode = null;
+                        while ($row = mysqli_fetch_assoc($result)) {
+                            $jsonObjects = json_decode($row['history'], true);
+                    
+                            $rowCount = count($jsonObjects); 
+                    
+                            if ($row['emp_code'] !== $prevEmpCode) {
+                                echo '<tr class="live">';
+                                echo '<td rowspan="' . $rowCount . '">' . $row['emp_code'] . '</td>';
+                                $prevEmpCode = $row['emp_code'];
+                            }
+                            $latestIndex = $rowCount - 1; 
+                            foreach ($jsonObjects as $index => $jsonObject) {
+                                $key1 = $jsonObject['accomodation'];
+                                $key2 = $jsonObject['room'];
+                                $key3 = $jsonObject['start_date'];
+                    
+                                $boldClass = ($index === $latestIndex) ? 'bold' : '';
+                    
+                                echo '<td class="' . $boldClass . '">' . $key1 . '</td>';
+                                echo '<td class="' . $boldClass . '">' . $key2 . '</td>';
+                                echo '<td class="' . $boldClass . '">' . $key3 . '</td>';
+                                echo '</tr>';
+                            }
+                        }
+                        mysqli_free_result($result);
+                    }
+                    
+                     else { ?>
+                        <label style="color:white;">No entries found</label>
+                    <?php
+                } ?>
+            </tbody>
+        </table>
+    </div>
+
+
+
+
+
+
+
+
+
+<div class="fl w-100 form-outline srch">
+        <input type="search" id="form1" class="form-control" placeholder="Live Search" aria-label="Search" oninput="search()" />
+        <h4 id="demo"></h4>
+    </div>
+        <table class="table table-bordered table-responsive tc">
+            <thead>
+                <tr>
+                    <th scope="col" rowspan="2">Employee Code</th>
+                    <th scope="col" colspan="3">History</th>
+                </tr>
+                <tr>
+                    <th scope="col">Accommodation</th>
+                    <th scope="col">Room</th>
+                    <th scope="col">Start Date</th>
+                </tr>
+            </thead>
+            <tbody id="tableBody">
+                <?php
+                    $result = mysqli_query($conn, "SELECT emp_code, history FROM change_tracking_living_history");
+                    if ($result) {
+                        $prevEmpCode = null;
+                        while ($row = mysqli_fetch_assoc($result)) {
+                            $jsonObjects = json_decode($row['history'], true);
+                    
+                            $rowCount = count($jsonObjects); 
+                    
+                            if ($row['emp_code'] !== $prevEmpCode) {
+                                echo '<tr class="live">';
+                                echo '<td rowspan="' . $rowCount . '">' . $row['emp_code'] . '</td>';
+                                $prevEmpCode = $row['emp_code'];
+                            }
+                            $latestIndex = $rowCount - 1; 
+                            foreach ($jsonObjects as $index => $jsonObject) {
+                                $key1 = $jsonObject['accomodation'];
+                                $key2 = $jsonObject['room'];
+                                $key3 = $jsonObject['start_date'];
+                    
+                                $boldClass = ($index === $latestIndex) ? 'bold' : '';
+                    
+                                echo '<td class="' . $boldClass . '">' . $key1 . '</td>';
+                                echo '<td class="' . $boldClass . '">' . $key2 . '</td>';
+                                echo '<td class="' . $boldClass . '">' . $key3 . '</td>';
+                                echo '</tr>';
+                            }
+                        }
+                        mysqli_free_result($result);
+                    }
+                    
+                     else { ?>
+                        <label style="color:white;">No entries found</label>
+                    <?php
+                } ?>
+            </tbody>
+        </table>
+    </div>
+
+
+$result = mysqli_query($conn, "SELECT emp_code,
+                                                    json_extract(history, '$.accomodation') AS acc,
+                                                    json_extract(history, '$.room') AS room,
+                                                    json_extract(history, '$.start_date') AS dt
+                                                    FROM change_tracking_living_history");
+                    $result = mysqli_query($conn, "SELECT emp_code,
+                    SUBSTRING_INDEX(SUBSTRING_INDEX(history, '\"accomodation\":\"', -1),'\"', 1) AS acc,
+                    SUBSTRING_INDEX(SUBSTRING_INDEX(history, '\"room\":\"', -1),'\"', 1) AS room,
+                    SUBSTRING_INDEX(SUBSTRING_INDEX(history, '\"start_date\":\"', -1),'\"', 1) AS dt
+                    FROM change_tracking_living_history;");
+                    if (mysqli_num_rows($result) > 0) {
+                        while ($row = mysqli_fetch_array($result)) { ?>
+                            <tr class="live">
+                                <td><?php echo $row['emp_code'] ?></td>
+                                <td><?php echo $row['acc'] ?></td>
+                                <td><?php echo $row['room'] ?></td>
+                                <td><?php echo $row['dt'] ?></td>
+                            </tr>
+                    <?php 
+
+
 <?php
                                     if($_POST['acc_id']){
                                         $accid = $_POST['acc_id'];
@@ -4135,3 +4277,9 @@ if (isset($_GET['edit'])) {
 </html>
 
 ************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************
+
+
+ <?php
+                               $emp_name=$row['fname']." ".$row['lname']."-".$row['emp_code'];
+                               echo $emp_name;
+                               ?>
