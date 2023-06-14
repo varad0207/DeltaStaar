@@ -1,13 +1,13 @@
 <?php include('../../controllers/includes/common.php'); ?>
 <?php include('../../controllers/tanker_vendor_controller.php'); 
 if (!isset($_SESSION["emp_id"]))
-header("location:../../views/login.php");
+header("location:../../index.php");
 if ($_SESSION['is_superadmin'] == 0)
 die('<script>alert("You dont have access to this page, Please contact admin");window.location = history.back();</script>');
 $update = "";
 if(isset($_GET['edit']))
 {
-    $id = $vname = $cname = $add = $num = "";
+    $id = $vname = $cname = $add = $num = $price = "";
     $id = $_GET['edit'];
     $update = true;
 
@@ -16,9 +16,10 @@ if(isset($_GET['edit']))
 	$n = mysqli_fetch_array($record);
 
     $vname = $n['vname'];
-    $cname = $n['cname'];
-    $add = $n['add'];
-    $num = $n['num'];
+    $cname = $n['company_name'];
+    $add = $n['address'];
+    $num = $n['number'];
+    $price = $n['price'];
 }
 ?>
 <!DOCTYPE html>
@@ -57,59 +58,58 @@ if(isset($_GET['edit']))
             <div class="form-content">
                 <div class="form-items">
                     <h1 class="f2 lh-copy tc" style="color: white;">Tanker Vendor Entry</h1>
-                    <form class="requires-validation f3 lh-copy" novalidate action="../../controllers/tanker_vendor_controller.php" method="post" name="myForm">
-                    
-                       <div class="col-md-12 pa2">
-                        <label for="vname">Vendor Name</label> 
-                            <input class="form-control" type="text" name="vname" placeholder="Vendor Name" value = "<?php $vname ?>" required onkeyup = "return validateText(document.myForm.vname.value,0)">
-                            <span class="valid-text"></span>
-                            <span class="invalid-feedback" style="color: gold; font-size: 14px;">Field cannot be empty!</span>
+                    <form class="f3 lh-copy" action="../../controllers/tanker_vendor_controller.php" method="post" id="myForm">
+                        <div class="col-md-12 pa2">
+                            <label for="vname">Vendor Name</label> 
+                            <input class="form-control" type="text" name="vname" id="vname" placeholder="Vendor Name" value = "<?= $vname; ?>">
+                            <small></small>
                        </div>
 
-                       <div class="col-md-12 pa2">
-                        <label for="cname">Company Name</label> 
-                            <input class="form-control" type="text" name="cname" placeholder="Company Name" value = "<?php $cname ?>" required onkeyup = "return validateText(document.myForm.cname.value,1)">
-                            <span class="valid-text"></span>
-                            <span class="invalid-feedback" style="color: gold; font-size: 14px;">Field cannot be empty!</span>
-                       </div>
+                        <div class="col-md-12 pa2">
+                            <label for="cname">Company Name</label> 
+                            <input class="form-control" type="text" name="cname" id="cname" placeholder="Company Name" value = "<?= $cname; ?>">
+                            <small></small>
+                        </div>
 
-                       <div class="col-md-12 pa2">
-                        <label for="number">Number</label>
-                          <input class="form-control" type="number" name="num" placeholder="Number" value = "<?php $num ?>" required onkeyup = "return validateNum(document.myForm.num.value,0)">
-                          <span class="valid-field"></span>
-                          <span class="invalid-feedback" style="color: gold; font-size: 14px;">Field cannot be empty!</span>
-                      </div>
+                        <div class="col-md-12 pa2">
+                            <label for="number">Contact Number</label>
+                            <input class="form-control" type="number" name="num" id="num" placeholder="Contact Number" value = "<?= $num; ?>">
+                            <small></small>
+                        </div>
 
-                      <div class="col-md-12 pa2">
-                        <label for="address">Vendor Address</label> 
-                            <input class="form-control" type="text" name="add" placeholder="Vendor Address" value = "<?php $add ?>" required>
-                            <span class="valid-text"></span>
-                            <span class="invalid-feedback" style="color: gold; font-size: 14px;">Field cannot be empty!</span>
-                       </div>
+                        <div class="col-md-12 pa2">
+                            <label for="address">Vendor Address</label> 
+                            <input class="form-control" type="text" name="add" id="add" placeholder="Vendor Address" value = "<?= $add; ?>">
+                            <small></small>
+                        </div>
                        
-                        
-                      <div class="form-button mt-3 tc">  
-                        <?php if ($update == true): ?>
-						<button id="submit" class="btn btn-warning f3 lh-copy" style="color: white;" type="submit" name="update" value="update"
-							style="background: #556B2F;">update</button>
-						<?php else: ?>
-						<button id="submit" class="btn btn-warning f3 lh-copy" style="color: white;" type="submit" name="submit"
-							value="submit">Submit</button>
-						<?php endif ?>
+                        <div class="col-md-12 pa2">
+                            <label for="price">Price</label>
+                            <input class="form-control" type="number" name="price" id="price" placeholder="Annual Price" value="<?= $price; ?>">
+                            <small></small>
+                        </div>
+
+                        <div class="form-button mt-3 tc">  
+                            <?php if ($update == true): ?>
+                            <button id="submit" class="btn btn-warning f3 lh-copy" style="color: white;" type="submit" name="update" value="update"
+                                style="background: #556B2F;">update</button>
+                            <?php else: ?>
+                            <button id="submit" class="btn btn-warning f3 lh-copy" style="color: white;" type="submit" name="submit"
+                                value="submit">Submit</button>
+                            <?php endif ?>
                         </div>
                     </form>
                 </div>
             </div>
         </div>
     </div>
-  </div>
-  <footer class="tc f3 lh-copy mt4">Copyright &copy; 2022 Delta@STAAR. All Rights Reserved</footer>
+    </div>
+    <footer class="tc f3 lh-copy mt4">Copyright &copy; 2022 Delta@STAAR. All Rights Reserved</footer>
 
     <!-- Script files -->
     <script src="../../js/form.js"></script>
     <script src="../../js/Sidebar/sidebar.js"></script>
-    <script src="../../js/validateEmp.js"></script>
-    <script src="../../js/validateAcc.js"></script>
+    <script src="../../js/validateVendor.js"></script>
     <script src="https://kit.fontawesome.com/319379cac6.js" crossorigin="anonymous"></script>
     <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
         integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"

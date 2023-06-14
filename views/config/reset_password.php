@@ -1,7 +1,7 @@
 <?php 
     include('../../controllers/includes/common.php'); 
     if (!isset($_SESSION["emp_id"]))
-    header("location:../../views/login.php");
+    header("location:../../index.php");
     $n = mysqli_fetch_array(mysqli_query($conn, "SELECT concat(fname,' ',mname,' ',lname) name,emp_code,emp_id FROM employee WHERE emp_code='{$_SESSION['emp_code']}'"));
     $emp_id = $n['emp_id'];
     $emp_code = $n['emp_code'];

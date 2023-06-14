@@ -2,7 +2,8 @@
     include('../../controllers/includes/common.php');
     include('../../controllers/vaccination_controller.php'); 
 
-    if (!isset($_SESSION["emp_id"]))header("location:../../views/login.php");
+    if (!isset($_SESSION["emp_id"]))
+    header("location:../../index.php");
     // check rights
     $isPrivilaged = 0;
 $rights = unserialize($_SESSION['rights']);
@@ -193,14 +194,29 @@ die('<script>alert("You dont have access to this page, Please contact admin");wi
     $pages = 0;
     $page=isset($_GET['page'])?$_GET['page']:1;
     $start = ($page - 1) * $limit;
-    $sql .= " LIMIT $start,$limit";
-    $result = mysqli_query($conn, $sql);
+    
 
     $q1 = "SELECT * FROM vaccination";
     $result1 = mysqli_query($conn, $q1);
     $total = mysqli_num_rows($result1);
     $pages = ceil($total / $limit);
-    
+    if(($page>1)||($page<$pages))
+    {
+        $Previous=$page-1;
+        $Next=$page+1;
+    }
+    if($page<=1)
+    {
+        $Previous=1;
+        $Next=0;
+    }
+    if($page>=$pages)
+    {
+        $Next=$pages;
+    }
+
+    $sql .= " LIMIT $start,$limit";
+    $result = mysqli_query($conn, $sql);
     /* ************************************************ */
     ?>
     <div class="table-div">

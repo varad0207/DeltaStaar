@@ -3,7 +3,7 @@
     require '../../controllers/complaint_type_controller.php';
 
     if (!isset($_SESSION["emp_id"]))
-    header("location:../../views/login.php");
+    header("location:../../index.php");
 if ($_SESSION['is_superadmin'] == 0)
     die('<script>alert("You dont have access to this page, Please contact admin");window.location = history.back();</script>');
 
@@ -58,8 +58,13 @@ if ($_SESSION['is_superadmin'] == 0)
                             <input type="hidden" name="id" value="<?php echo $id; ?>">
                             <div class="col-md-12 pa2">
                                 <label for="complaint_type">Complaint Type</label>
-                                <input class="form-control" type="text" name="type" placeholder="Enter a Complaint Type"
+                                <?php if ($update == true): ?>
+                                    <input class="form-control" type="text" name="type" placeholder="Enter New Complaint Type"
                                     required>
+                                <?php else: ?>
+                                    <input class="form-control" type="text" name="type" placeholder="Enter a Complaint Type"
+                                    required>
+                                <?php endif ?>
                                 <div class="valid-feedback">field is valid!</div>
                                 <div class="invalid-feedback">field cannot be blank!</div>
                             </div>

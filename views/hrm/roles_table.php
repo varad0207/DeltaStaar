@@ -2,7 +2,7 @@
 include('../../controllers/includes/common.php');
 include('../../controllers/role_controller.php');
 if (!isset($_SESSION["emp_id"]))
-    header("location:../../views/login.php");
+header("location:../../index.php");
 
 //only superadmin can view and assign roles
 if ($_SESSION['is_superadmin'] == 0)

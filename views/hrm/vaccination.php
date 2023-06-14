@@ -2,8 +2,8 @@
 <?php include('../../controllers/vaccination_controller.php'); ?>
 <?php
 if (!isset($_SESSION["emp_id"]))
-    header("location:../../views/login.php");
-    $isPrivilaged = 0;
+header("location:../../index.php");
+$isPrivilaged = 0;
     $rights = unserialize($_SESSION['rights']);
     if ($rights['rights_vaccination'] > 1) {
         $isPrivilaged = $rights['rights_vaccination'];

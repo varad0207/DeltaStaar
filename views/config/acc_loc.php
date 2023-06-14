@@ -2,7 +2,7 @@
 include('../../controllers/includes/common.php'); 
 include('../../controllers/acc_loc_controller.php');
 if (!isset($_SESSION["emp_id"]))
-    header("location:../../views/login.php");
+header("location:../../index.php");
 if ($_SESSION['is_superadmin'] == 0)
     die('<script>alert("You dont have access to this page, Please contact admin");window.location = history.back();</script>');
 

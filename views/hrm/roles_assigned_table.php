@@ -1,7 +1,7 @@
 <?php 
     include('../../controllers/includes/common.php'); 
     if (!isset($_SESSION["emp_id"]))
-        header("location:../../views/login.php");
+    header("location:../../index.php");
 
         if ($_SESSION['is_superadmin'] == 0)
         die('<script>alert("You dont have access to this page, Please contact admin");window.location = history.back();</script>');
@@ -133,9 +133,9 @@ $all = '<span class="material-icons">done_all</span>';
                 <thead>
                     <tr>
                         <th>Employee</th>
-                    <th scope="col" rowspan="2">Role Name</th>
-                    <th scope="col" colspan="8">Rights</th>
-                    <th scope="col" colspan="2">Un-assign</th>
+                        <th scope="col" rowspan="2">Role Name</th>
+                        <th scope="col" colspan="8">Rights</th>
+                        <th scope="col" colspan="2">Un-assign</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -160,7 +160,7 @@ $all = '<span class="material-icons">done_all</span>';
                     $row = mysqli_fetch_array($results);
                         ?>
                     <tr>
-                        <td><?php echo $emp_row['emp_code']; ?></td>
+                        <td><?php echo $emp_row['fname']." ".$emp_row['lname']." - ".$emp_row['emp_code']; ?></td>
                         <td>
                             <?php echo $row['role_name']; ?>
                         </td>

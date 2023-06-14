@@ -95,7 +95,7 @@ if ($_SESSION['is_superadmin']) {
         else if ($isTechnician)
             include '../controllers/includes/technician.php';
         else if ($isSecurity)
-            include '../controllers/includes/security.php';
+            include '../controllers/includes/employee.php';
         else
             include '../controllers/includes/employee.php';
         ?>

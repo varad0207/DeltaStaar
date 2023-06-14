@@ -4,7 +4,7 @@ require '../../controllers/jobs_controller.php';
 require '../../controllers/complaint_controller.php';
 
 if (!isset($_SESSION["emp_id"]))
-    header("location:../../views/login.php");
+header("location:../../index.php");
 // check rights
 $isPrivilaged = 0;
 $rights = unserialize($_SESSION['rights']);
@@ -138,13 +138,13 @@ if (isset($_GET['edit'])) {
                                     <!--Backend remaining-->
                             <div class="col-md-12 pa2">
                                 <label for="tentative_date">Tentative Completion Date</label>
-                                <input class="form-control" type="date" name="tentative_date" value="<?php echo $tentative_date; ?>" required>
+                                <input class="form-control" type="date" name="tentative_date" value="<?php echo $tentative_date; ?>" min="<?= date('Y-m-d'); ?>" required>
                                 <div class="valid-feedback">field is valid!</div>
                                 <div class="invalid-feedback">field cannot be blank!</div>
                             </div>
                             <div class="col-md-12 pa2">
                                 <label for="completion_date">Completion Date</label>
-                                <input class="form-control" type="date" name="completion_date" value="<?php echo $completion_date; ?>" required>
+                                <input class="form-control" type="date" name="completion_date" value="<?php echo $completion_date; ?>" min="<?= date('Y-m-d'); ?>" required>
                                 <div class="valid-feedback">field is valid!</div>
                                 <div class="invalid-feedback">field cannot be blank!</div>
                             </div>

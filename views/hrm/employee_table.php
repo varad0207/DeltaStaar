@@ -3,7 +3,7 @@ include('../../controllers/includes/common.php');
 include('../../controllers/employee_controller.php');
 
 if (!isset($_SESSION["emp_id"]))
-    header("location:../../views/login.php");
+header("location:../../index.php");
 // check rights
 $isPrivilaged = 0;
 $rights = unserialize($_SESSION['rights']);
@@ -11,7 +11,21 @@ if ($rights['rights_employee_details'] > 0) {
     $isPrivilaged = $rights['rights_employee_details'];
 } else
     die('<script>alert("You dont have access to this page, Please contact admin");window.location = history.back();</script>');
+$isWarden = 0;
+$check = mysqli_query($conn, "select emp_id,emp_code from employee where emp_id not in(select emp_id from technician) and emp_id not in (select emp_id from security) and emp_id='{$_SESSION['emp_id']}' and emp_code in (select warden_emp_code from accomodation)");
+if (mysqli_num_rows($check) > 0)
+{
+    $isWarden = 1;
+    $fetch = mysqli_fetch_array(mysqli_query($conn, "select rooms.id as id from rooms join accomodation using(acc_id) where  accomodation.warden_emp_code='{$_SESSION['emp_code']}' "));
+}
 
+$isSecurity = 0;
+$c = mysqli_query($conn,"SELECT emp_id,emp_code FROM employee WHERE emp_id IN(SELECT emp_id FROM security)");
+if(mysqli_num_rows($c) > 0)
+{
+    $isSecurity = 1;
+    $fetch1 = mysqli_fetch_array(mysqli_query($conn, "SELECT rooms.id as id from rooms join accomodation using(acc_id) join security using(acc_id) where  security.emp_id='{$_SESSION['emp_id']}' "));
+}
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -227,8 +241,10 @@ if ($rights['rights_employee_details'] > 0) {
             $sort_condition = "DESC";
         }
     }
-
-    $sql = "SELECT * from employee JOIN employee_designation on employee_designation.id = employee.designation join employee_dept on employee.department=employee_dept.dept_id where 1=1";
+$room="room_id";
+    if($isWarden) $room=$fetch['id'];
+    elseif($isSecurity) $room=$fetch1['id'];
+    $sql = "SELECT * from employee JOIN employee_designation on employee_designation.id = employee.designation join employee_dept on employee.department=employee_dept.dept_id where room_id=$room and 1=1 "; //
     if (isset($_GET['designation'])) {
         $designation_checked = [];
         $designation_checked = $_GET['designation'];
@@ -281,13 +297,12 @@ if ($rights['rights_employee_details'] > 0) {
     $sql .= " ORDER BY fname $sort_condition";
     $emp_qry = $sql;
 
-
+// echo $sql;
     /* ***************** PAGINATION ***************** */
     $limit = 10;
     $page = isset($_GET['page']) ? $_GET['page'] : 1;
     $start = ($page - 1) * $limit;
-    $sql .= " LIMIT $start,$limit";
-    $result = mysqli_query($conn, $sql);
+    
 
     $q1 = "SELECT * FROM employee";
     $result1 = mysqli_query($conn, $q1);
@@ -302,11 +317,15 @@ if ($rights['rights_employee_details'] > 0) {
     if($page<=1)
     {
         $Previous=1;
+        $Next=0;
     }
     if($page>=$pages)
     {
         $Next=$pages;
     }
+
+    $sql .= " LIMIT $start,$limit";
+    $result = mysqli_query($conn, $sql);
     /* ************************************************ */
 
     ?>
@@ -359,7 +378,7 @@ if ($rights['rights_employee_details'] > 0) {
                                     <?php }
                                     if ($isPrivilaged >= 4) {  ?>
 
-                                        <a class="del_btn"><i class="bi bi-trash" style="font-size: 1rem;    color: black;" onclick="myfunc('<?php echo $row['emp_code']; ?>')"></i></a>
+                                        <a class="del_btn" onclick="myfunc('<?php echo $row['emp_code']; ?>')"><i class="bi bi-trash" style="font-size: 1rem;    color: black;" ></i></a>
                                         <form id="del_response" action="../../controllers/employee_controller.php" method="get">
                                             <input type="hidden" id="hidden-del" name="del" value="" />
                                         </form>
@@ -418,7 +437,7 @@ if ($rights['rights_employee_details'] > 0) {
     <script>
         function myfunc(code) {
             const viewmore_overlay_span = document.querySelector('.viewmore_ovelay');
-            const overlay_viewmore = viewmore_overlay_span.querySelector('.overlay');
+            const overlay_viewmore = document.querySelector('.overlay');
             overlay_viewmore.style.display = 'none';
             const del_overlay_span = document.querySelector('.delete_ovelay');
             const overlay_del = del_overlay_span.querySelector('.overlay');

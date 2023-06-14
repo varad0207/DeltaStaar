@@ -41,7 +41,7 @@ if (isset($_GET['edit'])) {
     $contact = $n['contact'];
     $accid = '';
 
-    $sql2 = mysqli_query($conn,"SELECT * FROM rooms WHERE id='$room_id'");
+    $sql2 = mysqli_query($conn, "SELECT * FROM rooms WHERE id='$room_id'");
     $n1 = mysqli_fetch_assoc($sql2);
     @$accid = $n1['acc_id'];
 }
@@ -57,7 +57,11 @@ if (isset($_GET['edit'])) {
 
     <!--Favicon link-->
     <link rel="icon" type="image/x-icon" href="../../images/logo-no-name-circle.png">
-    <title>Delta@STAAR | Add Employees</title>
+    <?php if (isset($_GET['edit'])) : ?>
+        <title>Delta@STAAR | Edit Employees</title>
+    <?php else : ?>
+        <title>Delta@STAAR | Add Employees</title>
+    <?php endif ?>    
     <link rel="stylesheet" href="../../css/sidebar.css">
     <link rel="stylesheet" href="../../css/form.css">
     <link rel="stylesheet" href="../../css/style1.css">
@@ -80,7 +84,11 @@ if (isset($_GET['edit'])) {
             <div class="form-holder">
                 <div class="form-content">
                     <div class="form-items">
-                        <h1 class="f2 lh-copy tc" style="color: white;">Enter Employee Details</h1>
+                    <?php if (isset($_GET['edit'])) : ?>
+                        <h1 class="f2 lh-copy tc" style="color: white;">Edit Employee Details</h1>
+                        <?php else : ?>
+                            <h1 class="f2 lh-copy tc" style="color: white;">Enter Employee Details</h1>
+                            <?php endif ?> 
                         <form class="f3 lh-copy" action="../../controllers/employee_controller.php" method="post" id="myForm">
                             <input type="hidden" name="emp_code" value="<?php echo $emp_code; ?>">
                             <input type="hidden" name="emp_id" value="<?php echo $emp_id; ?>">
@@ -92,15 +100,15 @@ if (isset($_GET['edit'])) {
                                 <small></small>
                             </div>
                             <div id="phpJS">
-                                <?php 
+                                <?php
                                 $sql1 = mysqli_query($conn, "SELECT * FROM employee");
                                 $a = array();
-                                foreach($sql1 as $row1){
+                                foreach ($sql1 as $row1) {
                                     $op = $row1['emp_code'];
-                                    array_push($a,$op); 
+                                    array_push($a, $op);
                                 }
                                 ?>
-                            </div>    
+                            </div>
 
                             <div class="form-field col-md-12 pa2">
                                 <label for="fname">First Name</label>
@@ -117,7 +125,7 @@ if (isset($_GET['edit'])) {
                             <div class="form-field col-md-12 pa2">
                                 <label for="lname">Last Name</label>
                                 <input class="form-control" type="text" name="lname" id="lname" placeholder="Last Name" value="<?php echo $lname; ?>">
-                                <small></small>                         
+                                <small></small>
                             </div>
 
                             <div class="form-field col-md-12 pa2">
@@ -128,14 +136,8 @@ if (isset($_GET['edit'])) {
                                     $emp_desig = mysqli_query($conn, "SELECT * FROM employee_designation");
 
                                     foreach ($emp_desig as $row) { ?>
-                                    <option 
-                                        value="<?= $row["id"] ?>"
-                                        
-                                        name="employee_desig"
-                                        <?php if($designation == $row['id']) { ?>
-                                            selected
-                                        <?php } ?>><?= $row["designation"]; ?> 
-                                    </option>
+                                        <option value="<?= $row["id"] ?>" name="employee_desig" <?php if ($designation == $row['id']) { ?> selected <?php } ?>><?= $row["designation"]; ?>
+                                        </option>
                                     <?php
                                     }
                                     ?>
@@ -178,7 +180,7 @@ if (isset($_GET['edit'])) {
                                 <input class="form-control" type="tel" name="contact1" id="phone" placeholder="Contact Number" value="<?php echo $contact; ?>">
                                 <small></small>
                             </div>
-                            
+
 
                             <div class="form-field col-md-12 pa2">
                                 <label for="email">Email</label>
@@ -190,44 +192,18 @@ if (isset($_GET['edit'])) {
                                 <label for="blood_group">Blood Group</label>
                                 <select class="form-select mt-3" name="blood_group" value="<?php echo $blood_group ?>">
                                     <option selected disabled value="">Select Blood Group</option>
-                                    <option value="A+" 
-                                    <?php if($blood_group == 'A+') { ?>
-                                        selected 
-                                    <?php } ?> 
-                                    >A+</option>
-                                    <option value="A-" 
-                                    <?php if($blood_group == 'A-') { ?>
-                                        selected
-                                    <?php } ?>>A-</option>
-                                    <option value="B+" <?php if($blood_group == 'B+') { ?>
-                                        selected 
-                                    <?php } ?>
-                                    >B+</option>
-                                    <option value="B-" <?php if($blood_group == 'B-') { ?>
-                                        selected 
-                                    <?php } ?>
-                                    >B-</option>
-                                    <option value="O+" <?php if($blood_group == 'O+') { ?>
-                                        selected 
-                                    <?php } ?>
-                                    >O+</option>
-                                    <option value="O-" <?php if($blood_group == 'O-') { ?>
-                                        selected 
-                                    <?php } ?>
-                                    >O-</option>
-                                    <option value="AB+" <?php if($blood_group == 'AB+') { ?>
-                                        selected 
-                                    <?php } ?>
-                                    >AB+</option>
-                                    <option value="AB-" 
-                                    <?php if($blood_group == 'AB-') { ?>
-                                        selected 
-                                    <?php } ?>
-                                    >AB-</option>
+                                    <option value="A+" <?php if ($blood_group == 'A+') { ?> selected <?php } ?>>A+</option>
+                                    <option value="A-" <?php if ($blood_group == 'A-') { ?> selected <?php } ?>>A-</option>
+                                    <option value="B+" <?php if ($blood_group == 'B+') { ?> selected <?php } ?>>B+</option>
+                                    <option value="B-" <?php if ($blood_group == 'B-') { ?> selected <?php } ?>>B-</option>
+                                    <option value="O+" <?php if ($blood_group == 'O+') { ?> selected <?php } ?>>O+</option>
+                                    <option value="O-" <?php if ($blood_group == 'O-') { ?> selected <?php } ?>>O-</option>
+                                    <option value="AB+" <?php if ($blood_group == 'AB+') { ?> selected <?php } ?>>AB+</option>
+                                    <option value="AB-" <?php if ($blood_group == 'AB-') { ?> selected <?php } ?>>AB-</option>
                                 </select>
                                 <small></small>
                             </div>
-                            
+
                             <div class="form-field col-md-12 pa2">
                                 <label for="department">Department</label>
                                 <select class="form-select mt-3" name="department" id="dept">
@@ -236,10 +212,7 @@ if (isset($_GET['edit'])) {
                                     $emp_dept = mysqli_query($conn, "SELECT * FROM employee_dept");
 
                                     foreach ($emp_dept as $row) { ?>
-                                        <option name="employee_dept" value="<?= $row["dept_id"] ?>"
-                                        <?php if($department == $row['dept_id']) { ?> 
-                                            selected 
-                                        <?php } ?>>
+                                        <option name="employee_dept" value="<?= $row["dept_id"] ?>" <?php if ($department == $row['dept_id']) { ?> selected <?php } ?>>
                                             <?= $row["dept_name"]; ?>
                                         </option>
                                     <?php
@@ -251,7 +224,7 @@ if (isset($_GET['edit'])) {
 
                             <div class="form-field col-md-12 pa2">
                                 <label for="joiningdate">Joining Date</label>
-                                <input class="form-control" type="date" name="joining_date" value="<?php echo $joining_date; ?>">
+                                <input class="form-control" type="date" name="joining_date" max="<?= date('Y-m-d'); ?>" value="<?php echo $joining_date; ?>">
                             </div>
 
                             <div class="form-field col-md-12 pa2">
@@ -268,41 +241,36 @@ if (isset($_GET['edit'])) {
 
                             <div class="form-field col-md-12 pa2">
                                 <label for="acc_id">Accomodation</label>
-                                
-                                    <select class="form-select mt-3" name="acc_id" id="select_acc" onchange="GetDetail()">
+
+                                <select class="form-select mt-3" name="acc_id" id="select_acc" onchange="GetDetail()">
                                     <option selected disabled value=""> Select Accommodation </option>
-                                        <?php 
-                                        $emp_acc = mysqli_query($conn, "SELECT * FROM accomodation");
-                                        foreach ($emp_acc as $row) { ?>
-                                            <option name="employee_accomodation" value="<?= $row["acc_id"] ?>"
-                                            <?php if(@$accid == $row['acc_id']) { ?>
-                                                selected
-                                            <?php } ?>>
-                                                <?= $row["acc_name"]; ?> 
-                                            </option>
-                                        <?php
-                                        }
-                                        ?>
-                                    </select>
-                                    <small></small>
+                                    <?php
+                                    $emp_acc = mysqli_query($conn, "SELECT * FROM accomodation");
+                                    foreach ($emp_acc as $row) { ?>
+                                        <option name="employee_accomodation" value="<?= $row["acc_id"] ?>" <?php if (@$accid == $row['acc_id']) { ?> selected <?php } ?>>
+                                            <?= $row["acc_name"]; ?>
+                                        </option>
+                                    <?php
+                                    }
+                                    ?>
+                                </select>
+                                <small></small>
                             </div>
-                            
+
                             <div class="form-field col-md-12 pa2">
                                 <label for="room_id">Room</label>
+                                <input type="hidden" value="<?php echo $room_id; ?>" name="existing_room">
                                 <select class="form-select mt-3" name="room_id" id="room">
-                                    <option selected disabled value="">Select Room Number</option>   
+                                    <option selected disabled value="">Select Room Number</option>
                                     <?php
-                                    $emp_room = mysqli_query($conn,"SELECT * FROM rooms");
-                                    foreach($emp_room as $row) { ?>
-                                        <option name="emp_room" value="<?= $row['id'] ?>"
-                                        <?php if($room_id == $row['id']) { ?>
-                                            selected
-                                        <?php } ?>>
-                                        <?= $row['room_no']; ?>
+                                    $emp_room = mysqli_query($conn, "SELECT * FROM rooms");
+                                    foreach ($emp_room as $row) { ?>
+                                        <option name="emp_room" value="<?= $row['id'] ?>" <?php if ($room_id == $row['id']) { ?> selected <?php } ?>>
+                                            <?= $row['room_no']; ?>
                                         </option>
                                     <?php } ?>
-                                                     
-                                </select>  
+
+                                </select>
                                 <small></small>
                             </div>
 
@@ -332,7 +300,7 @@ if (isset($_GET['edit'])) {
             var selectedValue = document.getElementById("select_acc").value;
             console.log(selectedValue)
             var xmlhttp = new XMLHttpRequest();
-            xmlhttp.onreadystatechange = function () {
+            xmlhttp.onreadystatechange = function() {
                 if (this.readyState == 4 && this.status == 200) {
                     var myObj = JSON.parse(this.responseText);
                     var el = document.createElement("option");
@@ -341,7 +309,7 @@ if (isset($_GET['edit'])) {
 
                     el.value = "";
                     el.disabled = true;
-                    el.defaultSelected = true; 
+                    el.defaultSelected = true;
                     select.appendChild(el);
 
                     for (var key in myObj) {
@@ -355,8 +323,7 @@ if (isset($_GET['edit'])) {
             xmlhttp.open("GET", "../../controllers/validation.php?acc=" + selectedValue, true);
             xmlhttp.send();
         }
-        window.onload=GetDetail;
-
+        window.onload = GetDetail;
     </script>
     <script src="../../js/form.js"></script>
     <script src="../../js/Sidebar/sidebar.js"></script>

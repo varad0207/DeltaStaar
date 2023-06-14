@@ -2,18 +2,18 @@
 include('../../controllers/includes/common.php');
 
 if (!isset($_SESSION["emp_id"]))
-    header("location:../../views/login.php");
+header("location:../../index.php");
 // check rights
 
-if($_SESSION['is_superadmin']){
-    
+if ($_SESSION['is_superadmin']) {
+
 }
 
 $isPrivilaged = 0;
 $rights = unserialize($_SESSION['rights']);
 if ($rights['rights_jobs'] > 0) {
     $isPrivilaged = $rights['rights_jobs'];
-} 
+}
 // else
 //     die('<script>alert("You dont have access to this page, Please contact admin");window.location = history.back();</script>');
 // $sql = mysqli_query($conn, "SELECT * FROM technician where emp_id='{$_SESSION['emp_id']}' ");
@@ -21,10 +21,10 @@ if ($rights['rights_jobs'] > 0) {
 //     die('<script>alert("You dont have access to this page, Please contact admin");window.location = history.back();</script>');
 
 
-if(!$isPrivilaged)
+if (!$isPrivilaged)
     die('<script>alert("You dont have access to this page, Please contact admin");window.location = history.back();</script>');
 $sql = mysqli_query($conn, "SELECT * FROM technician where emp_id='{$_SESSION['emp_id']}' ");
-if(mysqli_num_rows($sql)>0) 
+if (mysqli_num_rows($sql) > 0)
     $technician_id = mysqli_fetch_array($sql);
 else
     die('<script>alert("You dont have access to this page, Please contact admin");window.location = history.back();</script>');
@@ -96,27 +96,47 @@ else
     </div> -->
     </div>
 
-    <?php //Entries per-page
-    $results_per_page = 5;
-
-    //Number of results in the DB
-    $sql = "SELECT * FROM jobs";
+    <?php 
+    // PAGINATION
+    $sql="SELECT complaints.*,
+          j.id as job_id,
+          j.complaint_id as complaint_id,
+          j.technician_id as technician_id,
+          j.raise_timestamp as job_raise_time,
+          j.description as job_desc,
+          j.completion_date as job_comp_time,
+          j.warden_emp_code as warden_emp_code
+          FROM jobs j
+          JOIN complaints ON complaint_id = complaints.id
+          WHERE technician_id ='{$technician_id['id']}' and 1=1";
+    $q1 = $sql;
+    /* ***************** PAGINATION ***************** */
+    $limit = 10;
+    $page = isset($_GET['page']) ? $_GET['page'] : 1;
+    $start = ($page - 1) * $limit;
+    
+    $result1 = mysqli_query($conn, $q1);
+    $total = mysqli_num_rows($result1);
+    $pages = ceil($total / $limit);
+    //check if current page is less then or equal 1
+    if(($page>1)||($page<$pages))
+    {
+        $Previous=$page-1;
+        $Next=$page+1;
+    }
+    if($page<=1)
+    {
+        $Previous=1;
+        $start=0;
+    }
+    if($page>=$pages)
+    {
+        $Next=$pages;
+    }
+    $sql .= " LIMIT $start,$limit";
+    echo $sql;
     $result = mysqli_query($conn, $sql);
-    $number_of_results = mysqli_num_rows($result);
-    //number of pages
-    $number_of_pages = ceil($number_of_results / $results_per_page);
-
-    // on which is the user
-    if (!isset($_GET['page']))
-        $page = 1;
-    else
-        $page = $_GET['page'];
-    //starting limit number for the results
-    $this_page_first_result = ($page - 1) * $results_per_page;
-
-    // retrieve the selected results
-    $sqli = "SELECT * FROM jobs LIMIT " . $this_page_first_result . ',' . $results_per_page;
-    $results = mysqli_query($conn, $sqli);
+    /* ************************************************ */
 
     ?>
     <div class="table-div">
@@ -129,17 +149,6 @@ else
             </div>
         <?php endif ?>
 
-        <?php
-        $results = mysqli_query($conn, "SELECT complaints.*,
-        j.id as job_id,
-        j.complaint_id as complaint_id,
-        j.technician_id as technician_id,
-        j.raise_timestamp as job_raise_time,
-        j.description as job_desc,
-        j.completion_date as job_comp_time,
-        j.warden_emp_code as warden_emp_code
-         FROM jobs j join complaints on complaint_id=complaints.id where technician_id='{$technician_id['id']}' ");
-        ?>
         <div class="pa1 table-responsive">
             <table class="table table-bordered tc">
                 <thead>
@@ -153,11 +162,12 @@ else
                         <th>Expected Completion Date </th>
                         <!-- <th>Status </th> -->
                         <!-- <th>Remarks </th> -->
-                        <th colspan="2">Actions</th>
+                        <th>Material</th>
+                        <th>Job</th>
                     </tr>
                 </thead>
                 <tbody>
-                    <?php while ($row = mysqli_fetch_array($results)) {
+                    <?php while ($row = mysqli_fetch_array($result)) {
                         $emp_det = mysqli_query($conn, "SELECT concat(fname,' ',lname) raised_by,emp_code FROM employee where emp_code='{$row['warden_emp_code']}'");
                         $row1 = mysqli_fetch_array($emp_det);
 
@@ -170,17 +180,17 @@ else
                                 <?php echo $row1['raised_by'] . "(" . $row1['emp_code'] . ")"; ?>
                             </td>
                             <td>
-                                <?php echo $row['job_raise_time']; ?>
+                                <?php echo date('d-m-Y', strtotime($row['job_raise_time'])); ?>
                             </td>
                             <td>
                                 <?php echo $row['description'] . "\n" . $row['job_desc']; ?>
                             </td>
                             <td>
-                                <?php echo $row['job_comp_time']; ?>
+                                <?php echo date('d-m-Y', strtotime($row['job_comp_time'])); ?>
                             </td>
 
                             <td style="text-align:center;">
-                                <?php if(isset($row['tech_pending_timestamp']) || isset($row['tech_closure_timestamp'])) { ?>
+                                <?php if (isset($row['tech_pending_timestamp']) || isset($row['tech_closure_timestamp'])) { ?>
                                     <p class="del_btn"
                                         style="background-color: green; color: white; padding: 5px 10px; border-radius: 5px; margin-bottom: 0px; text-align: center; display: inline-block;"
                                         disabled>Closed</p><br>
@@ -200,35 +210,25 @@ else
                                         disabled>Closed</p><br>
                                 <?php } ?>
                             </td>
-
-                           
-
-                            
                         </tr>
                     <?php } ?>
                 </tbody>
             </table>
-            <?php
-
-            //display the links to the pages
-            for ($page = 1; $page <= $number_of_pages; $page++)
-                echo '<a href="jobs_table.php?page=' . $page . '">' . $page . '</a>';
-            ?>
         </div>
     </div>
 
-    <!-- <div class="table-footer pa4">
-        <div class="fl w-75 tl">
-            <button class="btn btn-warning">
-                <h4><i class="bi bi-file-earmark-pdf"> Export</i></h4>
-            </button>
-        </div>
-        <div class="fl w-25 tr">
-            <button class="btn btn-light">
-                <h4><a href="tanker.php">Add Tanker</a></h4>
-            </button>   
-        </div>
-    </div> -->
+    <!-- Pagination numbers -->
+    <nav aria-label="Page navigation example">
+        <ul class="pagination pagination justify-content-center">
+            <li class="page-item"><a class="page-link" href="tech_jobs.php?page=<?= $Previous; ?>" aria-label="Previous"><span aria-hidden="true">&laquo; Previous</span></a></li>
+            <?php for ($i = 1; $i <= $pages; $i++) : ?>
+                <li class="page-item"><a class="page-link" href="tech_jobs.php?page=<?= $i ?>">
+                        <?php echo $i; ?>
+                    </a></li>
+            <?php endfor; ?>
+            <li class="page-item"><a class="page-link" href="tech_jobs.php?page=<?= $Next; ?>" aria-label="Next"><span aria-hidden="true">Next &raquo;</span></a></li>
+        </ul>
+    </nav>
 
     <!-- Footer -->
     <footer class="tc f3 lh-copy mt4">Copyright &copy; 2022 Delta@STAAR. All Rights Reserved</footer>

@@ -1,7 +1,8 @@
 <?php 
     include('../../controllers/includes/common.php'); 
     include('../../controllers/accomodation_controller.php'); 
-    if (!isset($_SESSION["emp_id"]))header("location:../../views/login.php");
+    if (!isset($_SESSION["emp_id"]))    header("location:../../index.php");
+
     // check rights
     $isPrivilaged = 0;
     $rights = unserialize($_SESSION['rights']);
@@ -245,8 +246,7 @@ die('<script>alert("You dont have access to this page, Please contact admin");wi
     $limit=10;
     $page=isset($_GET['page'])?$_GET['page']:1;
     $start=($page-1) * $limit;
-    $sqli .=" LIMIT $start,$limit";
-    $result=mysqli_query($conn,$sqli);
+   
 
     $q1="SELECT * FROM accomodation";
     $result1=mysqli_query($conn,$q1);
@@ -261,11 +261,14 @@ die('<script>alert("You dont have access to this page, Please contact admin");wi
     if($page<=1)
     {
         $Previous=1;
+        $start=0;
     }
     if($page>=$pages)
     {
         $Next=$pages;
     }
+    $sqli .=" LIMIT $start,$limit";
+    $results=mysqli_query($conn,$sqli);
     /* ************************************************ */
     ?>
 
@@ -287,8 +290,8 @@ die('<script>alert("You dont have access to this page, Please contact admin");wi
                     <th scope="col">Building Status</th>
                     <th scope="col">Location</th>
                     <th scope="col">Gender</th>
-                    <th scope="col">Total Capacity/Current Occupancy</th>
-                    <th scope="col">Number of Rooms</th>
+                    <th scope="col">Current Occupancy/Total Capacity</th>
+                    <th scope="col">Max Number of Rooms</th>
                     <th scope="col">Warden</th>
                     <!-- <th scope="col">Occupied Rooms</th>
                     <th scope="col">Availabe Rooms</th> -->
@@ -306,7 +309,7 @@ die('<script>alert("You dont have access to this page, Please contact admin");wi
                     ?>
                     <?php
                     $accid = $row['acc_id'];
-                    $queryRoom = mysqli_query($conn, "SELECT * FROM rooms WHERE acc_id = '$accid'");
+                    $queryRoom = mysqli_query($conn, "SELECT acc_id,SUM(`current_room_occupancy`) AS tot_occ FROM rooms GROUP BY acc_id HAVING acc_id='$accid'");
                     $room_row = mysqli_fetch_assoc($queryRoom);
                     ?>
                         
@@ -326,10 +329,10 @@ die('<script>alert("You dont have access to this page, Please contact admin");wi
                         </td>
                         <td>
                             <?php 
-                            if(@$room_row['current_room_occupancy'] == NULL){
-                                @$room_row['current_room_occupancy'] = 0;
+                            if(@$room_row['tot_occ'] == NULL){
+                                $room_row['tot_occ'] = 0;
                             }
-                            echo $row['tot_capacity']; ?>/<?php echo @$room_row['current_room_occupancy'] ; ?>
+                            echo @$room_row['tot_occ']; ?>/<?php echo $row['tot_capacity'] ; ?>
                         </td>
                         <td>
                             <?php echo $row['no_of_rooms']; ?>
@@ -349,7 +352,8 @@ die('<script>alert("You dont have access to this page, Please contact admin");wi
                                 class="edit_btn"> <i class="bi bi-pencil-square" style="font-size: 1.2rem; color: black;"></i>
                             </a>
                             <?php } ?>
-                            &nbsp;
+                        </td>
+                        <td>
                             <?php if($isPrivilaged>=4){ ?>
                             <a class="del_btn" onclick="myfunc('<?php echo $row['acc_code']; ?>')"><i class="bi bi-trash" style="font-size: 1.2rem; color: black;"></i></a>
                             <form id="del_response" action="../../controllers/accomodation_controller.php" method="get">

@@ -107,12 +107,12 @@
                             <td>
                                 <label>From : </label>
                                 <input type="date" name="start_date" value="<?php if (isset($_POST['start_date']))
-                                echo $_POST['start_date']; ?>">
+                                                                                echo $_POST['start_date']; ?>">
                                 <br>
                                 <br>
                                 <label>To : </label>
                                 <input type="date" name="end_date" value="<?php if (isset($_POST['end_date']))
-                                echo $_POST['end_date']; ?>"><br>
+                                                                                echo $_POST['end_date']; ?>"><br>
 
                             </td>
                         </tr>
@@ -138,6 +138,8 @@
     $limit = 10;
     $page = isset($_GET['page']) ? $_GET['page'] : 1;
     $start = ($page - 1) * $limit;
+    $sql .= " LIMIT $start,$limit";
+    $result = mysqli_query($conn, $sql);
 
     $q1 = "SELECT * FROM jobs";
     $result1 = mysqli_query($conn, $q1);
@@ -152,16 +154,11 @@
     if($page<=1)
     {
         $Previous=1;
-        $start=0;
     }
     if($page>=$pages)
     {
         $Next=$pages;
     }
-   
-    $sql .= " LIMIT $start,$limit";
-    echo $sql;
-    $result = mysqli_query($conn, $sql);
     /* ************************************************ */
 
     ?>
@@ -279,7 +276,7 @@
                             </td>
 
                             <td style="text-align:center;">
-                                <?php if (isset($row['sec_closure_timestamp']) || isset($row['warden_closure_timestamp'])) { ?>
+                                <?php if (isset($row['sec_closure_timestamp']) || isset($row3['warden_closure_timestamp'])) { ?>
 
                                     <p class="del_btn" style="background-color: green; color: white; padding: 5px 10px; border-radius: 5px; margin-bottom: 0px; text-align: center; display: inline-block;" disabled>Closed</p><br>
                                     <span class="closure-label">Security</span>
@@ -296,7 +293,7 @@
                             </td>
 
                             <td style="text-align:center;">
-                                <?php if (isset($row['sec_closure_timestamp']) || isset($row['warden_closure_timestamp'])) { ?>
+                                <?php if (isset($row['sec_closure_timestamp']) || isset($row3['warden_closure_timestamp'])) { ?>
 
                                     <p class="del_btn" style="background-color: green; color: white; padding: 5px 10px; border-radius: 5px; margin-bottom: 0px; text-align: center; display: inline-block;" disabled>Closed</p><br>
                                     <span class="closure-label">Warden</span>
@@ -321,13 +318,13 @@
     <!-- Pagination numbers -->
     <nav aria-label="Page navigation example">
         <ul class="pagination pagination justify-content-center">
-            <li class="page-item"><a class="page-link" href="jobs_table.php?page=<?= $Previous; ?>" aria-label="Previous"><span aria-hidden="true">&laquo; Previous</span></a></li>
+            <li class="page-item"><a class="page-link" href="test.php?page=<?= $Previous; ?>" aria-label="Previous"><span aria-hidden="true">&laquo; Previous</span></a></li>
             <?php for ($i = 1; $i <= $pages; $i++) : ?>
-                <li class="page-item"><a class="page-link" href="jobs_table.php?page=<?= $i ?>">
+                <li class="page-item"><a class="page-link" href="test.php?page=<?= $i ?>">
                         <?php echo $i; ?>
                     </a></li>
             <?php endfor; ?>
-            <li class="page-item"><a class="page-link" href="jobs_table.php?page=<?= $Next; ?>" aria-label="Next"><span aria-hidden="true">Next &raquo;</span></a></li>
+            <li class="page-item"><a class="page-link" href="test.php?page=<?= $Next; ?>" aria-label="Next"><span aria-hidden="true">Next &raquo;</span></a></li>
         </ul>
     </nav>
 

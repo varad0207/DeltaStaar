@@ -3,18 +3,21 @@ include('../../controllers/includes/common.php');
 include('../../controllers/employee_outing_controller.php');
 
 if (!isset($_SESSION["emp_id"]))
-  header("location:../../views/login.php");
+header("location:../../index.php");
 $isPrivilaged = 0;
 $rights = unserialize($_SESSION['rights']);
 
-if ($rights['rights_vaccination'] > 1) {
-  $isPrivilaged = $rights['rights_vaccination'];
+if ($rights['rights_employee_outing'] > 1) {
+  $isPrivilaged = $rights['rights_employee_outing'];
 } else
   die('<script>alert("You dont have access to this page, Please contact admin");window.location = history.back();</script>');
 
 if ($isPrivilaged == 5 || $isPrivilaged == 4)
   die('<script>alert("You dont have access to this page, Please contact admin");window.location = history.back();</script>');
 
+// if($_SESSION['is_superadmin'] == 1){
+//     die('<script>alert("You dont have access to this page, Please contact security");window.location = history.back();</script>');
+// }
 
 if (isset($_GET['edit'])) {
   $emp_code = $_GET['edit'];
@@ -91,11 +94,11 @@ if (isset($_GET['edit'])) {
               </div>
               <div class="col-md-12 pa2">
                 <label for="quantity">Outing Start Date</label>
-                <input class="form-control" type="date" name="start_date" value="<?= $outing_date ?>" required>
+                <input class="form-control" type="date" name="start_date" value="<?= $outing_date ?>" min="<?= date('Y-m-d'); ?>" required>
               </div>
               <div class="col-md-12 pa2">
                 <label for="quantity">Arrival Date (Optional)</label>
-                <input class="form-control" type="date" name="arrival_date" value="<?= $arrival_date ?>">
+                <input class="form-control" type="date" name="arrival_date" value="<?= $arrival_date ?>" min="<?= date('Y-m-d'); ?>">
               </div>
               <div class="col-md-12 pa2">
                 <label for="type">Type of Outing</label>

@@ -1,6 +1,8 @@
-<?php include('../../controllers/includes/common.php'); ?>
-<?php include('../../controllers/visitor_log_controller.php');
-if (!isset($_SESSION["emp_id"])) header("location:../../views/login.php");
+<?php 
+include('../../controllers/includes/common.php');
+include('../../controllers/visitor_log_controller.php');
+if (!isset($_SESSION["emp_id"])) 
+header("location:../../index.php");
 $isPrivilaged = 0;
 $rights = unserialize($_SESSION['rights']);
 if ($rights['rights_visitor_log'] > 1) {
@@ -43,60 +45,72 @@ if($_SESSION['is_superadmin'] == 1){
             <div class="form-holder">
                 <div class="form-content">
                     <div class="form-items">
-                        <h1 class="f2 lh-copy tc" style="color: white;">VISITOR LOG FORM</h1>
+                        <h1 class="f2 lh-copy tc" style="color: white;">Visitor Log</h1>
                         <form class="f3 lh-copy" id="myForm" action="../../controllers/visitor_log_controller.php" method="post">
-                            <label for="visitor-type">Visitor Type:</label>
-                            <select id="visitor-type" name="visitor-type">
-                                <option value="Nota">Select Visitor Category</option>
-                                <option name="emp" value="employee">Employee</option>
-                                <option name="non-emp" value="non-employee">Non Employee</option>
-                            </select>
-                            <small></small>
-                            <br><br>
+                            <div class="col-md-12 pa2">
+                                <label for="visitor-type">Visitor Type:</label>
+                                <select id="visitor-type" name="visitor-type">
+                                    <option value="Nota">Select Visitor Category</option>
+                                    <option name="emp" value="employee">Employee</option>
+                                    <option name="non-emp" value="non-employee">Non Employee</option>
+                                </select>
+                                <small></small>
+                            </div>
 
-                            <!-- div for employee form -->
                             <div id="employee-form" style="display: none;">
-                                <div class="col-md-12">
+                                <div class="col-md-12 pa2">
                                     <label for="empcode">Employee Code</label>
                                     <select class="form-select mt-3" name="emp_id" id="empid">
-                                        <option selected disabled value="" name="employee_code">Select Employee Code</option>
-                                        <?php $emp_code = mysqli_query($conn, "SELECT * FROM employee");
-                                        foreach ($emp_code as $row) { ?>
-                                            <option name="employee_code" value="<?= $row["emp_id"] ?>"><?= $row["emp_code"]; ?></option>
-                                        <?php
-                                        }
-                                        ?>
+                                            <option selected disabled value="" name="employee_code">Select Employee Code</option>
+                                            <?php $emp_code = mysqli_query($conn, "SELECT * FROM employee");
+                                            foreach ($emp_code as $row) { ?>
+                                                <option name="employee_code" value="<?= $row["emp_id"] ?>"><?= $row["emp_code"]; ?></option>
+                                            <?php
+                                            }
+                                            ?>
                                     </select>
-                                    <div class="invalid-feedback">Please select an option!</div>
-                                    <br>
                                 </div>
-                                <label name="vehicle-no"for="vehicle-number">Vehicle Number:</label>
-                                <input type="text" id="vehicle-number" name="vehiclenumber">
-                                <br><br>
-                                <label name="purpose"for="purpose-of-visit">Purpose of Visit:</label>
-                                <input type="text" id="purpose-of-visit" name="purposeofvisit">
-                                <small></small>
-                            </div>
 
-                            <!-- div for non-employee form -->
+                                <div class="col-md-12 pa2">
+                                    <label for="vehicle-number">Vehicle Number</label>
+                                    <input type="text" name="evehiclenumber" id="empVNo" placeholder="Vehicle Number">
+                                    <small></small>
+                                </div>
+
+                                <div class="col-md-12 pa2">
+                                    <label for="purpose-of-visit">Purpose of Visit</label>
+                                    <input type="text" name="epurposeofvisit" id="empPurpose" placeholder="Purpose">
+                                    <small></small>
+                                </div>
+                            </div>
+                            
                             <div id="non-employee-form" style="display: none;">
-                                <label for="visitor-name">Visitor Name:</label>
-                                <input type="text" id="visitor-name" name="visitor-name" placeholder="Your Name">
-                                <br><br>
-                                <label for="vehicle-number">Vehicle Number:</label>
-                                <input type="text" id="vehicle-number" name="vehicle-number" placeholder="Your Vehicle Number">
-                                <br><br>
-                                <label for="purpose-of-visit">Purpose of Visit:</label>
-                                <input type="text" id="purpose-of-visit" name="purpose-of-visit" placeholder="Purpose of the visit">
-                                <br><br>
-                                <label for="visitor-phone">Visitor Phone:</label>
-                                <br><br>
-                                <input type="tel" id="visitor-phone" name="visitor-phone" placeholder="Phone Number" style="border-radius:5px;">
-                                <small></small>
+                                <div class="col-md-12 pa2">
+                                    <label for="visitorName">Visitor Name</label>
+                                    <input type="text" name="visitor-name" id="visitor" placeholder="Visitor Name">
+                                    <small></small>
+                                </div>
+
+                                <div class="col-md-12 pa2">
+                                    <label for="vehicleno">Vehicle Number</label>
+                                    <input type="text" name="vehiclenumber" id="nempVNo" placeholder="Vehicle Number">
+                                    <small></small>
+                                </div>
+
+                                <div class="col-md-12 pa2">
+                                    <label for="purpose">Purpose of Visit</label>
+                                    <input type="text" name="purposeofvisit" id="nempPurpose" placeholder="Purpose">
+                                    <small></small>
+                                </div>
+
+                                <div class="col-md-12 pa2">
+                                    <label for="phone">Phone Number</label>
+                                    <input type="text" name="visitor-phone" id="visitor-phone" placeholder="Phone Number">
+                                    <small></small>
+                                </div>
                             </div>
 
-                            <br><br>
-                            <div class="mb-3 tc">
+                            <div class="form-button mt-3 tc">
                                 <button class="btn btn-warning f3 lh-copy" style="color: white;" type="submit" name="submit" value="submit">Submit</button>
                             </div>
                         </form>
@@ -106,6 +120,8 @@ if($_SESSION['is_superadmin'] == 1){
         </div>
     </div>
 
+
+    <footer class="tc f3 lh-copy mt4">Copyright &copy; 2022 Delta@STAAR. All Rights Reserved</footer>
 
     <script>
         const visitorTypeSelect = document.getElementById('visitor-type');
@@ -125,7 +141,17 @@ if($_SESSION['is_superadmin'] == 1){
             }
         });
     </script>
+    <script src="../../js/form.js"></script>
+    <script src="../../js/Sidebar/sidebar.js"></script>
     <script src="../../js/validateVisitor.js"></script>
+    <script src="https://kit.fontawesome.com/319379cac6.js" crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
+        integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
+        crossorigin="anonymous"></script>
+    <!-- JavaScript Bundle with Popper -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4"
+        crossorigin="anonymous"></script>
 </body>
 
 </html>

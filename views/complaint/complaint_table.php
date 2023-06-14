@@ -2,7 +2,7 @@
 include('../../controllers/includes/common.php');
 include('../../controllers/complaint_controller.php');
 if (!isset($_SESSION["emp_id"]))
-    header("location:../../views/login.php");
+    header("location:../../index.php");
 // check rights
 $isPrivilaged = 0;
 $rights = unserialize($_SESSION['rights']);
@@ -11,7 +11,7 @@ if ($rights['rights_complaints'] > 0) {
 } else
     die('<script>alert("You dont have access to this page, Please contact admin");window.location = history.back();</script>');
 $isWarden = 0;
-$check = mysqli_query($conn, "select emp_id from employee where emp_id not in(select emp_id from technician) and emp_id not in (select emp_id from security) and emp_id='{$_SESSION['emp_id']}'");
+$check = mysqli_query($conn, "select emp_id,emp_code from employee where emp_id not in(select emp_id from technician) and emp_id not in (select emp_id from security) and emp_id='{$_SESSION['emp_id']}' and emp_code in (select warden_emp_code from accomodation)");
 if (mysqli_num_rows($check) > 0)
     $isWarden = 1;
 ?>
@@ -199,7 +199,20 @@ if (mysqli_num_rows($check) > 0)
     </div>
 
     <?php
-    $sqli = "SELECT * FROM complaint_type join complaints ON type=type_id join accomodation USING(acc_code) WHERE 1=1";
+    $part="";
+    
+    if($isWarden){
+        $empc="'{$_SESSION['emp_code']}'";
+    }
+    else if($_SESSION['is_superadmin']) {       
+        $empc="accomodation.warden_emp_code";
+    }
+else{
+    $empc="accomodation.warden_emp_code";
+
+    $part=" and emp_code='{$_SESSION['emp_code']}'";
+}
+    $sqli = "SELECT * FROM complaint_type join complaints ON type=type_id join accomodation USING(acc_code) where accomodation.warden_emp_code=$empc and 1=1 ";
     $sort_condition = "";
     if (isset($_GET['sort_alpha'])) {
         if ($_GET['sort_alpha'] == "a-z") {
@@ -230,6 +243,7 @@ if (mysqli_num_rows($check) > 0)
         $sqli .=" ) ";
         
     }
+    $sqli.=$part;
     $sqli .=" ORDER BY complaint_type $sort_condition";
     // echo $sqli;
     $complaint_qry=$sqli;
@@ -240,6 +254,7 @@ if (mysqli_num_rows($check) > 0)
     $limit=10;
     $pages = 0;
     $page=isset($_GET['page'])?$_GET['page']:1;
+    $start=($page-1) * $limit;
     //check if current page is less then or equal 1
     if(($page>=1)||($page<$pages))
     {
@@ -250,7 +265,7 @@ if (mysqli_num_rows($check) > 0)
     if($page<1)
     {
         $Previous=1;
-        $start = 1;
+        $start = 0;
     }
     if($page>=$pages)
     {
@@ -259,8 +274,17 @@ if (mysqli_num_rows($check) > 0)
     $sqli .=" LIMIT $start,$limit";
     $result=mysqli_query($conn,$sqli);
 
+//     if($isWarden){
+//     $sess_emp_code=mysqli_fetch_assoc(mysqli_query($conn, "SELECT * FROM employee where emp_id='{$_SESSION["emp_id"]}'"));
+//     // $c1=mysqli_fetch_assoc(mysqli_query($conn, "SELECT * FROM employee where complaints.emp_code=employee.emp_code"));
+//     // $c2=mysqli_fetch_assoc(mysqli_query($conn, "SELECT * FROM rooms where rooms.id='{$c1['room_id']}'"));
+//     // $c3=mysqli_fetch_assoc(mysqli_query($conn, "SELECT * FROM accomodation where accomodation.acc_id='{$c2['acc_id']}'"));
+//     $q1="SELECT * FROM complaints where {$sess_emp_code['']}";
+//     $result1=mysqli_query($conn,$q1);
+// }else{
     $q1="SELECT * FROM complaints";
     $result1=mysqli_query($conn,$q1);
+// }
     $total=mysqli_num_rows($result1);
     $pages=ceil($total/$limit);
     
@@ -305,7 +329,8 @@ if (mysqli_num_rows($check) > 0)
                         </tr>
                     </thead>
                     <tbody>
-                        <?php while ($row = mysqli_fetch_array($result1)) { 
+                        <?php 
+                        while ($row = mysqli_fetch_array($result)) { 
                             $emp_code = $row['emp_code'];
                             $EmpName_row = mysqli_fetch_assoc(mysqli_query($conn, "SELECT * FROM employee where emp_code='$emp_code'"));
                             $EmployeeRoom_row = mysqli_fetch_assoc(mysqli_query($conn, "SELECT * FROM rooms WHERE id = '{$EmpName_row['room_id']}'"));
@@ -314,7 +339,7 @@ if (mysqli_num_rows($check) > 0)
                             $complaintType_row = mysqli_fetch_assoc(mysqli_query($conn, "SELECT * FROM complaint_type where type_id='{$row['type']}'"));
                     
                             $query = mysqli_query($conn, "SELECT * FROM jobs WHERE complaint_id = '{$row['id']}'");
-
+                            
                             ?>
                             <tr class="live">
                                 <td>
@@ -366,7 +391,13 @@ if (mysqli_num_rows($check) > 0)
                                 </td>
                                 <!-- fetch acc name -->
                                 <td>
-                                    <?php echo $AccName_row['acc_name']; ?>
+                                <?php
+                                    if (isset($AccName_row['acc_name']) && !empty($AccName_row['acc_name'])) {
+                                        echo $AccName_row['acc_name'];
+                                    } else {
+                                        echo $AccName_row['acc_name'] = 'N/A';
+                                    }
+                                ?>
                                 </td>
                                 <td>
                                     <?php
@@ -388,7 +419,7 @@ if (mysqli_num_rows($check) > 0)
                                             <!-- <b style="color: green;">Job Raised</b> -->
                                             <?php
                                         } else {
-                                            if ($isWarden) {
+                                            if ($isWarden || $_SESSION['is_superadmin']) {
                                                 if ($rights['rights_jobs'] > 1 && $rights['rights_jobs'] != 5 && $rights['rights_jobs'] != 4) { ?>
                                                     <a href="jobs.php?raise=<?php echo $row['id']; ?>" class="edit_btn"
                                                         style="color: red;">Raise Job</a>

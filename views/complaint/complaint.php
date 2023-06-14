@@ -109,7 +109,7 @@ if (isset($_GET['edit'])) {
     </style>
 </head>
 
-<body class="b ma2" onload="fetchList()">
+<body class="b ma2">
     <!-- Sidebar and Navbar-->
     <?php
     if (isset($_SESSION['emp_id'])) {
@@ -155,7 +155,7 @@ if (isset($_GET['edit'])) {
                                 $accomodations = json_encode($accdata);
                                 ?>
                                 <?php if (isset($_SESSION['emp_id']) && !$update) { ?>
-                                    <input class="form-control" id="empcode" value="<?php echo "{$_SESSION['user']} - {$_SESSION['emp_code']}";?>" type="text" name="emp_code" style="pointer-events: auto;">
+                                    <input class="form-control" id="empcode" value="<?php echo "{$_SESSION['user']} - {$_SESSION['emp_code']}"; ?>" type="text" name="emp_code" style="pointer-events: auto;">
                                 <?php } else { ?>
                                     <!-- <input class="form-control" id="empcode" value="" type="text" name="emp_code" placeholder="Start typing" required autocomplete="off" list="options_list" onkeyup="GetDetail(this.value)"> -->
                                     <div class="autocomplete form-control">
@@ -171,13 +171,16 @@ if (isset($_GET['edit'])) {
                                     <div class="invalid-feedback">field cannot be blank!</div>
                                 <?php } ?>
                             </div>
+
+
                             <div class="col-md-12 pa2">
                                 <label for="type">Accomodation name</label>
                                 <div class="autocomplete form-control">
-                                    <input class="autocompleteinp form-control" id="acccode" type="text" name="acc" placeholder="Accomodation name" required>
+                                    <input class="autocompleteinp form-control" id="acccode" type="text" name="acc" placeholder="Accomodation name" required onfocus="myfunc1()">
                                 </div>
                                 <div class="invalid-feedback">Please select an option!</div>
                             </div>
+
                             <div class="col-md-12 pa2">
                                 <label for="type">Complaint Type</label>
                                 <select class="form-select mt-3" name="category" required>
@@ -243,6 +246,17 @@ if (isset($_GET['edit'])) {
                 }
             });
             inp.addEventListener("keydown", function(e) {
+                if (e.keyCode === 13) {
+                    // insert the value for the autocomplete text field:
+                    var selectedOption = document.querySelector(".autocomplete-active");
+                    if (selectedOption) {
+                        inp.value = selectedOption.getElementsByTagName("input")[0].value;
+                    }
+                    // close the list of autocompleted values
+                    closeAllLists();
+                }
+            });
+            inp.addEventListener("keydown", function(e) {
                 var x = document.getElementById(this.id + "autocomplete-list");
                 if (x) x = x.getElementsByTagName("div");
                 if (e.keyCode == 40) {
@@ -291,6 +305,41 @@ if (isset($_GET['edit'])) {
     <script>
         var accomodations = <?php echo $accomodations; ?>;
         autocomplete(document.getElementById("acccode"), accomodations);
+    </script>
+    <script>
+        function myfunc1() {
+            var empCode = $("#empcode").val();
+            var empCode = empCode.split(' - ')[1];
+            // console.log("value:", empCode);
+            var script = document.createElement("script");
+            script.src = "https://code.jquery.com/jquery-3.6.0.min.js";
+            document.head.appendChild(script);
+
+            // Your code using jQuery
+            $(document).ready(function() {
+                $.ajax({
+                    type: "POST",
+                    url: "../../controllers/validation.php",
+                    data: {
+                        emp_code_room_check: empCode
+                    },
+                    success: function(response) {
+                        // Handle the response from the PHP file
+                        // console.log("Response:", response);
+                        var accCode = document.querySelector("#acccode");
+                        if (response == "  !") {
+                            accCode.readOnly = false;
+
+
+                        } else {
+                            accCode.value = response;
+                            accCode.readOnly = true;
+                        }
+                    }
+                });
+            });
+
+        }
     </script>
     <script src="../../js/form.js"></script>
     <!-- JavaScript Bundle with Popper -->

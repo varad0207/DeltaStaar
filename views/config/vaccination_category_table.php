@@ -3,7 +3,7 @@
     include('../../controllers/vaccination_category_controller.php'); 
 
     if (!isset($_SESSION["emp_id"]))
-    header("location:../../views/login.php");
+    header("location:../../index.php");
 if ($_SESSION['is_superadmin'] == 0)
     die('<script>alert("You dont have access to this page, Please contact admin");window.location = history.back();</script>');
 
@@ -90,7 +90,7 @@ if ($_SESSION['is_superadmin'] == 0)
                 <thead>
                     <tr>
                     <th scope="col">Categroy Name</th>
-                    <th scope="col" colspan="2">Action</th>
+                    <th scope="col" colspan="1">Action</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -99,10 +99,10 @@ if ($_SESSION['is_superadmin'] == 0)
                             <?php echo $row['category_name']; ?>
                         </td>
                         <td>
-                            <a href="./vaccination_category.php?edit=<?php echo '%27' ?><?php echo $row['category_id']; ?><?php echo '%27' ?>"
+                            <!-- <a href="./vaccination_category.php?edit=<?php echo '%27' ?><?php echo $row['category_id']; ?><?php echo '%27' ?>"
                                 class="edit_btn"><i class="bi bi-pencil-square" style="font-size: 1.2rem; color: black;"></i>
-                            </a>
-                                &nbsp;
+                            </a> -->
+                                <!-- &nbsp; -->
                             <a href="../../controllers/vaccination_category_controller.php?del=<?php echo '%27' ?><?php echo $row['category_id']; ?><?php echo '%27' ?>"
                                 class="del_btn"><i class="bi bi-trash" style="font-size: 1.2rem; color: black;"></i>
                             </a>

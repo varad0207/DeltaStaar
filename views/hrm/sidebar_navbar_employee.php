@@ -3,7 +3,7 @@
 <?php
 
 if (!isset($_SESSION["emp_id"]))
-    header("location:../../views/login.php");
+header("location:../../index.php");
 
 if (isset($_GET['edit'])) {
     $emp_code = $_GET['edit'];

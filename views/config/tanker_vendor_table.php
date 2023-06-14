@@ -2,7 +2,7 @@
     include('../../controllers/includes/common.php'); 
     include('../../controllers/tanker_vendor_controller.php'); 
     if (!isset($_SESSION["emp_id"]))
-    header("location:../../views/login.php");
+    header("location:../../index.php");
 if ($_SESSION['is_superadmin'] == 0)
     die('<script>alert("You dont have access to this page, Please contact admin");window.location = history.back();</script>');
 
@@ -83,7 +83,7 @@ if ($_SESSION['is_superadmin'] == 0)
                 </div>
         <?php endif ?>
         
-        <?php $results = mysqli_query($conn, "SELECT * FROM tanker_vendors"); ?>
+        <?php $results = mysqli_query($conn, "SELECT id,vname,company_name,number,address,price,DATE(time_stamp) AS dt FROM tanker_vendors"); ?>
 
         <div class="pa1 table-responsive">
             <table class="table table-bordered tc">
@@ -93,6 +93,7 @@ if ($_SESSION['is_superadmin'] == 0)
                     <th scope="col">Comapny Name</th>
                     <th scope="col">Vendor Adress</th>
                     <th scope="col">Number</th>
+                    <th scope="col">Date Added</th>
                     <th scope="col" colspan="2">Action</th>
                     </tr>
                 </thead>
@@ -111,7 +112,9 @@ if ($_SESSION['is_superadmin'] == 0)
                         <td>
                             <?php echo $row['number']; ?>
                         </td>
-                        
+                        <td>
+                            <?php echo $row['dt']; ?>
+                        </td>
                         <td>
                             <a href="./tanker_vendor.php?edit=<?php echo '%27' ?><?php echo $row['id']; ?><?php echo '%27' ?>"
                                 class="edit_btn"> <i class="bi bi-pencil-square" style="font-size: 1.2rem; color: black;"></i>

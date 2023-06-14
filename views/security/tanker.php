@@ -1,6 +1,7 @@
 <?php include('../../controllers/includes/common.php'); ?>
 <?php include('../../controllers/tanker_controller.php'); 
-    if (!isset($_SESSION["emp_id"]))header("location:../../views/login.php");
+    if (!isset($_SESSION["emp_id"]))
+    header("location:../../index.php");
     $isPrivilaged = 0;
     $rights = unserialize($_SESSION['rights']);
     if ($rights['rights_tankers'] > 1) {
@@ -10,7 +11,7 @@
     if ($isPrivilaged == 5 || $isPrivilaged == 4)
         die('<script>alert("You dont have access to this page, Please contact admin");window.location = history.back();</script>');
     $update = false;
-$accid = $empsecid = $venid = $quality = $qty = $billno = $timestamp = "";
+$accid = $empsecid = $venid = $quality = $qty = $billno = $amount = $timestamp = "";
 if(isset($_GET['edit']))
 {
     $id = $_GET['edit'];
@@ -24,6 +25,7 @@ if(isset($_GET['edit']))
     $quality = $n['quality_check'];
     $qty = $n['qty'];
     $billno = $n['bill_no'];
+    $amount = $n['amount'];
     $timestamp = $n['timestamp'];
 }
 ?>
@@ -63,11 +65,11 @@ if(isset($_GET['edit']))
             <div class="form-content">
                 <div class="form-items">
                     <h1 class="f2 lh-copy tc" style="color: white;">Tanker Entry</h1>
-                    <form class="requires-validation f3 lh-copy" novalidate action="../../controllers/tanker_controller.php" method="post" name="myForm">
+                    <form class="f3 lh-copy" id="myForm" action="../../controllers/tanker_controller.php" method="post" name="myForm">
                 
                         <div class="col-md-12 pa2">
                             <label for="accid">Accomodation</label>
-                            <select class="form-select mt-3" name="acc" required>
+                            <select class="form-select mt-3" name="acc" id="acc">
                                     <option selected disabled value="">Select Accomodation</option>
                                     <?php
                                     $acc_code=mysqli_query($conn, "SELECT * FROM accomodation");
@@ -82,13 +84,12 @@ if(isset($_GET['edit']))
                                     }
                                 ?>
                             </select>
-                            <span class="valid-feedback" style="color: gold; font-size: 14px;">Field is valid!</span>
-                            <span class="invalid-feedback" style="color: gold; font-size: 14px;">Field cannot be empty!</span>
+                            <small></small>
                         </div>
 
                         <div class="col-md-12 pa2">
                             <label for="empsecid">Employee Security ID</label>
-                            <select class="form-select mt-3" name="sec" required>
+                            <select class="form-select mt-3" name="sec" id="sec">
                                     <option selected disabled value="">Select Security</option>
                                     <?php
                                     $sec_id = mysqli_query($conn, "SELECT * FROM security");
@@ -105,14 +106,13 @@ if(isset($_GET['edit']))
                                     
                                     ?>
                             </select>
-                            <span class="valid-feedback" style="color: gold; font-size: 14px;">Field is valid!</span>
-                            <span class="invalid-feedback" style="color: gold; font-size: 14px;">Field cannot be empty!</span>
+                            <small></small>
                         </div>
 
                         <div class="col-md-12 pa2">
-                            <label for="vendorid">Vendor ID</label>
-                            <select class="form-select mt-3" name="ven" required>
-                                    <option selected disabled value="">Select Vendor</option>
+                            <label for="vendorid">Vendor Name</label>
+                            <select class="form-select mt-3" name="ven" id="ven">
+                                    <option selected disabled value="">Select Name</option>
                                     <?php
                                     $vendor_id = mysqli_query($conn, "SELECT * FROM tanker_vendors");
                                     
@@ -121,20 +121,19 @@ if(isset($_GET['edit']))
                                     <?php if($venid == $row['id']) { ?>
                                         selected
                                     <?php } ?>
-                                    ><?= $row["id"];?></option>	
+                                    ><?= $row["vname"];?></option>	
                                     <?php
                                     }
                                     ?>
                             </select>
-                            <span class="valid-feedback" style="color: gold; font-size: 14px;">Field is valid!</span>
-                            <span class="invalid-feedback" style="color: gold; font-size: 14px;">Field cannot be empty!</span>
+                            <small></small>
                         </div>
 
                         
                       
                        <div class="col-md-12 pa2">
                         <label for="quality">Quality</label>
-                            <select class="form-select mt-3" name="quality" required>
+                            <select class="form-select mt-3" name="quality" id="quality">
                                     <option selected disabled value="">Select Quality</option>
                                     <option value="Yes"
                                     <?php if($quality == 'Yes') { ?>
@@ -147,22 +146,25 @@ if(isset($_GET['edit']))
                                     <?php } ?>
                                     >Not Ok</option>
                             </select>
-                            <span class="valid-feedback" style="color: gold; font-size: 14px;">Field is valid!</span>
-                            <span class="invalid-feedback" style="color: gold; font-size: 14px;">Field cannot be empty!</span>
+                            <small></small>
                        </div>
 
                        <div class="col-md-12 pa2">
                         <label for="quantity">Quantity</label>
-                            <input class="form-control" type="number" name="qty" placeholder="7000" value="<?= $qty ?>" required onkeyup = "return validateNum(document.myForm.qty.value,0)">
-                            <span class="valid-field"></span>
-                            <span class="invalid-feedback" style="color: gold; font-size: 14px;">Field cannot be empty!</span>
+                            <input class="form-control" type="number" name="qty" placeholder="7000" value="<?= $qty ?>" id="qty">
+                            <small></small>
                       </div>
 
                       <div class="col-md-12 pa2">
                         <label for="billno">Delivery Challan</label>
-                            <input class="form-control" type="text" name="billno" placeholder="Bill Number" value="<?= $billno ?>" required>
-                            <span class="valid-feedback" style="color: gold; font-size: 14px;">Field is valid!</span>
-                            <span class="invalid-feedback" style="color: gold; font-size: 14px;">Field cannot be empty!</span>
+                            <input class="form-control" type="text" name="billno" placeholder="Bill Number" value="<?= $billno ?>" id="challan">
+                            <small></small>
+                      </div>
+
+                      <div class="col-md-12 pa2">
+                        <label for="amount">Amount (In Thousand Rupees)</label>
+                            <input class="form-control" type="text" name="amount" placeholder="Amount" value="<?= $amount ?>" id="amt">
+                            <small></small>
                       </div>
                        
                         
@@ -185,7 +187,7 @@ if(isset($_GET['edit']))
 
     <script src="../../js/form.js"></script>
     <script src="../../js/Sidebar/sidebar.js"></script>
-    <script src="../../js/validateAcc.js"></script>
+    <script src="../../js/validateTanker.js"></script>
     <script src="https://kit.fontawesome.com/319379cac6.js" crossorigin="anonymous"></script>
     <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
         integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"

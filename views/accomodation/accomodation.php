@@ -3,7 +3,7 @@ include('../../controllers/accomodation_controller.php');
 
 
 if (!isset($_SESSION["emp_id"]))
-    header("location:../../views/login.php");
+header("location:../../index.php");
 
 // check rights
 $isPrivilaged = 0;
@@ -172,7 +172,7 @@ if (isset($_GET['edit'])) {
                                     <?php if($warden_emp_code == $row['emp_code']) { ?>
                                         selected
                                     <?php } ?>>
-                                    <?= $row["emp_code"]; ?>
+                                    <?= $row["emp_code"]. "-" .$row["fname"]." ".$row["lname"]; ?>
                                     </option>
                                 <?php } ?>
                                 </select>
