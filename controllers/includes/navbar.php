@@ -21,7 +21,7 @@ if (basename($_SERVER['PHP_SELF'], '.php') != "dashboard")
             aria-labelledby="offcanvasNavbarLabel">
             <div class="offcanvas-header">
                 <h5 class="offcanvas-title" id="offcanvasNavbarLabel" style="color: #fff;">Delta@STAAR</h5>
-                <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close">
+                <button style="color: #fff;" type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close">
                 </button>
             </div>
 
@@ -104,22 +104,64 @@ if (basename($_SERVER['PHP_SELF'], '.php') != "dashboard")
                                 <a class="nav-link active1" aria-current="page" onclick="window.history.back()">Back</a>
                             </li>
                         <?php } ?>
-                        <li class="nav-item">
+                        <!-- <li class="nav-item">
                             <a class="nav-link active1" id="adminlogin"
                                 href="../<?php echo $link; ?>controllers/logout.php">Log Out</a>
-                        </li>
+                        </li> -->
 
-                        <li class="nav-item p-1 ps-3" style="align-items: center; justify-content:center; display:flex;">
+                        <!-- <li class="nav-item p-1 ps-3" style="align-items: center; justify-content:center; display:flex;">
                         <?php  $EmpName_row = mysqli_fetch_assoc(mysqli_query($conn, "SELECT * FROM employee where emp_code='{$_SESSION['emp_code']}'")); ?>                         
                             <i class="bi bi-person-circle" style="font-size: 1.8rem; color: #FFFF8C; padding:0;"></i>
                                              
+                        </li> -->
+                       
+                        <li class="nav-item">
+                            
+                            <div class="dropdown">
+                                <a class="nav-link active" id="dropdownMenuButton" aria-haspopup="true"
+                                    aria-expanded="false" aria-current="page" href="#" data-toggle="dropdown"
+                                    data-placement="bottom" title="Configure">
+                                                                       
+                                    
+                                    <p style="color: #FFFF8C; font-size:1.5rem; margin-bottom: 0;">
+                                        <i class="bi bi-person-circle" style="font-size: 1.8rem; color: #FFFF8C; padding:0;"></i>
+                                        <?= $EmpName_row['fname'] ?>
+                                    </p>
+                                    
+                                </a>
+                                <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuButton">
+                                    <a class="dropdown-item" href="../views/config/reset_password.php">Change Password</a>
+                                    <a class="dropdown-item" id="adminlogin" href="../<?php echo $link; ?>controllers/logout.php">Log Out</a>
+                                </div>
+                            </div>
                         </li>
-                        <li class="nav-item p-2">
-                            <p class="" style="color: #FFFF8C; font-size:1.5rem; margin-bottom:0px; align-items: center; justify-content:center; display:flex;">
-                                <?= $EmpName_row['fname'] ?>
-                            </p>
-                        </li>
-                    </ul>
+                        <!-- 
+                        <li class="nav-item">
+                            <div class="btn-group">
+                                <button type="button" class="btn btn-secondary dropdown-toggle" data-bs-toggle="dropdown" data-bs-display="static" aria-expanded="false">
+                                    <i class="bi bi-person-circle" style="font-size: 1.8rem; color: #FFFF8C; padding:0;"></i>
+                                    
+                                    <p style="color: #FFFF8C; font-size:1.5rem; margin-bottom:0px; align-items: center; justify-content:center; display:flex;">
+                                        <?= $EmpName_row['fname'] ?>
+                                    </p>
+                                </button>
+                                <ul class="dropdown-menu dropdown-menu-lg-end">
+                                    <li>
+                                        <button class="dropdown-item" type="button" href="../views/config/reset_password.php">
+                                            Change Password
+                                        </button>
+                                    </li>
+                                    <li>
+                                        <button class="dropdown-item" type="button" id="adminlogin" href="../<?php echo $link; ?>controllers/logout.php">
+                                            Log Out
+                                        </button>
+                                    </li>
+                                </ul>
+                            </div>
+                        </li> -->
+                        
+                        
+
                 </div>
             <?php } ?>
         </div>

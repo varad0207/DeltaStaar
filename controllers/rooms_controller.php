@@ -32,6 +32,7 @@ if (isset($_POST['submit'])|| isset($_POST['update'])||isset($_GET['del'])) {
         
         if($room_count < $no_of_rooms){
             mysqli_query($conn,"INSERT INTO rooms (acc_id, room_no, room_capacity) VALUES ('$acc_id', '$room_no', '$room_cap')");
+            $last_insert_id = mysqli_insert_id($conn);
             mysqli_query($conn,"UPDATE accomodation SET tot_capacity = '$tot_cap' WHERE acc_id = '$acc_id'");
             $_SESSION['message'] = "Room Info Added!";
         }
@@ -41,7 +42,7 @@ if (isset($_POST['submit'])|| isset($_POST['update'])||isset($_GET['del'])) {
         
         //change tracking code
         if($AllowTrackingChanges){
-            mysqli_query($conn,"insert into change_tracking_rooms (user,type,acc_id,room_id, room_no, room_capacity) values ('{$_SESSION['user']}','Insert','$acc_code','$last_insert_id', '$room_no', '$room_cap')");
+            mysqli_query($conn,"insert into change_tracking_rooms (user,type,acc_id,room_id, room_no, room_capacity) values ('{$_SESSION['user']}','Insert','$acc_id','$last_insert_id', '$room_no', '$room_cap')");
         }
 
         header("location: ../views/accomodation/room_table.php");

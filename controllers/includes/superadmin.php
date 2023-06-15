@@ -1,6 +1,6 @@
 <div class="portal">
 
-    <div class="charts-container">
+    <div class="charts-container px-4">
        
         <?php       
         include '../charts/accommodationStatus_Bar.php';
@@ -9,27 +9,7 @@
         include '../charts/waterTankers_Line.php';
 
         ?>
-         <!-- <div class="chartBox">
-            <h4 class="text-center p-2">Accommodation Status</h4>
-            <canvas id="myChart"></canvas>
-        </div>
-        <div class="chartBox">
-            <h4 class="text-center p-2">Complaint Types</h4>
-            <canvas id="myDoughnutChart"></canvas>
-        </div>
-        <div class="chartBox">
-            <h4 class="text-center p-2">Complaint Status</h4>
-            <canvas id="myPieChart"></canvas>
-        </div>
-        <div class="chartBox">
-            <h4 class="text-center p-2">Water Tankers Line</h4>
-            <canvas id="myLineChart"></canvas>
-        </div>
         
-        <div class="chartBox">
-            <h4 class="text-center p-2">Nos.of trips by each Vendor</h4>
-            <canvas id=""></canvas>
-        </div>-->
         
     </div>
 

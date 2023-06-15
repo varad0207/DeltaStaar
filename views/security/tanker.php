@@ -92,14 +92,14 @@ if(isset($_GET['edit']))
                             <select class="form-select mt-3" name="sec" id="sec">
                                     <option selected disabled value="">Select Security</option>
                                     <?php
-                                    $sec_id = mysqli_query($conn, "SELECT * FROM security");
+                                    $sec_id = mysqli_query($conn, "SELECT * FROM security join employee using(emp_id)");
                                     
                                     foreach ($sec_id as $row){ ?>
                                     <option name="sec" value="<?= $row["emp_id"]?>"
                                     <?php if($empsecid == $row['emp_id']) { ?>
                                         selected
                                     <?php } ?>
-                                    ><?= $row["emp_id"];?>
+                                    ><?php echo($row['emp_code']." - ".$row['fname']);?>
                                     </option>	
                                     <?php
                                     }

@@ -57,9 +57,6 @@ if ($_SESSION['is_superadmin']) {
     <link rel="stylesheet" href="../css/style1.css">
     <link rel="stylesheet" href="../css/overlay.css">
 
-    <!-- Tachyons -->
-    <link rel="stylesheet" href="https://unpkg.com/tachyons@4.12.0/css/tachyons.min.css" />
-
     <!--Favicon link-->
     <link rel="icon" type="image/x-icon" href="../images/logo-no-name-circle.png">
 

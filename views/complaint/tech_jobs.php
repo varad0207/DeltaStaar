@@ -203,7 +203,7 @@ else
                             <td style="text-align:center;">
                                 <?php if (!isset($row['tech_closure_timestamp'])) { ?>
                                     <a href="../../controllers/complaint_controller.php?tech=<?php echo '%27' ?><?php echo $row['complaint_id']; ?><?php echo '%27' ?>"
-                                        class="del_btn">Done</a><br>
+                                        class="del_btn">Close</a><br>
                                 <?php } else { ?>
                                     <p class="del_btn"
                                         style="background-color: green; color: white; padding: 5px 10px; border-radius: 5px; margin-bottom: 0px; text-align: center; display: inline-block;"

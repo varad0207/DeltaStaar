@@ -256,8 +256,8 @@
                                 <div class="progress-bar">
                                     <?php if ($is_closed) { ?>
                                         <div style="width: 100%" class="progress">100%</div>
-                                    <?php } elseif ($progress_text == 'over-dew') { ?>
-                                        <div style="width: 90%" class="progress">over-dew</div>
+                                    <?php } elseif ($progress_text == 'overdue') { ?>
+                                        <div style="width: 90%" class="progress">overdue</div>
                                     <?php } else { ?>
                                         <div style="width: <?= $progress ?>%" class="progress"><?= $progress_text ?></div>
                                     <?php } ?>
@@ -270,7 +270,7 @@
 
                             <td style="text-align:center;">
                                 <?php if (!isset($row['tech_closure_timestamp'])) { ?>
-                                    <a href="../../controllers/complaint_controller.php?tech=<?php echo '%27' ?><?php echo $row['complaint_id']; ?><?php echo '%27' ?>" class="del_btn">Done</a><br>
+                                    <a href="../../controllers/complaint_controller.php?tech=<?php echo '%27' ?><?php echo $row['complaint_id']; ?><?php echo '%27' ?>" class="del_btn">Close</a><br>
                                     <span class="closure-label">Technician</span>
                                 <?php } else { ?>
                                     <p class="del_btn" style="background-color: green; color: white; padding: 5px 10px; border-radius: 5px; margin-bottom: 0px; text-align: center; display: inline-block;" disabled>Closed</p><br>
@@ -286,10 +286,10 @@
 
                                 <?php } else if (!isset($row['sec_closure_timestamp'])) { ?>
                                     <?php if (!isset($row['tech_closure_timestamp'])) { ?>
-                                        <a href="../../controllers/complaint_controller.php?sec=<?php echo '%27' ?><?php echo $row['complaint_id']; ?><?php echo '%27' ?>" class="btn btn-secondary" style="pointer-events: none;">Done</a><br>
+                                        <a href="../../controllers/complaint_controller.php?sec=<?php echo '%27' ?><?php echo $row['complaint_id']; ?><?php echo '%27' ?>" class="btn btn-secondary" style="pointer-events: none;">Close</a><br>
                                         <span class="closure-label">Security</span>
                                     <?php } else { ?>
-                                        <a href="../../controllers/complaint_controller.php?sec=<?php echo '%27' ?><?php echo $row['complaint_id']; ?><?php echo '%27' ?>" class="del_btn">Done</a><br>
+                                        <a href="../../controllers/complaint_controller.php?sec=<?php echo '%27' ?><?php echo $row['complaint_id']; ?><?php echo '%27' ?>" class="del_btn">Close</a><br>
                                         <span class="closure-label">Security</span>
                                     <?php } ?>
                                 <?php } ?>
@@ -303,10 +303,10 @@
 
                                 <?php } else if (!isset($row['warden_closure_timestamp'])) { ?>
                                     <?php if (!isset($row['tech_closure_timestamp'])) { ?>
-                                        <a href="../../controllers/complaint_controller.php?warden=<?php echo '%27' ?><?php echo $row['complaint_id']; ?><?php echo '%27' ?>" class="btn btn-secondary" style="pointer-events: none;">Done</a><br>
+                                        <a href="../../controllers/complaint_controller.php?warden=<?php echo '%27' ?><?php echo $row['complaint_id']; ?><?php echo '%27' ?>" class="btn btn-secondary" style="pointer-events: none;">Close</a><br>
                                         <span class="closure-label">Warden</span>
                                     <?php } else { ?>
-                                        <a href="../../controllers/complaint_controller.php?warden=<?php echo '%27' ?><?php echo $row['complaint_id']; ?><?php echo '%27' ?>" class="del_btn">Done</a><br>
+                                        <a href="../../controllers/complaint_controller.php?warden=<?php echo '%27' ?><?php echo $row['complaint_id']; ?><?php echo '%27' ?>" class="del_btn">Close</a><br>
                                         <span class="closure-label">Warden</span>
                                     <?php } ?>
                                 <?php } ?>

@@ -17,7 +17,7 @@ $solved = json_encode($count_array);
 <!-- Refer accommodationStatus_Bar.php if needed -->
 <div class="chartBox">
     <h4 class="text-center p-2">Complaint Summary</h4>
-    <canvas id="myPieChart"></canvas>
+    <canvas id="myPieChart" style="width:25%;"></canvas>
 </div>
 <!-- </div> -->
 

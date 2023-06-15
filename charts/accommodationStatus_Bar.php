@@ -85,23 +85,23 @@ unset($pdo);
             label: 'Capacity',
             //Write SQL
             data: solved,
-            backgroundColor: 'rgba(75, 192, 192, 0.5)',
-            borderColor: 'rgb(75, 192, 192)',
+            backgroundColor: 'rgb(255, 99, 132)',
+            borderColor: 'rgb(255, 255, 255)',
             borderWidth: 1
         }, {
             //Total Occupied dataset of each Accommodation
             label: 'Occupied',
             //Write SQL
             data: solved1,
-            backgroundColor: 'rgba(54, 162, 235, 0.5)',
-            borderColor: 'rgb(54, 162, 235)',
+            backgroundColor: 'rgb(54, 162, 235)',
+            borderColor: 'rgb(255, 255, 255)',
             borderWidth: 1
         }, {
             label: 'Available',
             //Write SQL
             data: solved2,
-            backgroundColor: 'rgba(153, 102, 255, 0.5)',
-            borderColor: 'rgb(153, 102, 255)',
+            backgroundColor: 'rgb(255, 205, 86)',
+            borderColor: 'rgb(255, 255, 255)',
             borderWidth: 1
         }]
     };

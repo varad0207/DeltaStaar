@@ -14,6 +14,14 @@ $isWarden = 0;
 $check = mysqli_query($conn, "select emp_id,emp_code from employee where emp_id not in(select emp_id from technician) and emp_id not in (select emp_id from security) and emp_id='{$_SESSION['emp_id']}' and emp_code in (select warden_emp_code from accomodation)");
 if (mysqli_num_rows($check) > 0)
     $isWarden = 1;
+
+    $isSecurity = 0;
+    $c = mysqli_query($conn,"SELECT emp_id,emp_code FROM employee WHERE emp_id IN(SELECT emp_id FROM security)");
+    if(mysqli_num_rows($c) > 0)
+    {
+        $isSecurity = 1;
+        $fetch1 = mysqli_fetch_array(mysqli_query($conn, "SELECT distinct acc_id as id from rooms join accomodation using(acc_id) join security using(acc_id) where  security.emp_id='{$_SESSION['emp_id']}' "));
+    }
 ?>
 
 <!DOCTYPE html>
@@ -200,18 +208,25 @@ if (mysqli_num_rows($check) > 0)
 
     <?php
     $part="";
-    
+    $empc="accomodation.warden_emp_code";
+
     if($isWarden){
         $empc="'{$_SESSION['emp_code']}'";
     }
     else if($_SESSION['is_superadmin']) {       
         $empc="accomodation.warden_emp_code";
     }
+    else if($isSecurity){
+        $empc="accomodation.warden_emp_code";
+        $part=" and complaints.acc_id={$fetch1['id']}";
+
+    }
 else{
     $empc="accomodation.warden_emp_code";
 
     $part=" and emp_code='{$_SESSION['emp_code']}'";
 }
+
     $sqli = "SELECT * FROM complaint_type join complaints ON type=type_id join accomodation USING(acc_code) where accomodation.warden_emp_code=$empc and 1=1 ";
     $sort_condition = "";
     if (isset($_GET['sort_alpha'])) {
