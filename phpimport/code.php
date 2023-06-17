@@ -57,7 +57,8 @@ if (isset($_POST['employee'])) {
         $spreadsheet = \PhpOffice\PhpSpreadsheet\IOFactory::load($inputFileName);
         $data = $spreadsheet->getActiveSheet()->toArray();
 
-        foreach ($data as $row) {
+        foreach ($data as $row) 
+        {
             $emp_code = $row['0'];
             $fname = $row['1'];
             $mname = $row['2'];
