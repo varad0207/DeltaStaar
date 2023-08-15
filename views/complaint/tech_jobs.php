@@ -111,30 +111,22 @@ else
           WHERE technician_id ='{$technician_id['id']}' and 1=1";
     $q1 = $sql;
     /* ***************** PAGINATION ***************** */
-    $limit = 10;
+    if (!isset($_GET['page'])) {
+        $_SESSION['query'] = $sql;
+    }
+    $limit = 100;
     $page = isset($_GET['page']) ? $_GET['page'] : 1;
     $start = ($page - 1) * $limit;
-    $result1 = mysqli_query($conn, $q1);
-    $total = mysqli_num_rows($result1);
+    // Calculate total records based on filters
+    $rowcount=mysqli_num_rows(mysqli_query($conn,$_SESSION['query']));
+    $total = $rowcount;
     $pages = ceil($total / $limit);
-    //check if current page is less then or equal 1
-    if(($page>1)||($page<$pages))
-    {
-        $Previous=$page-1;
-        $Next=$page+1;
-    }
-    if($page<=1)
-    {
-        $Previous=1;
-        $Next=1;
-        $start=0;
-    }
-    if($page>=$pages)
-    {
-        $Next=$pages;
-    }
-    $sql .= " LIMIT $start,$limit";
-    // echo $sql;
+    // Adjust page numbers to prevent out-of-range values
+    $page = max(1, min($page, $pages));
+    $Previous = ($page > 1) ? $page - 1 : 1;
+    $Next = ($page < $pages) ? $page + 1 : $pages;
+    $sql = $_SESSION['query'];
+    $sql .= " LIMIT $start, $limit";
     $result = mysqli_query($conn, $sql);
     /* ************************************************ */
 
@@ -142,8 +134,9 @@ else
     <div class="table-div">
         <?php if (isset($_SESSION['message'])): ?>
             <div class="msg">
+            <script>alert("<?php echo $_SESSION['message'];?>");</script>
                 <?php
-                echo $_SESSION['message'];
+                // echo $_SESSION['message'];
                 unset($_SESSION['message']);
                 ?>
             </div>
@@ -232,6 +225,12 @@ else
 
     <!-- Footer -->
     <footer class="tc f3 lh-copy mt4">Copyright &copy; 2022 Delta@STAAR. All Rights Reserved</footer>
+
+    <!-- For dropdown function in User Profile / Config button -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js"
+            integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+            crossorigin="anonymous">
+    </script>
 </body>
 
 </html>

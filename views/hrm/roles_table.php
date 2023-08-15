@@ -85,8 +85,9 @@ $all = '<span class="material-icons">done_all</span>';
     <div class="table-div">
         <?php if (isset($_SESSION['message'])) : ?>
             <div class="msg">
+            <script>alert("<?php echo $_SESSION['message'];?>");</script>
                 <?php
-                echo $_SESSION['message'];
+                // echo $_SESSION['message'];
                 unset($_SESSION['message']);
                 ?>
             </div>
@@ -131,35 +132,6 @@ $all = '<span class="material-icons">done_all</span>';
         </div>
 
         <?php
-    /* ***************** PAGINATION ***************** */
-    // $limit=10;
-    // $pages = 0;
-    // $page=isset($_GET['page'])?$_GET['page']:1;
-    // $start=($page-1) * $limit;
-    // //check if current page is less then or equal 1
-    // if(($page>=1)||($page<$pages))
-    // {
-        
-    //     $Previous=$page-1;
-    //     $Next=$page+1;
-    // }
-    // if($page<=1)
-    // {
-    //     $Previous=1;
-    //     $Next=1;
-    //     $start=0;
-    // }
-    // if($page>=$pages)
-    // {
-    //     $Next=$pages;
-    // }
-    // $sql .=" LIMIT $start,$limit";
-    // $result=mysqli_query($conn,$sql);
-
-    // $q1="SELECT * FROM roles";
-    // $result1=mysqli_query($conn,$q1);
-    // $total=mysqli_num_rows($result1);
-    // $pages=ceil($total/$limit);
     $limit = 10;
     $page = isset($_GET['page']) && is_numeric($_GET['page']) ? $_GET['page'] : 1;
 
@@ -421,14 +393,20 @@ $all = '<span class="material-icons">done_all</span>';
     <footer class="tc f3 lh-copy mt4">Copyright &copy; 2022 Delta@STAAR. All Rights Reserved</footer>
     <?php include '../../controllers/overlays/deleteOverlay.php'; ?>
 
-<script>
-    function myfunc(code) {
-        console.log(code);
-        document.getElementById("hidden-del").value = code;
-        document.getElementById('overlay').style.display = 'flex';
-    }
-</script>
+    <script>
+        function myfunc(code) {
+            console.log(code);
+            document.getElementById("hidden-del").value = code;
+            document.getElementById('overlay').style.display = 'flex';
+        }
+    </script>
     <script src="../../js/Overlay.js"></script>
+
+    <!-- For dropdown function in User Profile / Config button -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js"
+            integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+            crossorigin="anonymous">
+    </script>
 
 </body>
 

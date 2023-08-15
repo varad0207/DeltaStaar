@@ -1,3 +1,56 @@
+<?php 
+
+include('../../controllers/includes/common.php');
+
+if (!isset($_SESSION["emp_id"]))
+header("location:../../index.php");
+// check rights
+
+if($_SESSION['is_superadmin']){
+    
+}
+
+$isPrivilaged = 0;
+$rights = unserialize($_SESSION['rights']);
+if ($rights['rights_jobs'] > 0) {
+    $isPrivilaged = $rights['rights_jobs'];
+} 
+// else
+//     die('<script>alert("You dont have access to this page, Please contact admin");window.location = history.back();</script>');
+// $sql = mysqli_query($conn, "SELECT * FROM security where emp_id='{$_SESSION['emp_id']}' ");
+// if(mysqli_num_rows($sql)==0) 
+//     die('<script>alert("You dont have access to this page, Please contact admin");window.location = history.back();</script>');
+
+
+if(!$isPrivilaged)
+    die('<script>alert("You dont have access to this page, Please contact admin");window.location = history.back();</script>');
+// $sql = mysqli_query($conn, "SELECT * FROM security where emp_id='{$_SESSION['emp_id']}' ");
+// if(mysqli_num_rows($sql)>0) 
+//     header("location:security_jobs.php");
+
+$sql = mysqli_query($conn, "SELECT * FROM technician where emp_id='{$_SESSION['emp_id']}' ");
+if(mysqli_num_rows($sql)>0) 
+    header("location:tech_jobs.php");
+
+
+
+    $isWarden = 0;
+    $isSecurity = 0;
+    $c = mysqli_query($conn,"SELECT emp_id,emp_code FROM employee WHERE emp_id IN(SELECT emp_id FROM security)");
+        if(mysqli_num_rows($c) > 0)
+        {
+            $isSecurity = 1;
+            $fetch1 = mysqli_fetch_array(mysqli_query($conn, "SELECT distinct acc_id as id from rooms join accomodation using(acc_id) join security using(acc_id) where  security.emp_id='{$_SESSION['emp_id']}' "));
+        }
+    $check = mysqli_query($conn, "select emp_id,emp_code from employee where emp_id not in(select emp_id from technician) and emp_id not in (select emp_id from security) and emp_id='{$_SESSION['emp_id']}' and emp_code in (select warden_emp_code from accomodation)");
+    if (mysqli_num_rows($check) > 0){
+        $isWarden = 1;
+    
+        $isSecurity = 0;
+    }
+        
+
+?>
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -133,43 +186,34 @@
         $sql = substr($sql, 0, strripos($sql, "or"));
         $sql .= " ) ";
     }
-
     /* ***************** PAGINATION ***************** */
-    $limit = 10;
+    if (!isset($_GET['page'])) {
+        $_SESSION['query'] = $sql;
+    }
+    $limit = 100;
     $page = isset($_GET['page']) ? $_GET['page'] : 1;
     $start = ($page - 1) * $limit;
-    $q1 = "SELECT * FROM jobs";
-    $result1 = mysqli_query($conn, $q1);
-    $total = mysqli_num_rows($result1);
+    // Calculate total records based on filters
+    $rowcount=mysqli_num_rows(mysqli_query($conn,$_SESSION['query']));
+    $total = $rowcount;
     $pages = ceil($total / $limit);
-    //check if current page is less then or equal 1
-    if(($page>1)||($page<$pages))
-    {
-        $Previous=$page-1;
-        $Next=$page+1;
-    }
-    if($page<=1)
-    {
-        $Previous=1;
-        $Next=1;
-        $start=0;
-    }
-    if($page>=$pages)
-    {
-        $Next=$pages;
-    }
-   
-    $sql .= " LIMIT $start,$limit";
-    // echo $sql;
+    // Adjust page numbers to prevent out-of-range values
+    $page = max(1, min($page, $pages));
+    $Previous = ($page > 1) ? $page - 1 : 1;
+    $Next = ($page < $pages) ? $page + 1 : $pages;
+    $sql = $_SESSION['query'];
+    $sql .= " LIMIT $start, $limit";
     $result = mysqli_query($conn, $sql);
     /* ************************************************ */
+    // echo $sql;
 
     ?>
     <div class="table-div">
         <?php if (isset($_SESSION['message'])) : ?>
             <div class="msg">
+            <script>alert("<?php echo $_SESSION['message'];?>");</script>
                 <?php
-                echo $_SESSION['message'];
+                // echo $_SESSION['message'];
                 unset($_SESSION['message']);
                 ?>
             </div>
@@ -269,7 +313,10 @@
                             </td>
 
                             <td style="text-align:center;">
-                                <?php if (!isset($row['tech_closure_timestamp'])) { ?>
+                                <?php if (!isset($row['tech_closure_timestamp']) && $isSecurity) { ?>
+                                    <a href="../../controllers/complaint_controller.php?tech=<?php echo '%27' ?><?php echo $row['complaint_id']; ?><?php echo '%27' ?>" class="btn btn-secondary" style="pointer-events: none;">Close</a><br>
+                                        <span class="closure-label">Technician</span>
+                                <?php }elseif (!isset($row['tech_closure_timestamp'])) { ?>
                                     <a href="../../controllers/complaint_controller.php?tech=<?php echo '%27' ?><?php echo $row['complaint_id']; ?><?php echo '%27' ?>" class="del_btn">Close</a><br>
                                     <span class="closure-label">Technician</span>
                                 <?php } else { ?>
@@ -302,7 +349,10 @@
                                     <span class="closure-label">Warden</span>
 
                                 <?php } else if (!isset($row['warden_closure_timestamp'])) { ?>
-                                    <?php if (!isset($row['tech_closure_timestamp'])) { ?>
+                                    <?php if (!isset($row['tech_closure_timestamp']) && $isSecurity) { ?>
+                                        <a href="../../controllers/complaint_controller.php?warden=<?php echo '%27' ?><?php echo $row['complaint_id']; ?><?php echo '%27' ?>" class="btn btn-secondary" style="pointer-events: none;">Close</a><br>
+                                        <span class="closure-label">Warden</span>
+                                    <?php } elseif (!isset($row['tech_closure_timestamp'])) { ?>
                                         <a href="../../controllers/complaint_controller.php?warden=<?php echo '%27' ?><?php echo $row['complaint_id']; ?><?php echo '%27' ?>" class="btn btn-secondary" style="pointer-events: none;">Close</a><br>
                                         <span class="closure-label">Warden</span>
                                     <?php } else { ?>
@@ -341,6 +391,13 @@
 
         <!-- Footer -->
         <footer class="tc f3 lh-copy mt4">Copyright &copy; 2022 Delta@STAAR. All Rights Reserved</footer>
+    </div>
+
+    <!-- For dropdown function in User Profile / Config button -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js"
+            integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+            crossorigin="anonymous">
+    </script>
 </body>
 
 </html>

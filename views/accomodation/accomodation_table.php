@@ -97,36 +97,14 @@ die('<script>alert("You dont have access to this page, Please contact admin");wi
             <br>
             <table class="table">
                 <thead>
-                    <th>Location : </th>
+                    <!-- <th>Location : </th> -->
                     <th>Building Status : </th>
                     <th>Gender : </th>
                     <th>Sort By : </th>
                 </thead>
                 <tbody>
                     <tr>
-                        <td>
-                            <?php
-                            $fetch_loc = "SELECT * FROM acc_locations";
-                            $fetch_loc_run = mysqli_query($conn, $fetch_loc);
-                            if (mysqli_num_rows($fetch_loc_run) > 0) {
-                                foreach ($fetch_loc_run as $loc) {
-                                    $checked1 = [];
-                                    if (isset($_GET['location'])) {
-                                        $checked1 = $_GET['location'];
-                                    }
-                            ?>
-                                    <div>
-                                        <input type="checkbox" name="location[]" value="<?= $loc['loc_id']; ?>" <?php if (in_array($loc['loc_id'], $checked1)) 
-                                        {echo "checked";}?>>
-                                        <label><?= $loc['location']; ?></label>
-                                    </div>
-                            <?php
-                                }
-                            } else {
-                                echo "No location available";
-                            }
-                            ?>
-                        </td>
+                        
                         <td>
                         <?php
                             $fetch_stat = "SELECT DISTINCT(bldg_status) FROM accomodation";
@@ -194,7 +172,7 @@ die('<script>alert("You dont have access to this page, Please contact admin");wi
 
     <!-- Displaying Database Table -->
         <?php 
-        $sqli = "SELECT * FROM accomodation t1 JOIN acc_locations t2 ON t1.location=t2.loc_id JOIN employee t3 ON t1.warden_emp_code=t3.emp_code WHERE 1=1";
+        $sqli = "SELECT * FROM accomodation t1 JOIN employee t3 ON t1.warden_emp_code=t3.emp_code WHERE 1=1";
         $sort_condition = "";
         if (isset($_GET['sort_alpha'])) {
             if ($_GET['sort_alpha'] == "a-z") {
@@ -203,17 +181,7 @@ die('<script>alert("You dont have access to this page, Please contact admin");wi
                 $sort_condition = "DESC";
             }
         }
-        if(isset($_GET['location'])){
-            $location_checked = [];
-            $location_checked = $_GET['location'];
-            $sqli .= " AND ( ";
-            foreach($location_checked as $row_loc){
-                $sqli .= " t1.location=$row_loc OR"; 
-            }
-            $sqli =substr($sqli,0,strripos($sqli,"OR"));  
-            $sqli .=" ) ";
-            
-        }
+        
         if(isset($_GET['bldg_status'])){
             $stat_checked = [];
             $stat_checked = $_GET['bldg_status'];
@@ -243,41 +211,59 @@ die('<script>alert("You dont have access to this page, Please contact admin");wi
         
     <?php
     /* ***************** PAGINATION ***************** */
-    $limit=10;
-    $page=isset($_GET['page'])?$_GET['page']:1;
-    $start=($page-1) * $limit;
-    $q1="SELECT * FROM accomodation";
-    $result1=mysqli_query($conn,$q1);
-    $total=mysqli_num_rows($result1);
-    $pages=ceil($total/$limit);
-    //check if current page is less then or equal 1
-    if(($page>1)||($page<$pages))
-    {
-        $Previous=$page-1;
-        $Next=$page+1;
+    // $limit=10;
+    // $page=isset($_GET['page'])?$_GET['page']:1;
+    // $start=($page-1) * $limit;
+    // $q1="SELECT * FROM accomodation";
+    // $result1=mysqli_query($conn,$q1);
+    // $total=mysqli_num_rows($result1);
+    // $pages=ceil($total/$limit);
+    // //check if current page is less then or equal 1
+    // if(($page>1)||($page<$pages))
+    // {
+    //     $Previous=$page-1;
+    //     $Next=$page+1;
+    // }
+    // if($page<=1)
+    // {
+    //     $Previous=1;
+    //     $Next=1;
+    //     $start=0;
+    // }
+    // if($page>=$pages)
+    // {
+    //     $Next=$pages;
+    // }
+    // $sqli .=" LIMIT $start,$limit";
+    /* ***************** PAGINATION ***************** */
+    if (!isset($_GET['page'])) {
+        $_SESSION['query'] = $sqli;
     }
-    if($page<=1)
-    {
-        $Previous=1;
-        $Next=1;
-        $start=0;
-    }
-    if($page>=$pages)
-    {
-        $Next=$pages;
-    }
-    $sqli .=" LIMIT $start,$limit";
-    $results=mysqli_query($conn,$sqli);
+    $limit = 5;
+    $page = isset($_GET['page']) ? $_GET['page'] : 1;
+    $start = ($page - 1) * $limit;
+    // Calculate total records based on filters
+    $rowcount=mysqli_num_rows(mysqli_query($conn,$_SESSION['query']));
+    $total = $rowcount;
+    $pages = ceil($total / $limit);
+    // Adjust page numbers to prevent out-of-range values
+    $page = max(1, min($page, $pages));
+    $Previous = ($page > 1) ? $page - 1 : 1;
+    $Next = ($page < $pages) ? $page + 1 : $pages;
+    $sqli = $_SESSION['query'];
+    $sqli .= " LIMIT $start, $limit";
+    $results = mysqli_query($conn, $sqli);
     /* ************************************************ */
     ?>
 
         <div class="table-div">
         <?php if (isset($_SESSION['message'])): ?>
                 <div class="msg">
-                    <?php
-                    echo $_SESSION['message'];
-                    unset($_SESSION['message']);
-                    ?>
+                <script>alert("<?php echo $_SESSION['message'];?>");</script>
+                <?php
+                // echo $_SESSION['message'];
+                unset($_SESSION['message']);
+                ?>
                 </div>
         <?php endif ?>    
         <div class="pa1 table-responsive">
@@ -287,7 +273,7 @@ die('<script>alert("You dont have access to this page, Please contact admin");wi
                     <th scope="col">Accomodation Code</th>
                     <th scope="col">Accomodation Name</th>
                     <th scope="col">Building Status</th>
-                    <th scope="col">Location</th>
+                    <!-- <th scope="col">Location</th> -->
                     <th scope="col">Gender</th>
                     <th scope="col">Current Occupancy/Total Capacity</th>
                     <th scope="col">Max Number of Rooms</th>
@@ -320,9 +306,7 @@ die('<script>alert("You dont have access to this page, Please contact admin");wi
                         <td>
                             <?php echo $row['bldg_status']; ?>
                         </td>
-                        <td>
-                            <?php echo $row['location']; ?>
-                        </td>
+                        
                         <td>
                             <?php echo $row['gender']; ?>
                         </td>
@@ -352,14 +336,14 @@ die('<script>alert("You dont have access to this page, Please contact admin");wi
                             </a>
                             <?php } ?>
                         </td>
-                        <td>
-                            <?php if($isPrivilaged>=4){ ?>
-                            <a class="del_btn" onclick="myfunc('<?php echo $row['acc_code']; ?>')"><i class="bi bi-trash" style="font-size: 1.2rem; color: black;"></i></a>
+                        <!-- <td>
+                            <?php //if($isPrivilaged>=4){ ?>
+                            <a class="del_btn" onclick="myfunc('<?php //echo $row['acc_code']; ?>')"><i class="bi bi-trash" style="font-size: 1.2rem; color: black;"></i></a>
                             <form id="del_response" action="../../controllers/accomodation_controller.php" method="get">
                                             <input type="hidden" id="hidden-del" name="del" value="" />
                                     </form>
-                            <?php } ?>
-                        </td>
+                            <?php //} ?>
+                        </td>  -->
                     </tr>
                     <?php } 
                     }
@@ -382,8 +366,8 @@ die('<script>alert("You dont have access to this page, Please contact admin");wi
     </nav>
     <div class="table-footer pa4">
         <div class="fl w-75 tl">
-            <form action="excel.php" method="post">
-                <button class="btn btn-warning" name="excel" value="<?php echo $temp_qry;?>"><h4><i class="bi bi-file-earmark-pdf"> Export</i></h4></button>
+            <form action="../../Phpspreadsheet/export.php" method="post">
+                <button class="btn btn-warning" name="acc_export" value="<?php echo $temp_qry;?>"><h4><i class="bi bi-file-earmark-pdf"> Export</i></h4></button>
             </form>
         </div>
         <?php if($isPrivilaged>1 && $isPrivilaged!=5 && $isPrivilaged!=4){ ?>
@@ -417,8 +401,10 @@ die('<script>alert("You dont have access to this page, Please contact admin");wi
         integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
         crossorigin="anonymous"></script>
     <!-- JavaScript Bundle with Popper -->
-    <!-- <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"
-        integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4"
-        crossorigin="anonymous"></script> -->
+    <!-- For dropdown function in User Profile / Config button -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js"
+            integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+            crossorigin="anonymous">
+    </script>
 </body>
 </html>

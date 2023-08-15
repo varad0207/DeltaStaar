@@ -1,29 +1,19 @@
-<?php
+<?php 
 include('../../controllers/includes/common.php');
-include('../../controllers/tanker_controller.php');
+include('../../controllers/visitor_log_controller.php');
 if (!isset($_SESSION["emp_id"])) 
 header("location:../../index.php");
 $isPrivilaged = 0;
-$isWarden = 0;
-$isSecurity = 0;
 $rights = unserialize($_SESSION['rights']);
-
-if ($rights['rights_visitor_log'] > 0) {
+if ($rights['rights_visitor_log'] > 1) {
     $isPrivilaged = $rights['rights_visitor_log'];
 } else
     die('<script>alert("You dont have access to this page, Please contact admin");window.location = history.back();</script>');
-$sec = mysqli_query($conn, "select acc_id from security where emp_id='{$_SESSION['emp_id']}'");
-$ward = mysqli_query($conn, "select acc_id from accomodation where warden_emp_code='{$_SESSION['emp_code']}'");
-if (mysqli_num_rows($sec) > 0) {
-    $isSecurity = 1;
-    $aid = mysqli_fetch_array($sec);
+if ($isPrivilaged == 5 || $isPrivilaged == 4)
+    die('<script>alert("You dont have access to this page, Please contact admin");window.location = history.back();</script>');
+if($_SESSION['is_superadmin'] == 1){
+    die('<script>alert("You dont have access to this page, Please contact security");window.location = history.back();</script>');
 }
-if (mysqli_num_rows($ward) > 0) {
-    $isWarden = 1;
-    $aid = mysqli_fetch_array($ward);
-}
-if ($_SESSION['is_superadmin'] == 1) $aid['acc_id'] = "acc_code";
-
 ?>
 
 <!DOCTYPE html>
@@ -157,40 +147,33 @@ if ($_SESSION['is_superadmin'] == 1) $aid['acc_id'] = "acc_code";
     }
 // echo $sql;
     /* ***************** PAGINATION ***************** */
-    $limit = 10;
+    if (!isset($_GET['page'])) {
+        $_SESSION['query'] = $sql;
+    }
+    $limit = 100;
     $page = isset($_GET['page']) ? $_GET['page'] : 1;
     $start = ($page - 1) * $limit;
-    
-
-    $q1 = "SELECT * FROM visitor_log where 1=1";
-    $result1 = mysqli_query($conn, $q1);
-    $total = mysqli_num_rows($result1);
+    // Calculate total records based on filters
+    $rowcount=mysqli_num_rows(mysqli_query($conn,$_SESSION['query']));
+    $total = $rowcount;
     $pages = ceil($total / $limit);
-    //check if current page is less then or equal 1
-    if (($page > 1) || ($page < $pages)) {
-        $Previous = $page - 1;
-        $Next = $page + 1;
-    }
-    if ($page <= 1) 
-    {
-        $Previous=1;
-        $Next=1;
-        $start=0;
-    }
-    if ($page >= $pages) {
-        $Next = $pages;
-    }
-    $sql .= " LIMIT $start,$limit";
-    $visitor_log_qry = $sql;
+    // Adjust page numbers to prevent out-of-range values
+    $page = max(1, min($page, $pages));
+    $Previous = ($page > 1) ? $page - 1 : 1;
+    $Next = ($page < $pages) ? $page + 1 : $pages;
+    $sql = $_SESSION['query'];
+    $sql .= " LIMIT $start, $limit";
     $result = mysqli_query($conn, $sql);
     /* ************************************************ */
+    $visitor_log_qry = $sql;
     ?>
 
     <div class="table-div">
         <?php if (isset($_SESSION['message'])): ?>
             <div class="msg">
+            <script>alert("<?php echo $_SESSION['message'];?>");</script>
                 <?php
-                echo $_SESSION['message'];
+                // echo $_SESSION['message'];
                 unset($_SESSION['message']);
                 ?>
             </div>
@@ -296,9 +279,10 @@ if ($_SESSION['is_superadmin'] == 1) $aid['acc_id'] = "acc_code";
     </nav>
     <div class="table-footer pa4">
         <div class="fl w-75 tl">
-            <form action="../EXCEL_export.php" method="post">
+            <form action="../../Phpspreadsheet/export.php" method="post">
                 <button class="btn btn-warning" name="visitor_log_export" value="<?php echo $visitor_log_qry; ?>">
                     <h4><i class="bi bi-file-earmark-pdf"> Export</i></h4>
+                    
                 </button>
             </form>
         </div>
@@ -323,6 +307,11 @@ if ($_SESSION['is_superadmin'] == 1) $aid['acc_id'] = "acc_code";
         }
     </script>
     <script src="../../js/Overlay.js"></script>
+    <!-- For dropdown function in User Profile / Config button -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js"
+            integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+            crossorigin="anonymous">
+    </script>
 </body>
 
 </html>

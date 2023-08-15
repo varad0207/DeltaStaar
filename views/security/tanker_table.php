@@ -202,26 +202,6 @@ if ($_SESSION['is_superadmin'] == 1) $aid['acc_id'] = "t.acc_id";
             $sort_condition = "DESC";
         }
     }
-
-    //     $sql="SELECT
-    //     tanker_vendors.*,
-    //     t.id entry_id,
-    //     t.acc_id,
-    //     t.security_emp_id security_emp_id,
-    //     t.quality_check quality_check,
-    //     t.qty qty,
-    //     t.bill_no bill_no,
-    //     t.amount amount,
-    //     t.vendor_id vendor_id,
-    //     t.timestamp as timestamp,
-    //     COUNT(t.amount) AS total_entries,
-    //     SUM(t.amount) AS total_amount
-    //   FROM
-    //     tankers t
-    //   JOIN
-    //     tanker_vendors ON tanker_vendors.id = vendor_id
-    //   WHERE
-    //    1=1";
     $sql = "SELECT tanker_vendors.*, t.id entry_id, t.acc_id, t.security_emp_id security_emp_id, t.quality_check quality_check, t.qty qty, t.bill_no bill_no, t.amount amount, t.vendor_id vendor_id, t.timestamp as timestamp
    FROM tankers t JOIN tanker_vendors ON tanker_vendors.id = t.vendor_id where 1=1";
     //     t.acc_id={$aid['acc_id']}
@@ -257,37 +237,34 @@ if ($_SESSION['is_superadmin'] == 1) $aid['acc_id'] = "t.acc_id";
     ?>
 
     <?php
+    
     /* ***************** PAGINATION ***************** */
-    $limit = 10;
+    if (!isset($_GET['page'])) {
+        $_SESSION['query'] = $sql;
+    }
+    $limit = 100;
     $page = isset($_GET['page']) ? $_GET['page'] : 1;
     $start = ($page - 1) * $limit;
-
-    $q1 = "SELECT * FROM tankers";
-    $result1 = mysqli_query($conn, $q1);
-    $total = mysqli_num_rows($result1);
+    // Calculate total records based on filters
+    $rowcount=mysqli_num_rows(mysqli_query($conn,$_SESSION['query']));
+    $total = $rowcount;
     $pages = ceil($total / $limit);
-    //check if current page is less then or equal 1
-    if (($page > 1) || ($page < $pages)) {
-        $Previous = $page - 1;
-        $Next = $page + 1;
-    }
-    if ($page <= 1) {
-        $Previous=1;
-        $Next=1;
-        $start=0;
-    }
-    if ($page >= $pages) {
-        $Next = $pages;
-    }
-    $sql .= " LIMIT $start,$limit";
+    // Adjust page numbers to prevent out-of-range values
+    $page = max(1, min($page, $pages));
+    $Previous = ($page > 1) ? $page - 1 : 1;
+    $Next = ($page < $pages) ? $page + 1 : $pages;
+    $sql = $_SESSION['query'];
+    $sql .= " LIMIT $start, $limit";
     $result = mysqli_query($conn, $sql);
     /* ************************************************ */
+    
     ?>
     <div class="table-div">
         <?php if (isset($_SESSION['message'])) : ?>
             <div class="msg">
+            <script>alert("<?php echo $_SESSION['message'];?>");</script>
                 <?php
-                echo $_SESSION['message'];
+                // echo $_SESSION['message'];
                 unset($_SESSION['message']);
                 ?>
             </div>
@@ -409,7 +386,7 @@ if ($_SESSION['is_superadmin'] == 1) $aid['acc_id'] = "t.acc_id";
 
     <div class="table-footer pa4">
         <div class="fl w-75 tl">
-            <form action="../EXCEL_export.php" method="post">
+            <form action="../../Phpspreadsheet/export.php" method="post">
                 <button class="btn btn-warning" name="tanker_export" value="<?php echo $tanker_qry; ?>">
                     <h4><i class="bi bi-file-earmark-pdf"> Export</i></h4>
                 </button>
@@ -437,6 +414,12 @@ if ($_SESSION['is_superadmin'] == 1) $aid['acc_id'] = "t.acc_id";
         }
     </script>
     <script src="../../js/Overlay.js"></script>
+
+    <!-- For dropdown function in User Profile / Config button -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js"
+            integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+            crossorigin="anonymous">
+    </script>
 </body>
 
 </html>

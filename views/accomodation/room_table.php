@@ -176,41 +176,33 @@ die('<script>alert("You dont have access to this page, Please contact admin");wi
 ?>
     <?php
     /* ***************** PAGINATION ***************** */
-    $limit=10;
-    $page=isset($_GET['page'])?$_GET['page']:1;
-    $start=($page-1) * $limit;
-    $q1="SELECT * FROM rooms";
-    $result1=mysqli_query($conn,$q1);
-    $total=mysqli_num_rows($result1);
-    $pages=ceil($total/$limit);
-    //check if current page is less then or equal 1
-    if(($page>1)||($page<$pages))
-    {
-        $Previous=$page-1;
-        $Next=$page+1;
+    if (!isset($_GET['page'])) {
+        $_SESSION['query'] = $sql;
     }
-    if($page<=1)
-    {
-        $Previous=1;
-        $Next=1;
-        $start=0;
-    }
-    if($page>=$pages)
-    {
-        $Next=$pages;
-    }
-    $sql .=" LIMIT $start,$limit";
-    $result=mysqli_query($conn,$sql);
-
+    $limit = 20;
+    $page = isset($_GET['page']) ? $_GET['page'] : 1;
+    $start = ($page - 1) * $limit;
+    // Calculate total records based on filters
+    $rowcount=mysqli_num_rows(mysqli_query($conn,$_SESSION['query']));
+    $total = $rowcount;
+    $pages = ceil($total / $limit);
+    // Adjust page numbers to prevent out-of-range values
+    $page = max(1, min($page, $pages));
+    $Previous = ($page > 1) ? $page - 1 : 1;
+    $Next = ($page < $pages) ? $page + 1 : $pages;
+    $sql = $_SESSION['query'];
+    $sql .= " LIMIT $start, $limit";
+    $result = mysqli_query($conn, $sql);
     /* ************************************************ */
     ?>
     <div class="table-div">
         <?php if (isset($_SESSION['message'])): ?>
                 <div class="msg">
-                    <?php
-                    echo $_SESSION['message'];
-                    unset($_SESSION['message']);
-                    ?>
+                <script>alert("<?php echo $_SESSION['message'];?>");</script>
+                <?php
+                // echo $_SESSION['message'];
+                unset($_SESSION['message']);
+                ?>
                 </div>
         <?php endif ?>
         <div class="pa1 table-responsive">
@@ -250,7 +242,7 @@ die('<script>alert("You dont have access to this page, Please contact admin");wi
                         <td>
                         <?php if($isPrivilaged>1 && $isPrivilaged!=5 && $isPrivilaged!=4){ ?>
 
-                            <a href="rooms.php?edit=<?php echo '%27' ?><?php echo $row['id']; ?><?php echo '%27' ?>"
+                            <a href="rooms.php?edit=<?php echo $row['id']; ?>"
                                 class="edit_btn"> <i class="bi bi-pencil-square" style="font-size: 1.2rem; color: black;"></i>
                             </a>
                             <?php } ?>
@@ -282,7 +274,7 @@ die('<script>alert("You dont have access to this page, Please contact admin");wi
     </nav>
     <div class="table-footer pa4">
         <div class="fl w-75 tl">
-        <form action="../EXCEL_export.php" method="post">
+        <form action="../../Phpspreadsheet/export.php" method="post">
                 <button class="btn btn-warning" name="room_export" value="<?php echo $room_qry;?>"><h4><i class="bi bi-file-earmark-pdf"> Export</i></h4></button>
             </form>
         </div>
@@ -314,9 +306,11 @@ die('<script>alert("You dont have access to this page, Please contact admin");wi
     <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
         integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
         crossorigin="anonymous"></script>
-    <!-- JavaScript Bundle with Popper -->
-    <!-- <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"
-        integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4"
-        crossorigin="anonymous"></script> -->
+    
+    <!-- For dropdown function in User Profile / Config button -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js"
+            integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+            crossorigin="anonymous">
+    </script>
 </body>
 </html>

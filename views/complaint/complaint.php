@@ -52,61 +52,13 @@ if (isset($_GET['edit'])) {
     <meta name="description" content="Complaint submission portal for deltin employees">
     <link rel="stylesheet" href="../../css/form.css">
     <link rel="stylesheet" href="../../css/style1.css">
+    <link rel="stylesheet" href="../../css/autocompleteCSS.css">
     <!-- CSS only -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
     <link rel="stylesheet" href="https://unpkg.com/tachyons@4.12.0/css/tachyons.min.css" />
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-autocomplete/1.0.7/jquery.auto-complete.min.js"></script>
-    <style>
-        * {
-            box-sizing: border-box;
-        }
-
-        /*the container must be positioned relative:*/
-        .autocomplete {
-            position: relative;
-            display: inline-block;
-            padding: 0px 0px !important;
-            margin-top: 16px !important;
-        }
-
-
-
-
-
-        .autocomplete-items {
-            position: absolute;
-            border: 1px solid #d4d4d4;
-            border-bottom: none;
-            border-top: none;
-            z-index: 99;
-            /*position the autocomplete items to be the same width as the container:*/
-            top: 100%;
-            left: 0;
-            right: 0;
-        }
-
-        .autocomplete-items div {
-            /* padding: 10px; */
-            cursor: pointer;
-            background-color: #fff;
-            border-bottom: 1px solid #d4d4d4;
-        }
-
-        /*when hovering an item:*/
-        .autocomplete-items div:hover {
-            background-color: #e9e9e9;
-        }
-
-        /*when navigating through the items using the arrow keys:*/
-        .autocomplete-active {
-            background-color: #e9e9e9 !important;
-        }
-
-        .autocompleteinp {
-            margin-top: 0px !important;
-        }
-    </style>
+   
 </head>
 
 <body class="b ma2">
@@ -138,7 +90,7 @@ if (isset($_GET['edit'])) {
                             <div class="col-md-12 pa2">
                                 <label for="empcode">Employee Name</label>
                                 <?php
-                                $empdet = "select emp_code,concat(fname,' ',lname,' - ',emp_code) as name from employee";
+                                $empdet = "select emp_code,concat(fname,' - ',emp_code) as name from employee";
                                 $detresult = mysqli_query($conn, $empdet);
                                 $detdata = array();
                                 while ($detrow = mysqli_fetch_assoc($detresult)) {
@@ -325,7 +277,7 @@ if (isset($_GET['edit'])) {
                     },
                     success: function(response) {
                         // Handle the response from the PHP file
-                        // console.log("Response:", response);
+                        console.log("Response:", response);
                         var accCode = document.querySelector("#acccode");
                         if (response == "  !") {
                             accCode.readOnly = false;
@@ -342,6 +294,13 @@ if (isset($_GET['edit'])) {
         }
     </script>
     <script src="../../js/form.js"></script>
+
+    <!-- For dropdown function in User Profile / Config button -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js"
+            integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+            crossorigin="anonymous">
+    </script>
+    
     <!-- JavaScript Bundle with Popper -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4" crossorigin="anonymous"></script>
 </body>

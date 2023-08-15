@@ -309,8 +309,9 @@ else{
     <div class="table-div">
         <?php if (isset($_SESSION['message'])): ?>
             <div class="msg">
+            <script>alert("<?php echo $_SESSION['message'];?>");</script>
                 <?php
-                echo $_SESSION['message'];
+                // echo $_SESSION['message'];
                 unset($_SESSION['message']);
                 ?>
             </div>
@@ -477,9 +478,9 @@ else{
 
     <div class="table-footer pa4">
         <div class="fl w-75 tl">
-        <form action="../EXCEL_export.php" method="post">
+        <form action="../../Phpspreadsheet/export.php" method="post">
                 <button class="btn btn-warning" name="complaint_export" value="<?php echo $complaint_qry;?>"><h4><i class="bi bi-file-earmark-pdf"> Export</i></h4></button>
-            </form>
+        </form>
         </div>
     </div>
 
@@ -487,14 +488,20 @@ else{
     <footer class="tc f3 lh-copy mt4">Copyright &copy; 2022 Delta@STAAR. All Rights Reserved</footer>
     <?php include '../../controllers/overlays/deleteOverlay.php'; ?>
 
-<script>
-    function myfunc(code) {
-        console.log(code);
-        document.getElementById("hidden-del").value = code;
-        document.getElementById('overlay').style.display = 'flex';
-    }
-</script>
+    <script>
+        function myfunc(code) {
+            console.log(code);
+            document.getElementById("hidden-del").value = code;
+            document.getElementById('overlay').style.display = 'flex';
+        }
+    </script>
     <script src="../../js/Overlay.js"></script>
+
+    <!-- For dropdown function in User Profile / Config button -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js"
+            integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+            crossorigin="anonymous">
+    </script>
 </body>
 
 </html>

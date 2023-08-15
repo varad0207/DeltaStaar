@@ -36,10 +36,13 @@ if ($_SESSION['is_superadmin']) {
 <html>
 
 <head>
-
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!--Favicon link-->
+    <link rel="icon" type="image/x-icon" href="../images/logo-no-name-circle.png">
+    <title>Dashboard</title>
 
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.3/font/bootstrap-icons.css">
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
@@ -56,12 +59,6 @@ if ($_SESSION['is_superadmin']) {
     <link rel="stylesheet" href="../css/employeeDashboard.css">
     <link rel="stylesheet" href="../css/style1.css">
     <link rel="stylesheet" href="../css/overlay.css">
-
-    <!--Favicon link-->
-    <link rel="icon" type="image/x-icon" href="../images/logo-no-name-circle.png">
-
-    <title>Dashboard</title>
-
 </head>
 
 <body class="bgcolor">
@@ -83,7 +80,10 @@ if ($_SESSION['is_superadmin']) {
         <div class="tc f1 lh-title txt7">
             Welcome back, 
             <span class="spr">
-                <?php echo $emp_details['fname']; ?>
+                <?php 
+                $nameParts = explode(" ", $emp_details['fname']); // Split the name by spaces
+                echo $nameParts[0] 
+                ?>
             </span>!
         </div>
         <?php
@@ -117,39 +117,40 @@ if ($_SESSION['is_superadmin']) {
     
 
     <!--End of Main content-->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.0.0/core.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/3.1.9-1/md5.js"></script>
-
     <script>
         window.onload = function() {
-        // console.log(localStorage.getItem('visited'));
-        if (!localStorage.getItem('visited')) {
-            var xmlhttp = new XMLHttpRequest();
+            if (!localStorage.getItem('visited')) {
+                var xmlhttp = new XMLHttpRequest();
 
-            xmlhttp.onreadystatechange = function () {
-                if (this.readyState == 4 && this.status == 200) {
-                    var myObj = JSON.parse(this.responseText);
-                    console.log(myObj[0]);
-                    if(CryptoJS.MD5("password").toString()==myObj[0]){
-                        document.getElementById('overlay').style.display = "flex";
-                        localStorage.setItem('visited', true);
+                xmlhttp.onreadystatechange = function () {
+                    if (this.readyState == 4 && this.status == 200) {
+                        var myObj = JSON.parse(this.responseText);
+                        console.log(myObj[0]);
+                        if(CryptoJS.MD5("password").toString()==myObj[0]){
+                            document.getElementById('overlay').style.display = "flex";
+                            localStorage.setItem('visited', true);
+                        }
+                        else{
+                            localStorage.setItem('visited', false);
+                            document.getElementById('overlay').style.display = "none";
+                        }
                     }
-                    else{
-                        localStorage.setItem('visited', false);
-                        document.getElementById('overlay').style.display = "none";
-                    }
-                }
-            };
+                };
 
-            xmlhttp.open("GET", "../controllers/validation.php?id=" + <?php echo $_SESSION['emp_id']; ?>, true);
-            xmlhttp.send(); 
-        }
-        else
-            document.getElementById('overlay').style.display = "none";
+                xmlhttp.open("GET", "../controllers/validation.php?id=" + <?php echo $_SESSION['emp_id']; ?>, true);
+                xmlhttp.send(); 
+            }
+            else
+                document.getElementById('overlay').style.display = "none";
         };
     </script>
 
     <script src="../js/Sidebar/sidebar.js"></script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.0.0/core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/3.1.9-1/md5.js"></script>
+
+    
 
     <!--Scripts for Navbar (as in dashboard.php)-->
     <script src="https://kit.fontawesome.com/319379cac6.js" crossorigin="anonymous"></script>

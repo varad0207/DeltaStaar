@@ -22,9 +22,9 @@ if (isset($_GET['edit'])) {
     $n = mysqli_fetch_array($record);
     $emp_id = $n['emp_id'];
     $emp_code = $n['emp_code'];
-    $fname = $n['fname'];
-    $mname = $n['mname'];
-    $lname = $n['lname'];
+    $fname = $n['fname'] . " " . $n['mname'] . " " . $n['lname'];
+    // $mname = $n['mname'];
+    // $lname = $n['lname'];
     $designation = $n['designation'];
     $dob = $n['dob'];
     $address = $n['address'];
@@ -61,7 +61,7 @@ if (isset($_GET['edit'])) {
         <title>Delta@STAAR | Edit Employees</title>
     <?php else : ?>
         <title>Delta@STAAR | Add Employees</title>
-    <?php endif ?>    
+    <?php endif ?>
     <link rel="stylesheet" href="../../css/sidebar.css">
     <link rel="stylesheet" href="../../css/form.css">
     <link rel="stylesheet" href="../../css/style1.css">
@@ -84,21 +84,29 @@ if (isset($_GET['edit'])) {
             <div class="form-holder">
                 <div class="form-content">
                     <div class="form-items">
-                    <?php if (isset($_GET['edit'])) : ?>
-                        <h1 class="f2 lh-copy tc" style="color: white;">Edit Employee Details</h1>
+                        <?php if (isset($_GET['edit'])) : ?>
+                            <h1 class="f2 lh-copy tc" style="color: white;">Edit Employee Details</h1>
                         <?php else : ?>
                             <h1 class="f2 lh-copy tc" style="color: white;">Enter Employee Details</h1>
-                            <?php endif ?> 
+                        <?php endif ?>
                         <form class="f3 lh-copy" action="../../controllers/employee_controller.php" method="post" id="myForm">
                             <input type="hidden" name="emp_code" value="<?php echo $emp_code; ?>">
                             <input type="hidden" name="emp_id" value="<?php echo $emp_id; ?>">
 
+                            <?php if (isset($_GET['edit'])) : ?>
+                                <div class="col-md-12 pa2">
+                                    <label for="emp_code">Employee Code</label>
+                                    <input readonly class="form-control" type="text" name="emp_code" id="empcode" placeholder="Employee Code" value="<?php echo $emp_code; ?>">
+                                    <small></small>
+                                </div>
+                            <?php else : ?>
+                                <div class="col-md-12 pa2">
+                                    <label for="emp_code">Employee Code</label>
+                                    <input class="form-control" type="text" name="emp_code" id="empcode" placeholder="Employee Code" value="<?php echo $emp_code; ?>">
+                                    <small></small>
+                                </div>
+                            <?php endif ?>
 
-                            <div class="col-md-12 pa2">
-                                <label for="emp_code">Employee Code</label>
-                                <input class="form-control" type="text" name="emp_code" id="empcode" placeholder="Employee Code" value="<?php echo $emp_code; ?>">
-                                <small></small>
-                            </div>
                             <div id="phpJS">
                                 <?php
                                 $sql1 = mysqli_query($conn, "SELECT * FROM employee");
@@ -111,22 +119,12 @@ if (isset($_GET['edit'])) {
                             </div>
 
                             <div class="form-field col-md-12 pa2">
-                                <label for="fname">First Name</label>
-                                <input class="form-control" type="text" name="fname" id="fname" placeholder="First Name" value="<?php echo $fname; ?>">
+                                <label for="fname">Full Name</label>
+                                <input class="form-control" type="text" name="fname" id="fname" placeholder="Full Name" value="<?php echo $fname; ?>">
                                 <small></small>
                             </div>
 
-                            <div class="form-field col-md-12 pa2">
-                                <label for="mname">Middle Name</label>
-                                <input class="form-control" type="text" name="mname" id="mname" placeholder="Middle Name" value="<?php echo $mname; ?>">
-                                <small></small>
-                            </div>
 
-                            <div class="form-field col-md-12 pa2">
-                                <label for="lname">Last Name</label>
-                                <input class="form-control" type="text" name="lname" id="lname" placeholder="Last Name" value="<?php echo $lname; ?>">
-                                <small></small>
-                            </div>
 
                             <div class="form-field col-md-12 pa2">
                                 <label for="designation">Designation</label>
@@ -184,7 +182,7 @@ if (isset($_GET['edit'])) {
 
                             <div class="form-field col-md-12 pa2">
                                 <label for="email">Email</label>
-                                <input class="form-control" type="email" name="email" id="email" placeholder="Email" value="<?php echo $email; ?>">
+                                <input class="form-control" type="text" name="email" id="email" pattern="^NA$|^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$" placeholder="Email" value="<?php echo $email; ?>">
                                 <small></small>
                             </div>
 
@@ -196,6 +194,7 @@ if (isset($_GET['edit'])) {
                                     <option value="A-" <?php if ($blood_group == 'A-') { ?> selected <?php } ?>>A-</option>
                                     <option value="B+" <?php if ($blood_group == 'B+') { ?> selected <?php } ?>>B+</option>
                                     <option value="B-" <?php if ($blood_group == 'B-') { ?> selected <?php } ?>>B-</option>
+                                    <option value="O" <?php if ($blood_group == 'O') { ?> selected <?php } ?>>O</option>
                                     <option value="O+" <?php if ($blood_group == 'O+') { ?> selected <?php } ?>>O+</option>
                                     <option value="O-" <?php if ($blood_group == 'O-') { ?> selected <?php } ?>>O-</option>
                                     <option value="AB+" <?php if ($blood_group == 'AB+') { ?> selected <?php } ?>>AB+</option>
@@ -331,7 +330,14 @@ if (isset($_GET['edit'])) {
     <script src="https://kit.fontawesome.com/319379cac6.js" crossorigin="anonymous"></script>
     <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
     <!-- JavaScript Bundle with Popper -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" 
+    integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4" crossorigin="anonymous"></script>
+
+    <!-- For dropdown function in User Profile / Config button -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js"
+            integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+            crossorigin="anonymous">
+    </script>
 </body>
 
 </html>

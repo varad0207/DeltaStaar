@@ -2,10 +2,10 @@
     include('../../controllers/includes/common.php'); 
     if (!isset($_SESSION["emp_id"]))
     header("location:../../index.php");
-    $n = mysqli_fetch_array(mysqli_query($conn, "SELECT concat(fname,' ',mname,' ',lname) name,emp_code,emp_id FROM employee WHERE emp_code='{$_SESSION['emp_code']}'"));
+    $n = mysqli_fetch_array(mysqli_query($conn, "SELECT fname,emp_code,emp_id FROM employee WHERE emp_code='{$_SESSION['emp_code']}'"));
     $emp_id = $n['emp_id'];
     $emp_code = $n['emp_code'];
-    $name = $n['name'];
+    $name = $n['fname'];
 
     if(isset($_POST['submit']))
     {
@@ -108,64 +108,69 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/3.1.9-1/md5.js"></script>
 
     <script>
-  function GetDetail(str,id) {
-    // console.log(CryptoJS.MD5(str).toString());
-        var xmlhttp = new XMLHttpRequest();
-        xmlhttp.onreadystatechange = function () {
-            if (this.readyState == 4 && this.status == 200) {
-                var myObj = JSON.parse(this.responseText);
-                //console.log(myObj[0]);
-                if(CryptoJS.MD5(str).toString()==myObj[0]){
-                    document.getElementById('oldpassword').style.color = "green";
-                    document.getElementById('newpassword').disabled =false;
-                }
-                else{
-                    document.getElementById('oldpassword').style.color = "red";
-                    document.getElementById('newpassword').disabled =true;
-                    document.getElementById('confirmpassword').disabled =true;
-                }
+        function GetDetail(str,id) {
+            // console.log(CryptoJS.MD5(str).toString());
+                var xmlhttp = new XMLHttpRequest();
+                xmlhttp.onreadystatechange = function () {
+                    if (this.readyState == 4 && this.status == 200) {
+                        var myObj = JSON.parse(this.responseText);
+                        //console.log(myObj[0]);
+                        if(CryptoJS.MD5(str).toString()==myObj[0]){
+                            document.getElementById('oldpassword').style.color = "green";
+                            document.getElementById('newpassword').disabled =false;
+                        }
+                        else{
+                            document.getElementById('oldpassword').style.color = "red";
+                            document.getElementById('newpassword').disabled =true;
+                            document.getElementById('confirmpassword').disabled =true;
+                        }
+
+                    }
+                };
+                xmlhttp.open("GET", "../../controllers/validation.php?id=" + id, true);
+                xmlhttp.send(); 
+        }
+        function newPass(str){
+            document.getElementById('confirmpassword').disabled =false;
+            var message = document.getElementById("message");
+            if(str=="password"){	
+                document.getElementById('confirmpassword').disabled =true;		
+                document.getElementById('newpassword').style.color = "red";	
+                message.innerHTML = "Your new password cannot be same as old password!";
+                message.style.color="red";
+                message.style.fontSize="10px";	
+                message.style.marginTop="5px";
+            }
+            else{
+                message.innerHTML = "&nbsp";
+                message.style.marginTop="5px";
+                document.getElementById('confirmpassword').disabled =false;	
+                document.getElementById('newpassword').style.color = "grey";			
+            }
+        }
+        function confirmPass(str){
+            if(str==document.getElementById('newpassword').value){
+                document.getElementById('confirmpassword').style.color = "green";
+                document.getElementById('submit').disabled =false;
 
             }
-        };
-        xmlhttp.open("GET", "../../controllers/validation.php?id=" + id, true);
-        xmlhttp.send(); 
-  }
-  function newPass(str){
-    document.getElementById('confirmpassword').disabled =false;
-    var message = document.getElementById("message");
-    if(str=="password"){	
-        document.getElementById('confirmpassword').disabled =true;		
-        document.getElementById('newpassword').style.color = "red";	
-		message.innerHTML = "Your new password cannot be same as old password!";
-        message.style.color="red";
-        message.style.fontSize="10px";	
-        message.style.marginTop="5px";
-    }
-    else{
-        message.innerHTML = "&nbsp";
-        message.style.marginTop="5px";
-        document.getElementById('confirmpassword').disabled =false;	
-        document.getElementById('newpassword').style.color = "grey";			
-    }
-  }
-  function confirmPass(str){
-    if(str==document.getElementById('newpassword').value){
-        document.getElementById('confirmpassword').style.color = "green";
-        document.getElementById('submit').disabled =false;
-
-    }
-    else{
-        document.getElementById('submit').disabled =true;
-        document.getElementById('confirmpassword').style.color = "red";
-    }
-  }
-  
-</script>
+            else{
+                document.getElementById('submit').disabled =true;
+                document.getElementById('confirmpassword').style.color = "red";
+            }
+        }
+    
+    </script>
     <script src="../../js/form.js"></script>
     <!-- JavaScript Bundle with Popper -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4"
         crossorigin="anonymous"></script>
+        <!-- For dropdown function in User Profile / Config button -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js"
+            integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+            crossorigin="anonymous">
+    </script>
 </body>
 
 </html>

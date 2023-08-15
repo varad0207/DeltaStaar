@@ -84,10 +84,11 @@ $all = '<span class="material-icons">done_all</span>';
     <div class="table-div">
         <?php if (isset($_SESSION['message'])): ?>
                 <div class="msg">
-                    <?php
-                    echo $_SESSION['message'];
-                    unset($_SESSION['message']);
-                    ?>
+                <script>alert("<?php echo $_SESSION['message'];?>");</script>
+                <?php
+                // echo $_SESSION['message'];
+                unset($_SESSION['message']);
+                ?>
                 </div>
         <?php endif ?>
         
@@ -362,5 +363,11 @@ $all = '<span class="material-icons">done_all</span>';
     
     <!-- Footer -->
     <footer class="tc f3 lh-copy mt4">Copyright &copy; 2022 Delta@STAAR. All Rights Reserved</footer>
+
+    <!-- For dropdown function in User Profile / Config button -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js"
+            integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+            crossorigin="anonymous">
+    </script>
 </body>
 </html>
