@@ -1,9 +1,8 @@
-<?php
-require './controllers/includes/common.php';
-if (isset($_SESSION["emp_id"])) {
-	session_unset();
-	session_destroy();
-}
+<?php require './controllers/includes/common.php';
+	if (isset($_SESSION["emp_id"])) {
+		session_unset();
+		session_destroy();
+	}
 ?>
 
 <!DOCTYPE html>
@@ -62,9 +61,6 @@ if (isset($_SESSION["emp_id"])) {
 						<li class="nav-item">
 							<a class="nav-link active" href="./views/complaint/complaint.php">Complaints+</a>
 						</li>
-						<!-- <li class="nav-item">
-							<a class="nav-link active1" href="./views/login.php">Login</a>
-						</li> -->
 					</ul>
 				</div>
 			</div>
@@ -81,9 +77,6 @@ if (isset($_SESSION["emp_id"])) {
 		</div>
 
 		<div class="child2">
-			<!--<h1>Welcome to <span class="txtgold">Delta@STAAR</span></h1>-->
-			<!--<a type="button" class="btn btn-secondary btn-lg" href="./views/login.php">Start / Login</a>-->
-
 			<div class="card rounded-4 gradient-custom-2">
 
 				<div class="text-center form-head">
