@@ -1,21 +1,30 @@
-<div class="portal">
+<div class="portal" >
 
     <div class="charts-container px-4">
        
-        <?php       
-        include '../charts/accommodationStatus_Bar.php';
-        include '../charts/complaintStatus_Pie.php';
-        // include '../charts/complaintTypes_Doughnut.php';
-        include '../charts/waterTankers_Line.php';
+        <div class="left-container">
+            <?php       
+            include '../charts/accommodationStatus_Bar.php';?>
+        </div>
 
-        ?>
+        <div class="seperator-div"></div>
+        
+        <div class="right-container">
+            <?php       
+                include '../charts/complaintStatus_Pie.php';
+                include '../charts/waterTankers_Line.php';
+
+            ?>
+        </div>
+        
         
         
     </div>
 
     <h1 class="tc f-subheadline lh-title spr">Super Admin Portal</h1>
+    
 
-    <div class="containeer ma4">
+    <div class="containeer ma4" id="portal-btns">
         <!-- FIRST ELEMENT -->
         <div class="containeer-items tc">
             <a>

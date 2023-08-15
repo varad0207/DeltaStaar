@@ -5,27 +5,21 @@ $complaint_count = mysqli_fetch_assoc(mysqli_query($conn, "SELECT count(*) as co
 
 $count_array = array();
 $pending = mysqli_fetch_assoc(mysqli_query($conn, "select count(*) as pending_count from complaints where complaints.tech_closure_timestamp is NULL"));
-// $count_array = $complaint_count['count'];
-// array_push($count_array, $complaint_count['count']);
 array_push($count_array, $pending['pending_count']);
 array_push($count_array, $complaint_count['count'] - $pending['pending_count']);
 $solved = json_encode($count_array);
 ?>
 
-<!-- <div class="chart-container"> -->
-<!-- Ignore Comments for now, only this div below is included + scripting -->
-<!-- Refer accommodationStatus_Bar.php if needed -->
+<!-- Only this div below is included + scripting -->
 <div class="chartBox">
-    <h4 class="text-center p-2">Complaint Summary</h4>
-    <canvas id="myPieChart" style="width:25%;"></canvas>
+    <h5 class="text-center">Complaint Summary</h5>
+    <canvas id="myPieChart"></canvas>
 </div>
-<!-- </div> -->
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
 <script> //Pie Chart
-
-var solved = <?php echo $solved; ?>;
+    var solved = <?php echo $solved; ?>;
     //Setup Block
     const dataPie = {
         labels: [
@@ -53,8 +47,6 @@ var solved = <?php echo $solved; ?>;
             aspectRatio: 2
         }
     };
-
-
 
     //Render Block
     const myPieChart = new Chart(

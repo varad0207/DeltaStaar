@@ -18,8 +18,7 @@ if (isset($_POST['submit'])|| isset($_POST['update'])||isset($_GET['del'])) {
 	if (isset($_POST['submit'])) 
     {
 	$category_name =  $_POST['category_name'];
-    
-		mysqli_query($conn, "INSERT INTO vaccination_category( category_name, category_id) values ( '$category_name', '')"); 
+		mysqli_query($conn, "INSERT INTO `vaccination_category`(`category_name`) VALUES ('$category_name')"); 
 		$_SESSION['message'] = "Vaccination Category details saved"; 
 		header('location: ../views/config/vaccination_category_table.php');
 	}

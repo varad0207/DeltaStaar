@@ -2,9 +2,21 @@
 require 'common.php';
 $rights = unserialize($_SESSION['rights']);
 $link = "";
+$isTechnician = 0;
+$isSecurity = 0;
 if (basename($_SERVER['PHP_SELF'], '.php') != "dashboard")
     $link = "../";
 
+    $sec=mysqli_query($conn,"select acc_id from security where emp_id='{$_SESSION['emp_id']}'");
+    $tech=mysqli_query($conn,"select id from technician where emp_id='{$_SESSION['emp_id']}'");
+if(mysqli_num_rows($sec)>0){
+    $isSecurity=1;
+    $aid=mysqli_fetch_array($sec);
+} 
+if(mysqli_num_rows($tech)>0) {
+    $isTechnician=1;
+    $aid=mysqli_fetch_array($tech);
+}
 ?>
 
 <!DOCTYPE html>
@@ -19,15 +31,18 @@ if (basename($_SERVER['PHP_SELF'], '.php') != "dashboard")
     <link rel="icon" type="image/x-icon" href="../../images/logo-no-name-circle.png">
     <title>Delta@STAAR | Sidebar</title>
 
+    <!-- CSS only -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" 
+        rel="stylesheet" integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" 
+        crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.3/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="https://unpkg.com/tachyons@4.12.0/css/tachyons.min.css" />
+
     <link rel="stylesheet" href="../../css/sidebar.css">
     <link rel="stylesheet" href="../../css/form.css">
     <link rel="stylesheet" href="../../css/style1.css">
 
-    <!-- CSS only -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet"
-        integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.3/font/bootstrap-icons.css">
-    <link rel="stylesheet" href="https://unpkg.com/tachyons@4.12.0/css/tachyons.min.css" />
+    <script src="../../js/Sidebar/sidebar.js"></script>
 </head>
 
 <body style="background-color: #1b1c1e;">
@@ -38,7 +53,7 @@ if (basename($_SERVER['PHP_SELF'], '.php') != "dashboard")
         </a>
         <ul class="nav flex-column p-4" id="nav_accordion" style="--bs-nav-link-hover-color: #f8f9fa;">
 
-            <!-- accomodation -->
+            <!-- Accomodation -->
             <?php if ($rights['rights_accomodation'] > 0 || $rights['rights_rooms'] > 0) { ?>
                 <li class="nav-item has-submenu">
                     <a class="nav-link border-dark border-bottom" href="#">
@@ -49,34 +64,25 @@ if (basename($_SERVER['PHP_SELF'], '.php') != "dashboard")
                     <ul class="submenu collapse">
                         <?php if ($rights['rights_accomodation'] > 0) { ?>
                             <li>
-                                <a class="nav-link border-dark border-bottom"
-                                    href="../<?php echo $link; ?>views/accomodation/accomodation.php">
+                                <a class="nav-link border-dark border-bottom" href="../<?php echo $link; ?>views/accomodation/accomodation.php">
                                     Add Accommodation
                                 </a>
                             </li>
                             <li>
-                                <a class="nav-link border-dark border-bottom"
-                                    href="../<?php echo $link; ?>views/accomodation/accomodation_table.php">
+                                <a class="nav-link border-dark border-bottom" href="../<?php echo $link; ?>views/accomodation/accomodation_table.php">
                                     Accommodation Table
                                 </a>
                             </li>
-                            <li>
-                                <a class="nav-link border-dark border-bottom"
-                                    href="../<?php echo $link; ?>views/config/acc_loc_table.php">
-                                    Accommodation Location Table
-                                </a>
-                            </li>
+                            
                         <?php }
                         if ($rights['rights_rooms'] > 0) { ?>
                             <li>
-                                <a class="nav-link border-dark border-bottom"
-                                    href="../<?php echo $link; ?>views/accomodation/rooms.php">
+                                <a class="nav-link border-dark border-bottom" href="../<?php echo $link; ?>views/accomodation/rooms.php">
                                     Add Rooms
                                 </a>
                             </li>
                             <li>
-                                <a class="nav-link border-dark border-bottom"
-                                    href="../<?php echo $link; ?>views/accomodation/room_table.php">
+                                <a class="nav-link border-dark border-bottom" href="../<?php echo $link; ?>views/accomodation/room_table.php">
                                     Rooms Table
                                 </a>
                             </li>
@@ -93,49 +99,37 @@ if (basename($_SERVER['PHP_SELF'], '.php') != "dashboard")
                     </a>
                     <ul class="submenu collapse">
                         <li>
-                            <a class="nav-link border-dark border-bottom"
-                                href="../<?php echo $link; ?>views/complaint/complaint.php">
+                            <a class="nav-link border-dark border-bottom" href="../<?php echo $link; ?>views/complaint/complaint.php">
                                 Raise A Complaint
                             </a>
                         </li>
                         <li>
-                            <a class="nav-link border-dark border-bottom"
-                                href="../<?php echo $link; ?>views/complaint/complaint_table.php">
+                            <a class="nav-link border-dark border-bottom" href="../<?php echo $link; ?>views/complaint/complaint_table.php">
                                 Complaint Table
                             </a>
                         </li>
-                        <?php if ($isSecurity): ?>
+                        <?php if ($isSecurity) : ?>
                             <li>
-                                <a class="nav-link border-dark border-bottom"
-                                    href="../<?php echo $link; ?>views/complaint/security_jobs.php">
+                                <a class="nav-link border-dark border-bottom" href="../<?php echo $link; ?>views/complaint/jobs_table.php">
                                     View Jobs
                                 </a>
                             </li>
-                        <?php elseif ($isTechnician): ?>
+                        <?php elseif ($isTechnician) : ?>
                             <li>
-                                <a class="nav-link border-dark border-bottom"
-                                    href="../<?php echo $link; ?>views/complaint/tech_jobs.php">
+                                <a class="nav-link border-dark border-bottom" href="../<?php echo $link; ?>views/complaint/tech_jobs.php">
                                     View Jobs
                                 </a>
                             </li>
-                        <?php else: ?>
+                        <?php else : ?>
                             <li>
-                                <a class="nav-link border-dark border-bottom"
-                                    href="../<?php echo $link; ?>views/complaint/jobs_table.php">
+                                <a class="nav-link border-dark border-bottom" href="../<?php echo $link; ?>views/complaint/jobs_table.php">
                                     View Jobs
                                 </a>
                             </li>
                         <?php endif ?>
                         <?php if ($_SESSION['is_superadmin']) { ?>
-                            <!-- 
-                    <li>
-                        <a class="nav-link border-dark border-bottom" href="../<?php //echo $link; ?>views/config/complaint_type.php">
-                            Add Complaint Type
-                        </a>
-                    </li> -->
                             <li>
-                                <a class="nav-link border-dark border-bottom"
-                                    href="../<?php echo $link; ?>views/config/complaint_type_table.php">
+                                <a class="nav-link border-dark border-bottom" href="../<?php echo $link; ?>views/config/complaint_type_table.php">
                                     Complaint Type Table
                                 </a>
                             </li>
@@ -153,32 +147,23 @@ if (basename($_SERVER['PHP_SELF'], '.php') != "dashboard")
                     </a>
                     <ul class="submenu collapse">
                         <?php if ($rights['rights_employee_details'] > 0) { ?>
-                            <!-- <li>
-                        <a class="nav-link border-dark border-bottom" href="../<?php //echo $link; ?>views/config/emp_desig.php">
-                            Add Designation Details
-                        </a>
-                    </li> -->
                             <li>
-                                <a class="nav-link border-dark border-bottom"
-                                    href="../<?php echo $link; ?>views/config/emp_desig_table.php">
+                                <a class="nav-link border-dark border-bottom" href="../<?php echo $link; ?>views/config/emp_desig_table.php">
                                     Employees Designation Table
                                 </a>
                             </li>
                             <li>
-                                <a class="nav-link border-dark border-bottom"
-                                    href="../<?php echo $link; ?>views/config/emp_dept_table.php">
+                                <a class="nav-link border-dark border-bottom" href="../<?php echo $link; ?>views/config/emp_dept_table.php">
                                     Employees Department Table
                                 </a>
                             </li>
                             <li>
-                                <a class="nav-link border-dark border-bottom"
-                                    href="../<?php echo $link; ?>views/hrm/employee.php">
+                                <a class="nav-link border-dark border-bottom" href="../<?php echo $link; ?>views/hrm/employee.php">
                                     Add Employee Details
                                 </a>
                             </li>
                             <li>
-                                <a class="nav-link border-dark border-bottom"
-                                    href="../<?php echo $link; ?>views/hrm/employee_table.php">
+                                <a class="nav-link border-dark border-bottom" href="../<?php echo $link; ?>views/hrm/employee_table.php">
                                     Employees Table
                                 </a>
                             </li>
@@ -189,40 +174,34 @@ if (basename($_SERVER['PHP_SELF'], '.php') != "dashboard")
                                     Add Role </a>
                             </li>
                             <li>
-                                <a class="nav-link border-dark border-bottom"
-                                    href="../<?php echo $link; ?>views/hrm/roles_table.php">
+                                <a class="nav-link border-dark border-bottom" href="../<?php echo $link; ?>views/hrm/roles_table.php">
                                     Roles Table
                                 </a>
                             </li>
                             <li>
-                                <a class="nav-link border-dark border-bottom"
-                                    href="../<?php echo $link; ?>views/config/security_table.php">
+                                <a class="nav-link border-dark border-bottom" href="../<?php echo $link; ?>views/config/security_table.php">
                                     Security Table
                                 </a>
                             </li>
                             <li>
-                                <a class="nav-link border-dark border-bottom"
-                                    href="../<?php echo $link; ?>views/config/technician_table.php">
+                                <a class="nav-link border-dark border-bottom" href="../<?php echo $link; ?>views/config/technician_table.php">
                                     Technician Table
                                 </a>
                             </li>
                         <?php }
                         if ($rights['rights_vaccination'] > 0 || $rights['rights_vaccination_category'] > 0) { ?>
                             <li>
-                                <a class="nav-link border-dark border-bottom"
-                                    href="../<?php echo $link; ?>views/hrm/vaccination.php">
+                                <a class="nav-link border-dark border-bottom" href="../<?php echo $link; ?>views/hrm/vaccination.php">
                                     Add Vacination Details
                                 </a>
                             </li>
                             <li>
-                                <a class="nav-link border-dark border-bottom"
-                                    href="../<?php echo $link; ?>views/hrm/vaccination_table.php">
+                                <a class="nav-link border-dark border-bottom" href="../<?php echo $link; ?>views/hrm/vaccination_table.php">
                                     Vacination Table
                                 </a>
                             </li>
                             <li>
-                                <a class="nav-link border-dark border-bottom"
-                                    href="../<?php echo $link; ?>views/config/vaccination_category_table.php">
+                                <a class="nav-link border-dark border-bottom" href="../<?php echo $link; ?>views/config/vaccination_category_table.php">
                                     Vacination Category Table
                                 </a>
                             </li>
@@ -240,49 +219,42 @@ if (basename($_SERVER['PHP_SELF'], '.php') != "dashboard")
                     <ul class="submenu collapse">
                         <?php if ($rights['rights_employee_outing'] > 0) { ?>
                             <li>
-                                <a class="nav-link border-dark border-bottom"
-                                    href="../<?php echo $link; ?>views/security/employee_outing.php">
+                                <a class="nav-link border-dark border-bottom" href="../<?php echo $link; ?>views/security/employee_outing.php">
                                     Add Employee Outing
                                 </a>
                             </li>
                             <li>
-                                <a class="nav-link border-dark border-bottom"
-                                    href="../<?php echo $link; ?>views/security/employee_outing_table.php">
+                                <a class="nav-link border-dark border-bottom" href="../<?php echo $link; ?>views/security/employee_outing_table.php">
                                     Employee Outings Table
                                 </a>
                             </li>
                         <?php }
                         if ($rights['rights_tankers'] > 0) {
-                            ?>
+                        ?>
                             <li>
-                                <a class="nav-link border-dark border-bottom"
-                                    href="../<?php echo $link; ?>views/security/tanker.php">
+                                <a class="nav-link border-dark border-bottom" href="../<?php echo $link; ?>views/security/tanker.php">
                                     Add Tanker Entry
                                 </a>
                             </li>
                             <li>
-                                <a class="nav-link border-dark border-bottom"
-                                    href="../<?php echo $link; ?>views/security/tanker_table.php">
+                                <a class="nav-link border-dark border-bottom" href="../<?php echo $link; ?>views/security/tanker_table.php">
                                     Tanker Table
                                 </a>
                             </li>
                             <li>
-                                <a class="nav-link border-dark border-bottom"
-                                    href="../<?php echo $link; ?>views/config/tanker_vendor_table.php">
+                                <a class="nav-link border-dark border-bottom" href="../<?php echo $link; ?>views/config/tanker_vendor_table.php">
                                     Tanker Vendor Table
                                 </a>
                             </li>
                         <?php }
                         if ($rights['rights_visitor_log'] > 0) { ?>
                             <li>
-                                <a class="nav-link border-dark border-bottom"
-                                    href="../<?php echo $link; ?>views/security/visitor.php">
+                                <a class="nav-link border-dark border-bottom" href="../<?php echo $link; ?>views/security/visitor.php">
                                     Visitor Log Form
                                 </a>
                             </li>
                             <li>
-                                <a class="nav-link border-dark border-bottom"
-                                    href="../<?php echo $link; ?>views/security/visitor_log_table.php">
+                                <a class="nav-link border-dark border-bottom" href="../<?php echo $link; ?>views/security/visitor_log_table.php">
                                     Visitor Log Table
                                 </a>
                             </li>
@@ -290,23 +262,20 @@ if (basename($_SERVER['PHP_SELF'], '.php') != "dashboard")
                     </ul>
                 </li>
             <?php } ?>
-            <!--
-            <li class="nav-item">
-                <a class="nav-link" href="#"> Other link </a>
-            </li>
-            -->
         </ul>
 
     </div>
 
     <script src="../<?php echo $link; ?>js//Sidebar//sidebar.js"></script>
+    <script src="../../js/Sidebar/sidebar.js"></script>
     <script src="https://kit.fontawesome.com/319379cac6.js" crossorigin="anonymous"></script>
-    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
-        integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
-        crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+    
     <!-- JavaScript Bundle with Popper -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"
-        integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4"
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" 
+    integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"
+        integrity="sha384-oBqDVmMz9ATKxIep9tiCxS/Z9fNfEXiDAYTujMAeBAsjFuCZSmKbSSUnQlmh/jp3"
         crossorigin="anonymous"></script>
 </body>
 

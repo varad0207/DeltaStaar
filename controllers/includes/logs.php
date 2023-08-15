@@ -314,7 +314,8 @@ die('<script>alert("You dont have access to this page, Please contact admin");wi
             </table>
         </div>
     </div>
-    <?php echo '<script>var rowCount = ' . $rowCount . ';</script>'; ?>
+    <?php $rowCount = '';
+    echo '<script>var rowCount = ' . $rowCount . ';</script>'; ?>
     <script type="text/javascript">
         function handleSearch(event) {
             if (event.keyCode === 13) {

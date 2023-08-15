@@ -21,21 +21,23 @@ $update = false;
 if (isset($_POST['submit'])) {
     
     // $vaccination_id = $_POST['vaccination_id'];
-    $emp_id= $_POST['emp_id'];
+    $emp_id= $_POST['emp_code'];
+    $parts = explode(" - ", $emp_id); // Split the string by " - "
+    $emp_code = end($parts); 
     $category=$_POST['cat_id'];
     $dateofadministration=date('Y-m-d',strtotime($_POST['doa']));
     // $nextdose=date('Y-m-d',strtotime($_POST['dond']));
     $location=$_POST['loc'];
 
-    $emp_row=mysqli_fetch_array(mysqli_query($conn,"select emp_code from employee where emp_id='$emp_id'"));
+    $emp_row=mysqli_fetch_array(mysqli_query($conn,"select emp_id from employee where emp_code='$emp_code'"));
 
-    mysqli_query($conn, "INSERT INTO vaccination(emp_id,emp_code,category_id,date_of_administration,location) VALUES ('$emp_id','{$emp_row['emp_code']}','$category','$dateofadministration','$location')");
+    mysqli_query($conn, "INSERT INTO vaccination(emp_id,emp_code,category_id,date_of_administration,location) VALUES ('{$emp_row['emp_id']}','$emp_code','$category','$dateofadministration','$location')");
     $last_insert_id = mysqli_insert_id($conn);
     $_SESSION['message'] = "vaccination details saved";
 
     //change tracking code
     if($AllowTrackingChanges)
-    mysqli_query($conn,"insert into change_tracking_vaccination (user,type,vaccination_id,emp_id,emp_code,category_id,date_of_administration,location) VALUES ('{$_SESSION['user']}','Insert','$last_insert_id','$emp_id','{$emp_row['emp_code']}','$category','$dateofadministration','$location')");
+    mysqli_query($conn,"insert into change_tracking_vaccination (user,type,vaccination_id,emp_id,emp_code,category_id,date_of_administration,location) VALUES ('{$_SESSION['user']}','Insert','$last_insert_id','{$emp_row['emp_id']}','$emp_code','$category','$dateofadministration','$location')");
 
     header('location: ../views/hrm/vaccination_table.php');
 }
@@ -50,7 +52,7 @@ if (isset($_POST['update'])) {
     // $nextdose=date('Y-m-d',strtotime($_POST['dond']));
     $location=$_POST['loc'];
     // echo $location;
-    mysqli_query($conn, "INSERT INTO vaccination(emp_id,emp_code,category_id,date_of_administration,location) VALUES ('$emp_id','$category','$dateofadministration','$location')");
+    mysqli_query($conn, "INSERT INTO vaccination(emp_id,emp_code,category_id,date_of_administration,location) VALUES ('$emp_id','$emp_code','$category','$dateofadministration','$location')")or die(mysqli_error($conn));
     $last_insert_id = mysqli_insert_id($conn);
     $_SESSION['message'] = "Vaccnation Info updated!";
 

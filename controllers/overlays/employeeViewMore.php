@@ -61,7 +61,7 @@ if(isset($_REQUEST['employeecode'])){
                             
                         <div class="right" style="display:block;text-align: left;">
                             <p class="card-text">Employee Name : <b><?php echo $row12['fname'];echo " "; echo $row12['lname']; ?></b></p>
-                            <p class="card-text">Address : <b><?php echo $row12['address']; ?></b></p>
+                            <p class="card-text" style="white-space: pre-wrap;width:200px;">Address : <b><?php echo $row12['address']; ?></b></p>
                             <p class="card-text">State :  <b><?php echo $row12['state']; ?></b></p>
                             <p class="card-text">Country : <b><?php echo $row12['country']; ?></b></p>
                             <p class="card-text">Pincode : <b><?php echo $row12['pincode']; ?></b></p>

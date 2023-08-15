@@ -1,4 +1,6 @@
 <?php
+// ob_start();
+
 require 'includes/common.php';
 if (isset($_SESSION["emp_id"])) {
     session_unset();
@@ -10,12 +12,14 @@ if (isset($_POST['submit']) && !empty($_POST['submit'])) {
     $emp_code = $_POST['user'];
     $password = md5($_POST['pass']);
 
-    $check = mysqli_query($conn, "select e.emp_id,concat(e.fname,' ',e.lname) as user from employee e join login_credentials c using(emp_id) where e.emp_code = '$emp_code' and e.role is not null") or die(mysqli_error($conn));
+    $check = mysqli_query($conn, "select e.emp_id,e.fname as user from employee e join login_credentials c using(emp_id) where e.emp_code = '$emp_code' and e.role is not null") or die(mysqli_error($conn));
 
     if (mysqli_num_rows($check) == 0) {
         echo '<script>alert("User not found, Please try again");window.location = history.back();</script>';
-    } else {
-        $check = mysqli_query($conn, "select e.emp_id,concat(e.fname,' ',e.lname) as user from employee e join login_credentials c using(emp_id) where e.emp_code = '$emp_code' && c.pass='$password'") or die(mysqli_error($conn));
+    } 
+    else 
+    {
+        $check = mysqli_query($conn, "select e.emp_id,e.fname as user from employee e join login_credentials c using(emp_id) where e.emp_code = '$emp_code' && c.pass='$password'") or die(mysqli_error($conn));
         if (mysqli_num_rows($check) == 0) {
             die('<script>alert("Incorrect Password, Please try again");window.location = history.back();</script>');
             // echo '<script>alert("Incorrect Password, Please try again");//window.location = history.back();</script>';   
@@ -111,8 +115,25 @@ if (isset($_POST['submit']) && !empty($_POST['submit'])) {
                 // if (!isset($_COOKIE['new_user'])) {
                 //     setcookie('new_user', 'true', time() + (86400 * 30), '/'); // set the cookie to expire in 30 days
                 // }
+
+
+                /* DELETING THE TEMPORARY FILES CREATED DURING THE EXPORT OF DIFFERENT MODULES*/
+                $files=mysqli_query($conn,"select file_path from tmp_files");
+                if(mysqli_num_rows($files)>0){
+                   while($row=mysqli_fetch_array($files)){
+                        $tempFilePath = "../Phpspreadsheet/".$row['file_path'];
+                        if (file_exists($tempFilePath)) {                           
+                            unlink($tempFilePath);
+                        }
+                    }
+                    mysqli_query($conn,"truncate table tmp_files");
+                }
+                
                 header("location:../views/dashboard.php");
+                // ob_end_flush();
+
             }
         // }
     }
 }
+?>
