@@ -1,0 +1,82 @@
+<!-- Horizontal Chart for Nos of trips in each month and cost in each month -->
+
+<div class="chartBox">
+    <h4 class="text-center p-2">Tanker Cost per months</h4>
+    <canvas id="myHBarChart"></canvas>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<script type="text/javascript">
+    //Horizontal Chart for Nos of trips in each month and cost in each month
+
+    const xValues = [50,60,70,80,90,100,110,120,130,140,150];
+    const yValues = [7,8,8,9,9,9,10,11,14,14,15];
+    const zValues = [17,18,18,19,19,19,120,11,142,14,125];
+    
+    //Setup Block
+    // const data = {
+    //     //Can be softcoded by fetching this from Table
+    //     labels: xValues,
+    //     datasets: [{
+    //         //Total Capacity dataset of each Accommodation
+    //         label: 'Capacity',
+    //         //Write SQL
+    //         data: yValues,
+    //         backgroundColor: 'rgba(75, 192, 192, 0.5)',
+    //         borderColor: 'rgb(75, 192, 192)',
+    //         borderWidth: 1
+    //     }, {
+    //         //Total Occupied dataset of each Accommodation
+    //         label: 'Occupied',
+    //         //Write SQL
+    //         data: zValues,
+    //         backgroundColor: 'rgba(54, 162, 235, 0.5)',
+    //         borderColor: 'rgb(54, 162, 235)',
+    //         borderWidth: 1
+    //     }]
+    // };
+    const ctx = document.getElementById('myHBarchart').getContext('2d');
+const myHBarchart = new Chart(ctx, {
+  type: 'bar',
+  data: {
+    labels: ['A', 'B', 'C'],
+    datasets: [{
+      label: 'Easy as',
+      data: [1, 2, 3],
+    }],
+  },
+  options: {
+    indexAxis: 'y', // <-- here
+    responsive: true
+  }
+});
+
+
+    // //Config Block
+    // const configHbar = {
+    //     type: 'bar',
+    //     data: data,
+    //     options: {
+    //         indexAxis: 'y',
+    //         //aspectRatio: 1.2,
+            
+    //     }
+    // };
+
+
+    // //Render Block
+    // const myChart = new Chart(
+    //     document.getElementById('myHbarChart'), configHbar
+    // );
+</script>
+
+
+<?php       
+        include '../charts/accommodationStatus_Bar.php';
+        include '../charts/complaintStatus_Pie.php';
+        include '../charts/complaintTypes_Doughnut.php';
+        include '../charts/waterTankers_Line.php';
+        include '../charts/tankers_Hbar.php';
+
+        ?>
