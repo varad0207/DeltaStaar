@@ -1,11 +1,5 @@
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;700;900&display=swap');
 
-@font-face {
-    font-family: 'Poppins', sans-serif;
-    /* font-family: Seasons; */
-    src: url(Fontspring-DEMO-theseasons-bd.otf);
-}
-
 .container {
     display: flex;
 }
@@ -20,12 +14,6 @@
     width: 40%;
     padding: 20px;
 }
-
-/* .welcome-message {
-    font-family: 'Poppins', sans-serif;
-    font-size: 50px;
-    margin-bottom: 20px;
-} */
 
 .parent-con {
     display: flex;
@@ -111,36 +99,6 @@
 .button-56:hover {
     outline: 0;
 }
-
-/*@media (min-width: 768px) {
-    .button-56 {
-        padding: 0 40px;
-    }
-
-    .left-side,
-    .right-side {
-        width: 100%;
-        padding: 10px;
-    }
-
-    .welcome-message {
-        font-size: 30px;
-    }
-
-    .user-icon {
-        width: 100%;
-    }
-
-    .complaint-statistics {
-        padding-left: 0;
-        font-size: 1.2rem;
-    }
-
-    .button-56 {
-        font-size: 14px;
-        height: 40px;
-    }
-}*/
 
 @media (max-width: 767px) {
     .container {

@@ -78,7 +78,7 @@ const checkChallan = () => {
     let valid = false;
     if (Challan === '') {
         showError(challan, "Field cannot be blank");
-    } else if (!/^[A-Za-z]+\-[0-9]*$/.test(Challan)) {
+    } else if (!/^[a-zA-Z0-9_\-()[\] ]+$/.test(Challan)) {
         showError(challan, "Field is invalid, challan should be of type XX-0000");
     } else {
         showSuccess(challan);

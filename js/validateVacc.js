@@ -40,7 +40,7 @@ const checkLoc = () => {
     let valid = false;
     if(Loc === '') {
         showError(loc, "Location cannot be empty");
-    } else if(!/^[a-zA-Z\s]+$/.test(loc)) {
+    } else if(!/^[a-zA-Z0-9_\-()[\] ]+$/.test(loc)) {
         showError(loc, "Enter valid location")
     } else {
         showSuccess(loc);

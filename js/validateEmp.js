@@ -24,7 +24,7 @@ const checkFname = () => {
     let valid = false;
     if (name === '') {
         showError(fname, "Name cannot be blank");
-    } else if (!/^[a-zA-Z\s]+$/.test(name)) {
+    } else if (!/^[a-zA-Z0-9_\-()[\] ]+$/.test(name)) {
         showError(fname, "Name is invalid");
     } else {
         showSuccess(fname);
@@ -35,9 +35,10 @@ const checkFname = () => {
 const checkMname = () => {
     const Mname = mname.value.trim();
     let valid = false;
-    if (Mname === '') {
-        showError(mname, "Name cannot be blank");
-    } else if (!/^[a-zA-Z\s]+$/.test(Mname)) {
+    // if (Mname === '') {
+    //     showError(mname, "Name cannot be blank");
+    // } 
+    if (!/^[a-zA-Z0-9_\-()[\] ]+$/.test(Mname)) {
         showError(mname, "Name is invalid");
     } else {
         showSuccess(mname);
@@ -48,9 +49,10 @@ const checkMname = () => {
 const checkLname = () => {
     const Lname = lname.value.trim();
     let valid = false;
-    if (Lname === '') {
-        showError(lname, "Name cannot be blank");
-    } else if (!/^[a-zA-Z\s]+$/.test(Lname)) {
+    // if (Lname === '') {
+    //     showError(lname, "Name cannot be blank");
+    // } 
+    if (!/^[a-zA-Z0-9_\-()[\] ]+$/.test(Lname)) {
         showError(lname, "Name is invalid");
     } else {
         showSuccess(lname);
@@ -63,8 +65,8 @@ const checkEmail = () => {
     let valid = false;
     if (Email === '') {
         showError(email, "Email cannot be blank");
-    } else if (!/^[a-zA-Z0-9+_.-]+@[a-zA-Z0-9-]+\.(com|in)$/.test(Email)) {
-        showError(email, "Email is invalid(must contain @ and .in/.com)");
+    } else if (!/^NA|^[a-zA-Z0-9+_.-]+@[a-zA-Z0-9-]+\.(com|in)$/.test(Email)) {
+        showError(email, "Email is invalid(must contain @ and .in/.com)or should be NA");
     } else {
         showSuccess(email);
         valid = true;
@@ -90,7 +92,7 @@ const checkState = () => {
     const min = 3, max = 20;
     if (State === '') {
         showError(state, "State cannot be blank");
-    } else if (!/^[a-zA-Z]+$/.test(State)) {
+    } else if (!/^[a-zA-Z0-9_\-()[\] ]+$/.test(State)) {
         showError(state, "State is invalid");
     } else if(!isBetween(State.length,min,max)) {
         showError(state, "Min 3, Max 20 letters")
@@ -116,32 +118,34 @@ const checkCountry = () => {
     }
     return valid;
 };
-// const checkPincode = () => {
-//     const Pincode = pincode.value.trim();
-//     let valid = false;
-//     if (Pincode === '') {
-//         showError(pincode, "Pincode cannot be blank");
-//     } else if (!/^[0-9]{6}$/.test(Pincode)) {
-//         showError(pincode, "Pincode is invalid, Pincode must be 6 digits");
-//     } else {
-//         showSuccess(pincode);
-//         valid = true;
-//     }
-//     return valid;
-// };
-// const checkAadhar = () => {
-//     const Aadhar = aadhar.value.trim();
-//     let valid = false;
-//     if (Aadhar === '') {
-//         showError(aadhar, "Aadhar number cannot be blank");
-//     } else if (!/^[0-9]{12}$/.test(Aadhar)) {
-//         showError(aadhar, "Aadhar is invalid, Aadhar number must be 12 digits");
-//     } else {
-//         showSuccess(aadhar);
-//         valid = true;
-//     }
-//     return valid;
-// };
+const checkPincode = () => {
+    const Pincode = pincode.value.trim();
+    let valid = false;
+    // if (Pincode === '') {
+    //     showError(pincode, "Pincode cannot be blank");
+    // } else 
+    if (!/^[0-9]{6}$/.test(Pincode)) {
+        showError(pincode, "Pincode is invalid, Pincode must be 6 digits");
+    } else {
+        showSuccess(pincode);
+        valid = true;
+    }
+    return valid;
+};
+const checkAadhar = () => {
+    const Aadhar = aadhar.value.trim();
+    let valid = false;
+    // if (Aadhar === '') {
+    //     showError(aadhar, "Aadhar number cannot be blank");
+    // } else 
+    if (!/^[0-9]{12}$/.test(Aadhar)) {
+        showError(aadhar, "Aadhar is invalid, Aadhar number must be 12 digits");
+    } else {
+        showSuccess(aadhar);
+        valid = true;
+    }
+    return valid;
+};
 const checkDesig = () => {
     let valid = false;
     if(desig.selectedIndex > 0) {
@@ -237,11 +241,11 @@ form.addEventListener('input', function(e) {
         case 'country':
             checkCountry();
             break;
-        // case 'pin':
-        //     checkPincode();
-        //     break;
-        // case 'ano':
-        //     checkAadhar();
-        //     break;
+        case 'pin':
+            checkPincode();
+            break;
+        case 'ano':
+            checkAadhar();
+            break;
     }
 })

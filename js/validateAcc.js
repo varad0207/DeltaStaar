@@ -13,7 +13,7 @@ const checkAccname = () => {
     let valid = false;
     if (name === '') {
         showError(accName, "Name cannot be blank");
-    } else if (!/^[a-zA-Z\s]+$/.test(name)) {
+    } else if (!/^[a-zA-Z0-9_\-()[\] ]+$/.test(name)) {
         showError(accName, "Name is invalid");
     } else {
         showSuccess(accName);

@@ -1,14 +1,8 @@
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;700;900&display=swap');
 
-@font-face {
-    font-family: 'Poppins', sans-serif;
-    /* font-family: Seasons; */
-    src: url(Fontspring-DEMO-theseasons-bd.otf);
-}
-
 h4 {
     padding-top: 1rem;
-    font-family: Seasons;
+    font-family: 'Poppins', sans-serif;
 }
 
 .containerrr {

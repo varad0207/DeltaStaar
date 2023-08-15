@@ -33,7 +33,7 @@ const checkVname = () => {
     let valid = false;
     if (name === '') {
         showError(vname, "Name cannot be blank");
-    } else if (!/^[a-zA-Z\s]+$/.test(name)) {
+    } else if (!/^[a-zA-Z0-9_\-()[\] ]+$/.test(name)) {
         showError(vname, "Name is invalid");
     } else {
         showSuccess(vname);

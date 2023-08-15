@@ -10,7 +10,7 @@ const checkVname = () => {
     let valid = false;
     if (name === '') {
         showError(vname, "Vendor Name cannot be blank");
-    } else if (!/^[a-zA-Z]+[0-9]*$/.test(name)) {
+    } else if (!/^[a-zA-Z0-9_\-()[\] ]+$/.test(name)) {
         showError(vname, "Vendor Name is invalid");
     } else {
         showSuccess(vname);
@@ -23,7 +23,7 @@ const checkCname = () => {
     let valid = false;
     if (Cname === '') {
         showError(cname, "Company Name cannot be blank");
-    } else if (!/^[a-zA-Z]+[0-9]*$/.test(Cname)) {
+    } else if (!/^[a-zA-Z0-9_\-()[\] ]+$/.test(Cname)) {
         showError(cname, "Company Name is invalid");
     } else {
         showSuccess(cname);
